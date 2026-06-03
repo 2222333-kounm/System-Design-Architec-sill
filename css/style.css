@@ -634,3 +634,138 @@ ul {
     gap: 8px;
   }
 }
+
+/* ========================================
+   Global Footer
+   ======================================== */
+
+.globalfooter {
+  background: var(--color-bg-card);
+  font-size: 12px;
+  line-height: 1.33337;
+  letter-spacing: -0.01em;
+  color: var(--color-text-secondary);
+}
+
+.globalfooter-content {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+/* 脚注标注 */
+.globalfooter-notes {
+  padding: 17px 0 11px;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.globalfooter-notes ol {
+  padding-left: 16px;
+}
+
+.globalfooter-notes li {
+  margin-bottom: 8px;
+}
+
+/* 导航链接 */
+.globalfooter-nav {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+  padding: 20px 0;
+}
+
+.footer-nav-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+.footer-nav-title-sub {
+  margin-top: 20px;
+}
+
+.footer-nav-col ul {
+  list-style: none;
+}
+
+.footer-nav-col li {
+  margin-bottom: 8px;
+}
+
+.footer-nav-col a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+.footer-nav-col a:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+/* 底部法律信息 */
+.globalfooter-legal {
+  padding: 16px 0 28px;
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.legal-text {
+  margin-bottom: 8px;
+}
+
+.legal-text a {
+  color: var(--color-link);
+}
+
+.legal-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.legal-copyright {
+  margin-right: auto;
+}
+
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 8px 16px;
+}
+
+.legal-links a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+.legal-links a:hover {
+  color: var(--color-text-primary);
+}
+
+.legal-locale {
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 734px) {
+  .globalfooter-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .legal-locale {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 735px) and (max-width: 1068px) {
+  .globalfooter-nav {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
