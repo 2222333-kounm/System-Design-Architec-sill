@@ -574,3 +574,63 @@ ul {
     padding-top: 40px;
   }
 }
+
+/* ========================================
+   CTA Bar
+   ======================================== */
+
+.section-cta-bar {
+  background: var(--color-bg-primary);
+  padding: 24px 16px 32px;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.cta-bar-content {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  text-align: center;
+}
+
+.cta-bar-item {
+  padding: 24px 16px;
+}
+
+.cta-bar-icon {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.cta-bar-title {
+  font-size: 14px;
+  line-height: 1.28577;
+  font-weight: 600;
+  letter-spacing: -0.016em;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.cta-bar-text {
+  font-size: 14px;
+  line-height: 1.42859;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+}
+
+.cta-bar-link {
+  font-size: 14px;
+  color: var(--color-link);
+}
+.cta-bar-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 734px) {
+  .cta-bar-content {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
