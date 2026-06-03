@@ -769,3 +769,41 @@ ul {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* 导航栏固定定位补偿 */
+.section-hero {
+  scroll-margin-top: var(--nav-height);
+}
+
+/* ========================================
+   Dark Mode Support
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-primary: #000000;
+    --color-bg-card: #1D1D1F;
+    --color-text-primary: #F5F5F7;
+    --color-text-secondary: #86868B;
+    --color-link: #2997FF;
+    --color-border: #333336;
+  }
+
+  .section-hero-light {
+    background: #1D1D1F;
+  }
+
+  .globalmessage {
+    background: #1D1D1F;
+    border-color: #333336;
+  }
+
+  .globalfooter {
+    background: #1D1D1F;
+  }
+
+  .section-cta-bar {
+    background: #000000;
+    border-color: #333336;
+  }
+}
