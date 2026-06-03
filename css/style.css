@@ -362,3 +362,38 @@ ul {
     display: none;
   }
 }
+
+/* ========================================
+   Global Message
+   ======================================== */
+
+.globalmessage {
+  background: var(--color-bg-card);
+  border-bottom: 1px solid var(--color-neutral-200);
+  padding: 12px 0;
+  text-align: center;
+}
+
+.globalmessage-content {
+  font-size: 14px;
+  line-height: 1.42859;
+  letter-spacing: -0.016em;
+  color: var(--color-text-secondary);
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.globalmessage-content a {
+  color: var(--color-link);
+  white-space: nowrap;
+}
+.globalmessage-content a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 734px) {
+  .globalmessage-content {
+    font-size: 12px;
+  }
+}
