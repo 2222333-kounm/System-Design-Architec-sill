@@ -1,0 +1,19 @@
+# CodeGraph data files (local per-machine)
+.codegraph/*.db
+.codegraph/*.db-wal
+.codegraph/*.db-shm
+.codegraph/cache/
+.codegraph/*.log
+.codegraph/.dirty
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
