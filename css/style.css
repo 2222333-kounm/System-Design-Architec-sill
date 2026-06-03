@@ -275,3 +275,82 @@ ul {
   justify-content: center;
   flex-wrap: wrap;
 }
+
+/* ========================================
+   GlobalNav
+   ======================================== */
+
+.globalnav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  z-index: 9999;
+}
+
+.globalnav-content {
+  max-width: 1024px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 22px;
+}
+
+.globalnav-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  list-style: none;
+}
+
+.globalnav-link {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 400;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.globalnav-link:hover {
+  color: #FFFFFF;
+}
+
+.globalnav-item-apple a,
+.globalnav-item-search a,
+.globalnav-item-bag a {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.globalnav-item-apple a:hover,
+.globalnav-item-search a:hover,
+.globalnav-item-bag a:hover {
+  color: #FFFFFF;
+}
+
+.globalnav-item-apple svg,
+.globalnav-item-search svg,
+.globalnav-item-bag svg {
+  display: block;
+}
+
+/* 移动端导航 — 隐藏文字链接，只保留图标 */
+@media (max-width: 734px) {
+  .globalnav-item:not(.globalnav-item-apple):not(.globalnav-item-search):not(.globalnav-item-bag) {
+    display: none;
+  }
+}
+
+/* 中小屏导航 — 隐藏部分链接 */
+@media (max-width: 1068px) {
+  .globalnav-item:nth-child(n+8):not(.globalnav-item-search):not(.globalnav-item-bag) {
+    display: none;
+  }
+}
