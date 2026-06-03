@@ -43,7 +43,8 @@
   /* === 排版 === */
   --font-display: "SF Pro Display", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   --font-text: "SF Pro Text", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-  --font-cn: "PingFang SC", "SF Pro SC", "Microsoft YaHei", sans-serif;
+  --font-cn: "SF Pro SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-family-mono: "SF Mono", "Menlo", "Monaco", "Consolas", monospace;
 
   /* === 间距 === */
   --spacing-xs: 9px;
@@ -95,6 +96,11 @@ a {
 }
 a:hover {
   color: var(--color-link-hover);
+}
+a:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 img {
@@ -193,8 +199,20 @@ ul {
   cursor: pointer;
   text-align: center;
   min-width: 60px;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   text-decoration: none;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+.button:disabled,
+.button.disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .button-primary {
