@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>节点编辑器 · Design System</title>
+
+  <!-- litegraph.js CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litegraph.js@0.7.0/build/litegraph.css">
+  <script src="https://cdn.jsdelivr.net/npm/litegraph.js@0.7.0/build/litegraph.min.js"></script>
+
+  <!-- 项目样式 + Token -->
+  <link rel="stylesheet" href="css/node-editor.css">
+  <link rel="stylesheet" href="css/tokens.css">
+</head>
+<body>
+  <!-- 顶栏 -->
+  <div class="ne-toolbar">
+    <div class="brand">🔌 <span>Node</span> Editor</div>
+    <div class="spacer"></div>
+    <button class="toolbar-btn" id="loadBtn" title="Ctrl+O 打开项目">📂 打开</button>
+    <button class="toolbar-btn" id="saveBtn" title="Ctrl+S 保存项目">💾 保存</button>
+    <span class="ne-status" id="neStatus">就绪</span>
+    <button class="toolbar-btn danger" id="closeBtn">✕ 关闭</button>
+  </div>
+
+  <!-- 主体：左画布 + 右预览 -->
+  <div class="ne-main">
+    <!-- 左：画布 -->
+    <div class="ne-canvas-panel" id="nodeCanvas">
+      <div class="ne-float-zoom">
+        <button id="zoomOutBtn" title="缩小">−</button>
+        <span class="zoom-label" id="zoomLabel">100%</span>
+        <button id="zoomInBtn" title="放大">+</button>
+        <button id="resetViewBtn" title="重置视图" style="width:auto;padding:0 10px;font-size:10px;">⌂</button>
+      </div>
+    </div>
+
+    <!-- 右：预览 -->
+    <div class="ne-preview-panel">
+      <div class="ne-preview-header">
+        <span class="dot"></span>
+        实时预览
+        <div class="preview-actions">
+          <button id="copyHtmlBtn" title="复制输出 HTML">📋 复制</button>
+        </div>
+      </div>
+      <div class="ne-preview-body" id="previewBody">
+        <div class="empty-state">
+          <div class="icon">🔌</div>
+          <div>连接节点到「输出」节点开始预览</div>
+          <div class="hint">拖拽节点到画布 → 连线 → 在右侧查看效果</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Token 基础设施 -->
+  <script src="js/node-token.js"></script>
+  <script src="js/node-token-ref.js"></script>
+  <script src="js/node-token-lock.js"></script>
+
+  <!-- 引擎 -->
+  <script src="js/node-engine.js"></script>
+
+  <!-- 初始化 -->
+  <script>
+    (function() {
+      'use strict';
+
+      var canvasWrap = document.getElementById('nodeCanvas');
+      var previewBody = document.getElementById('previewBody');
+      var statusEl = document.getElementById('neStatus');
+      var zoomLabel = document.getElementById('zoomLabel');
+
+      // 输出预览更新函数
+      function updatePreview(outputData) {
+        if (!outputData) {
+          previewBody.innerHTML =
+            '<div class="empty-state">' +
+            '<div class="icon">🔌</div>' +
+            '<div>连接节点到「输出」节点开始预览</div>' +
+            '<div class="hint">拖拽节点到画布 → 连线 → 在右侧查看效果</div>' +
+            '</div>';
+          return;
+        }
+
+        var html = '';
+        try {
+          var data = outputData;
+          if (data && data.css) {
+            var styleStr = '';
+            Object.keys(data.css).forEach(function(k) {
+              var v = data.css[k];
+              if (v !== undefined && v !== null && v !== '') {
+                styleStr += k + ':' + v + ';';
+              }
+            });
+
+            if (data.children && Array.isArray(data.children)) {
+              var childHtml = data.children.map(function(child) {
+                var cs = '';
+                Object.keys(child).forEach(function(k) {
+                  var v = child[k];
+                  if (v !== undefined && v !== null && v !== '') cs += k + ':' + v + ';';
+                });
+                return '<div style="' + cs + '"></div>';
+              }).join('\n');
+              html = '<div class="preview-content" style="position:relative;">' + childHtml + '</div>';
+            } else {
+              var content = data.content || '';
+              html = '<div class="preview-content" style="' + styleStr + '">' + content + '</div>';
+            }
+          } else if (typeof data === 'string') {
+            html = '<div class="preview-content">' + data + '</div>';
+          } else {
+            html = '<div class="preview-content" style="color:#9CA3AF;font-size:13px;">无法预览此数据类型</div>';
+          }
+
+          previewBody.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:auto;">' + html + '</div>';
+        } catch(e) {
+          previewBody.innerHTML = '<div class="preview-error">❌ 渲染错误: ' + e.message + '</div>';
+        }
+      }
+
+      // 初始化引擎
+      var engine = NodeEditor.init(canvasWrap, {
+        onOutputChange: updatePreview
+      });
+
+      // 状态更新
+      function updateStatus() {
+        var count = engine.graph._nodes ? engine.graph._nodes.length : 0;
+        statusEl.textContent = count + ' 个节点';
+      }
+      engine.graph.onAfterChange = function() {
+        updateStatus();
+        NodeEditor._updatePreview(engine.graph, updatePreview);
+      };
+      updateStatus();
+
+      // 缩放
+      function updateZoomLabel() {
+        if (engine.canvas) {
+          zoomLabel.textContent = Math.round(engine.canvas.ds.scale * 100) + '%';
+        }
+      }
+      document.getElementById('zoomInBtn').addEventListener('click', function() {
+        engine.canvas.ds.scale *= 1.3;
+        engine.canvas.setDirty(true, true);
+        updateZoomLabel();
+      });
+      document.getElementById('zoomOutBtn').addEventListener('click', function() {
+        engine.canvas.ds.scale /= 1.3;
+        engine.canvas.setDirty(true, true);
+        updateZoomLabel();
+      });
+      document.getElementById('resetViewBtn').addEventListener('click', function() {
+        var nodes = engine.graph._nodes;
+        if (nodes && nodes.length) {
+          var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+          nodes.forEach(function(n) {
+            minX = Math.min(minX, n.pos[0] - 50);
+            minY = Math.min(minY, n.pos[1] - 50);
+            maxX = Math.max(maxX, n.pos[0] + n.size[0] + 50);
+            maxY = Math.max(maxY, n.pos[1] + n.size[1] + 50);
+          });
+          var cw = canvasWrap.clientWidth, ch = canvasWrap.clientHeight;
+          if (maxX > minX && maxY > minY && cw > 0 && ch > 0) {
+            var fs = Math.min(cw / (maxX - minX), ch / (maxY - minY), 1) * 0.85;
+            var cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
+            engine.canvas.setZoom(fs);
+            engine.canvas.setOffset(cw / 2 - cx * fs, ch / 2 - cy * fs);
+          }
+        }
+        updateZoomLabel();
+      });
+
+      // 快捷键
+      NodeEditor.bindShortcuts(engine.canvas, engine.graph, {
+        onSave: function() { NodeEditor.saveToFile(engine.graph); },
+        onLoad: function() { NodeEditor.loadFromFile(engine.graph, function(err) {
+          if (err) alert('加载失败: ' + err.message);
+          else { updateStatus(); updatePreview(null); }
+        }); }
+      });
+
+      // 工具栏按钮
+      document.getElementById('saveBtn').addEventListener('click', function() { NodeEditor.saveToFile(engine.graph); });
+      document.getElementById('loadBtn').addEventListener('click', function() {
+        NodeEditor.loadFromFile(engine.graph, function(err) {
+          if (err) alert('加载失败: ' + err.message);
+          else { updateStatus(); NodeEditor._updatePreview(engine.graph, updatePreview); }
+        });
+      });
+
+      // 复制 HTML
+      document.getElementById('copyHtmlBtn').addEventListener('click', function() {
+        var previewEl = previewBody.querySelector('.preview-content');
+        if (previewEl) {
+          navigator.clipboard.writeText(previewEl.outerHTML).then(function() {
+            var btn = document.getElementById('copyHtmlBtn');
+            btn.textContent = '✅ 已复制';
+            setTimeout(function() { btn.textContent = '📋 复制'; }, 2000);
+          });
+        }
+      });
+
+      // 关闭 → 通知父窗口
+      document.getElementById('closeBtn').addEventListener('click', function() {
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: 'node-editor-close' }, '*');
+        }
+      });
+
+      // ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && engine.canvas) engine.canvas.selectNodes([]);
+      });
+
+      console.log('[节点编辑器] Phase 1 启动完成: 7 个节点 + 分屏预览 + 快捷键');
+    })();
+  </script>
+</body>
+</html>

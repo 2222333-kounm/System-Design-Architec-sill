@@ -1,0 +1,268 @@
+/* ========================================
+   节点编辑器 — 分屏布局 + 浮层 + 控件样式
+   Phase 1: 左画布右预览，Webflow/Framer 风格
+   主题适配在最终 Phase 完成
+   ======================================== */
+
+/* ---- 页面基础 ---- */
+html, body {
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #1A1C23;
+  color: #E2E8F0;
+}
+
+/* ---- 浮层覆盖层 ---- */
+.node-editor-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.node-editor-overlay.active {
+  display: flex;
+}
+
+.node-editor-overlay .node-editor-container {
+  width: 95vw;
+  height: 92vh;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.node-editor-overlay .node-editor-container iframe {
+  width: 100%; height: 100%;
+  border: none;
+  background: #1A1C23;
+}
+
+/* ---- 顶栏 ---- */
+.ne-toolbar {
+  height: 44px;
+  background: #22242B;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.ne-toolbar .brand {
+  font-size: 13px; font-weight: 600; color: #E2E8F0;
+}
+.ne-toolbar .brand span { color: #3B82F6; }
+.ne-toolbar .spacer { flex: 1; }
+
+.ne-toolbar .toolbar-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #9CA3AF;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s;
+}
+.ne-toolbar .toolbar-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #E2E8F0;
+}
+.ne-toolbar .toolbar-btn.danger:hover {
+  background: rgba(239,68,68,0.15);
+  color: #EF4444;
+  border-color: rgba(239,68,68,0.2);
+}
+
+.ne-toolbar .ne-status {
+  color: #4B5563;
+  font-size: 11px;
+}
+
+/* ---- 主体：分屏 ---- */
+.ne-main {
+  display: flex;
+  width: 100%; height: calc(100% - 44px);
+}
+
+/* 左：画布面板 */
+.ne-canvas-panel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.ne-canvas-panel .litegraph {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 右：预览面板 */
+.ne-preview-panel {
+  width: 420px;
+  min-width: 300px;
+  max-width: 600px;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  background: #181A20;
+  display: flex;
+  flex-direction: column;
+}
+
+.ne-preview-header {
+  height: 36px;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 11px;
+  color: #6B7280;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ne-preview-header .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #22C55E;
+}
+
+.ne-preview-header .preview-actions {
+  margin-left: auto;
+  display: flex; gap: 6px;
+}
+
+.ne-preview-header .preview-actions button {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #6B7280;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.15s;
+}
+.ne-preview-header .preview-actions button:hover {
+  background: rgba(59,130,246,0.15);
+  color: #60A5FA;
+}
+
+.ne-preview-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: auto;
+  position: relative;
+}
+
+.ne-preview-body .empty-state {
+  text-align: center;
+  color: #4B5563;
+  font-size: 13px;
+}
+.ne-preview-body .empty-state .icon { font-size: 32px; margin-bottom: 8px; }
+.ne-preview-body .empty-state .hint { font-size: 11px; color: #374151; margin-top: 4px; }
+
+.ne-preview-body .preview-error {
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: #FCA5A5;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  max-width: 100%;
+}
+
+/* ---- 浮动控制按钮（叠加在画布上） ---- */
+.ne-float-zoom {
+  position: absolute;
+  bottom: 16px; left: 16px;
+  display: flex; gap: 4px;
+  z-index: 100;
+}
+
+.ne-float-zoom button {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(30,32,38,0.9);
+  color: #9CA3AF;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  backdrop-filter: blur(8px);
+}
+
+.ne-float-zoom button:hover {
+  background: rgba(255,255,255,0.1);
+  color: #E2E8F0;
+}
+
+.ne-float-zoom .zoom-label {
+  width: 48px; text-align: center;
+  background: rgba(30,32,38,0.9);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: #6B7280;
+  font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+/* ---- 打开编辑器的按钮（在原有控制栏中） ---- */
+.node-editor-toggle {
+  background: rgba(59,130,246,0.15) !important;
+  color: #60A5FA !important;
+  border: 1px solid rgba(59,130,246,0.2) !important;
+  width: auto !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+}
+.node-editor-toggle:hover {
+  background: rgba(59,130,246,0.25) !important;
+}
+
+/* ---- 端口悬停提示 ---- */
+.litegraph .connection-error {
+  animation: port-flash 0.4s ease;
+}
+
+@keyframes port-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ---- 节点错误状态 ---- */
+.lgraph-node.node-error {
+  box-shadow: 0 0 0 2px #EF4444 !important;
+}
+
+.lgraph-node.node-error .node-title {
+  background: linear-gradient(90deg, #7F1D1D, #991B1B) !important;
+}
+
+.lgraph-node .node-error-msg {
+  background: rgba(239,68,68,0.1);
+  border-top: 1px solid rgba(239,68,68,0.15);
+  color: #FCA5A5;
+  padding: 4px 8px;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+/* ---- 输出预览内容区域 ---- */
+.ne-preview-body .preview-content {
+  width: 100%;
+  min-height: 100px;
+}

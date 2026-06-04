@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="canvas-demo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Design System · 无限画布浏览器</title>
+
+  <!-- 复用项目 Design Token（Single Source of Truth） -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <!-- 画布专有样式 -->
+  <link rel="stylesheet" href="css/canvas-demo.css">
+  <!-- 节点编辑器浮层样式 -->
+  <link rel="stylesheet" href="css/node-editor.css">
+
+  <style>
+    /* 针对画布页面的微调 override */
+    .canvas-demo {
+      --nav-height: 0px;
+    }
+    .canvas-demo body {
+      font-family: var(--font-family-text), var(--font-family-cn);
+    }
+    /* 确保 stage 初始可见 */
+    #canvas-stage {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====== 固定控制栏（不随画布变换） ====== -->
+  <div class="canvas-controls">
+    <button class="ctrl-btn" data-action="zoom-out" title="缩小">−</button>
+    <span class="ctrl-scale" id="scaleDisplay">100%</span>
+    <button class="ctrl-btn" data-action="zoom-in" title="放大">+</button>
+    <button class="ctrl-btn" data-action="reset" title="重置视图">⌂ 重置</button>
+    <span class="ctrl-divider"></span>
+    <span class="ctrl-scale" style="min-width:auto;background:transparent;border:none;font-family:var(--font-family-text);font-size:0.75rem;">
+      <kbd>Space</kbd>+拖拽 · <kbd>⌘</kbd>+滚轮
+    </span>
+    <span class="ctrl-divider"></span>
+    <a href="index.html" class="ctrl-link">← 返回首页</a>
+    <button class="ctrl-btn node-editor-toggle" data-action="open-node-editor" title="打开节点编辑器">🔌 节点</button>
+  </div>
+
+  <!-- ====== 编辑模式指示（仅编辑模式显示） ====== -->
+  <div class="edit-mode-indicator" id="editIndicator" style="display:none;"></div>
+  <div class="edit-banner" id="editBanner" style="display:none;">✎ 编辑模式 — 点击色块改色 · 点击图片替换</div>
+
+  <!-- ====== 画布视口（溢出隐藏） ====== -->
+  <div id="canvas-viewport">
+
+    <!-- ====== 画布舞台（transform 变换层） ====== -->
+    <div id="canvas-stage">
+
+      <!-- 无限网格背景 -->
+      <div class="canvas-grid"></div>
+
+      <!-- ====== 内容层（绝对定位） ====== -->
+      <div class="canvas-content">
+
+        <!-- ── ① 标题区 ── -->
+        <header class="canvas-section" style="left: 80px; top: 80px;">
+          <h1>🎨 Design System · 无限画布</h1>
+          <p class="canvas-subtitle">
+            从 DESIGN.md v1.5.0 自动映射的交互式设计规范浏览器
+            <br>自由缩放 / 拖拽探索 · 实时响应设计令牌
+          </p>
+          <div class="note-text">
+            ✨ 鼠标拖拽平移 · 滚轮缩放 · <span id="fontFamilyDisplay">字体家族加载中...</span>
+          </div>
+        </header>
+
+        <!-- ── ② 品牌色板区 ── -->
+        <section class="canvas-section palette-section" style="left: 80px; top: 280px; min-width: 400px;">
+          <h2>🎨 颜色系统</h2>
+          <div class="palette-grid">
+
+            <div class="color-family">
+              <h4>🔵 品牌主色 · 5 级色阶</h4>
+              <div class="color-steps" id="brand-palette">
+                <!-- JS 动态渲染 -->
+              </div>
+            </div>
+
+            <div class="color-family">
+              <h4>⚫ 中性色板</h4>
+              <div class="color-steps" id="neutral-palette">
+                <!-- JS 动态渲染 -->
+              </div>
+            </div>
+
+            <div class="color-family">
+              <h4>✨ 语义颜色（亮色 / 暗色模式适配）</h4>
+              <div class="semantic-row" id="semantic-palette">
+                <!-- JS 动态渲染 -->
+              </div>
+            </div>
+
+            <div class="color-family">
+              <h4>🟠 辅助色板</h4>
+              <div class="color-steps" id="accent-palette">
+                <!-- JS 动态渲染 -->
+              </div>
+            </div>
+
+          </div>
+          <div class="note-text">
+            🎨 基于 DESIGN.md 色阶 + 语义令牌，动态映射至组件
+          </div>
+        </section>
+
+        <!-- ── ③ 排版系统 ── -->
+        <section class="canvas-section typography-section" style="left: 80px; top: 750px;">
+          <h2>🔤 排版系统</h2>
+          <div class="type-scale" id="type-scale">
+            <!-- JS 动态渲染 -->
+          </div>
+          <div class="note-text" id="type-note">
+            📐 字体家族加载中...
+          </div>
+        </section>
+
+        <!-- ── ④ 组件预览区（右侧） ── -->
+        <section class="canvas-section component-section" style="left: 620px; top: 280px; min-width: 400px;">
+          <h2>🧩 组件预览</h2>
+          <div class="component-showcase">
+
+            <div>
+              <div class="type-label" style="margin-bottom: 8px;">Buttons · 胶囊形圆角</div>
+              <div class="button-group" style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="canvas-demo-btn canvas-demo-btn-primary">主要按钮</button>
+                <button class="canvas-demo-btn canvas-demo-btn-secondary">次要按钮</button>
+                <button class="canvas-demo-btn canvas-demo-btn-outline">轮廓按钮</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="type-label" style="margin-bottom: 8px;">导航栏 · 毛玻璃效果</div>
+              <div class="nav-demo">
+                <span class="nav-demo-item" style="font-weight:600;opacity:0.9;">🍎</span>
+                <span class="nav-demo-item">Mac</span>
+                <span class="nav-demo-item">iPad</span>
+                <span class="nav-demo-item">iPhone</span>
+                <span class="nav-demo-item">Watch</span>
+                <span class="nav-demo-item">AirPods</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="type-label" style="margin-bottom: 8px;">Hero 图片区 · 可替换</div>
+              <div class="editable-image-area" data-target="hero">
+                <img src="images/placeholders/hero-light.svg" alt="Hero 图片"
+                     style="width:100%;height:80px;object-fit:cover;border-radius:8px;">
+              </div>
+            </div>
+
+            <div>
+              <div class="type-label" style="margin-bottom: 8px;">产品卡片图 · 可替换</div>
+              <div class="editable-image-area" data-target="tile">
+                <img src="images/placeholders/tile-light.svg" alt="Tile 图片"
+                     style="width:100%;height:60px;object-fit:cover;border-radius:8px;">
+              </div>
+            </div>
+
+          </div>
+          <div class="note-text">⚡ 交互组件实时响应，拖拽画布任意查看细节</div>
+        </section>
+
+        <!-- ── ⑤ 页面结构布局图 ── -->
+        <section class="canvas-section layout-section" style="left: 620px; top: 750px; min-width: 400px;">
+          <h2>📐 页面结构</h2>
+          <div class="wireframe">
+            <div class="wf-section">
+              <div class="wf-header">
+                <span style="background:#334155; width:30px;height:8px;border-radius:12px;"></span>
+                <span style="background:#334155; width:80px;height:8px;border-radius:12px;"></span>
+                <span style="background:#334155; width:60px;height:8px;border-radius:12px;margin-left:auto;"></span>
+              </div>
+              <div class="wf-hero">
+                <span>Hero Section · 全幅视口</span>
+              </div>
+              <div class="wf-tiles">
+                <div class="wf-tile" style="display:flex;align-items:center;justify-content:center;color:#6c7a91;font-size:0.7rem;">卡片</div>
+                <div class="wf-tile" style="display:flex;align-items:center;justify-content:center;color:#6c7a91;font-size:0.7rem;">卡片</div>
+              </div>
+              <div class="wf-footer" style="display:flex;align-items:center;justify-content:center;color:#6c7a91;font-size:0.7rem;">Global Footer</div>
+            </div>
+          </div>
+          <div class="note-text">🏗️ 源自 DESIGN.md 页面架构定义（Layout blueprint）</div>
+        </section>
+
+        <!-- ── ⑥ 间距系统 ── -->
+        <section class="canvas-section spacing-section" style="left: 620px; top: 1120px; min-width: 400px;">
+          <h2>📏 间距系统</h2>
+          <div class="spacing-demo" id="spacing-list">
+            <!-- JS 动态渲染 -->
+          </div>
+          <div class="note-text">📐 间距基于视觉比例调整，非固定 4px/8px 网格</div>
+        </section>
+
+        <!-- ── 装饰标签：增加无限画布的自由感 ── -->
+        <div class="floating-tag" style="left: 1100px; top: 180px;">
+          ✨ 拖拽探索 · 无限延伸
+        </div>
+        <div class="floating-tag" style="left: 1100px; top: 900px;">
+          🎯 设计系统 · 无缝集成
+        </div>
+
+      </div>
+      <!-- /canvas-content -->
+
+    </div>
+    <!-- /canvas-stage -->
+
+  </div>
+  <!-- /canvas-viewport -->
+
+  <!-- ====== 视口边缘渐暗（固定叠加层） ====== -->
+  <div class="canvas-vignette"></div>
+
+  <!-- ====== 画布引擎（平移/缩放/重置/惯性） ====== -->
+  <script src="js/canvas-engine.js"></script>
+
+  <!-- ====== Design Token 动态渲染 ====== -->
+  <script src="js/canvas-content.js"></script>
+
+  <!-- ====== 颜色工具库（被 color-wheel / property-panel / canvas-components 共享） ====== -->
+  <script src="js/color-utils.js"></script>
+
+  <!-- ====== 编辑模式: 颜色轮盘 + 属性面板 ====== -->
+  <script src="js/color-wheel.js"></script>
+  <script src="js/property-panel.js"></script>
+
+  <!-- ====== 编辑模式: 组件系统（拖拽 + 6 个新增组件） ====== -->
+  <script src="js/canvas-components.js"></script>
+
+  <!-- ====== 编辑模式检测 ====== -->
+  <script>
+    (function() {
+      if (location.search.indexOf('mode=edit') >= 0) {
+        document.getElementById('editIndicator').style.display = '';
+        document.getElementById('editBanner').style.display = '';
+        document.body.classList.add('edit-mode');
+        // 在控制栏添加编辑标记
+        var scaleEl = document.getElementById('scaleDisplay');
+        if (scaleEl) {
+          scaleEl.style.borderColor = 'rgba(59, 130, 246, 0.5)';
+        }
+      }
+    })();
+  </script>
+
+  <!-- ====== 节点编辑器浮层 ====== -->
+  <div class="node-editor-overlay" id="nodeEditorOverlay">
+    <div class="node-editor-container">
+      <iframe src="node-editor.html" id="nodeEditorFrame" title="节点编辑器"></iframe>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    var overlay = document.getElementById('nodeEditorOverlay');
+    var toggleBtn = document.querySelector('[data-action="open-node-editor"]');
+    if (!overlay || !toggleBtn) return;
+
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      overlay.classList.add('active');
+    });
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'node-editor-close') {
+        overlay.classList.remove('active');
+      }
+    });
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.classList.remove('active');
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+      }
+    });
+  })();
+  </script>
+
+</body>
+</html>
