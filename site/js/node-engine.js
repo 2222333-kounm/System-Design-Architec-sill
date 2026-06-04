@@ -293,6 +293,72 @@
   LiteGraph.registerNodeType('sill/image', ImageNode);
 
   // =====================
+  //  ③ 视频节点（Phase 2 新增）
+  // =====================
+
+  function VideoNode() {
+    this.addInput('input', PORT_TYPES.ANY);
+    this.addOutput('video', PORT_TYPES.IMAGE);
+    this.properties = {
+      url: '',
+      autoplay: true,
+      loop: true,
+      muted: false,
+      controls: true
+    };
+
+    var that = this;
+    this.addWidget('text', '视频 URL', this.properties.url, function(v) {
+      that.properties.url = v; that._markDirty();
+    });
+    this.addWidget('toggle', '自动播放', this.properties.autoplay, function(v) {
+      that.properties.autoplay = v; that._markDirty();
+    });
+    this.addWidget('toggle', '循环', this.properties.loop, function(v) {
+      that.properties.loop = v; that._markDirty();
+    });
+    this.addWidget('toggle', '静音', this.properties.muted, function(v) {
+      that.properties.muted = v; that._markDirty();
+    });
+    this.addWidget('toggle', '控件', this.properties.controls, function(v) {
+      that.properties.controls = v; that._markDirty();
+    });
+
+    this.size = [320, 220];
+  }
+
+  VideoNode.title = '视频';
+  VideoNode.desc = '上传/引用视频 · 自动播放/循环/静音/控件';
+
+  VideoNode.prototype._markDirty = function() {
+    this.setDirtyCanvas(true, true);
+    this.graph?.onAfterChange?.(this.graph);
+  };
+
+  VideoNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    if (input && input.url) this.properties.url = input.url;
+    var VPLACEHOLDER = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22320%22 height=%22180%22%3E%3Crect width=%22320%22 height=%22180%22 fill=%22%23374151%22/%3E%3Ctext x=%22160%22 y=%2290%22 text-anchor=%22middle%22 fill=%22%236B7280%22 font-size=%2214%22%3E%26%23x25B6%3B 视频占位%3C/text%3E%3C/svg%3E';
+    var url = this.properties.url || VPLACEHOLDER;
+    this._lastOutput = {
+      type: 'image',
+      url: url,
+      video: true,
+      autoplay: this.properties.autoplay,
+      loop: this.properties.loop,
+      muted: this.properties.muted,
+      controls: this.properties.controls,
+      css: {
+        width: '100%',
+        height: 'auto'
+      }
+    };
+    this.setOutputData(0, this._lastOutput);
+  };
+
+  LiteGraph.registerNodeType('sill/video', VideoNode);
+
+  // =====================
   //  ④ 转换节点（6 种模式）
   // =====================
 
@@ -387,7 +453,157 @@
   LiteGraph.registerNodeType('sill/merge', MergeNode);
 
   // =====================
-  //  ⑥ 全局 Token 节点
+  //  ⑤ 按钮节点（Phase 2 新增）
+  // =====================
+
+  function ButtonNode() {
+    this.addInput('input', PORT_TYPES.TEXT);
+    this.addOutput('interactive', PORT_TYPES.INTERACTIVE);
+    this.properties = {
+      text: '立即购买',
+      color: '#0071E3',
+      hoverColor: '#0077ED',
+      activeColor: '#0068D9',
+      borderRadius: 8,
+      padding: 'sm'
+    };
+
+    var ts = window.TokenStore;
+    if (ts) {
+      var primary = ts.get('--color-primary-500');
+      if (primary) this.properties.color = primary;
+    }
+
+    var that = this;
+    this.addWidget('text', '文字', this.properties.text, function(v) {
+      that.properties.text = v; that._markDirty();
+    });
+    this.addWidget('color', '常态色', this.properties.color, function(v) {
+      that.properties.color = v; that._markDirty();
+    });
+    this.addWidget('color', 'Hover色', this.properties.hoverColor, function(v) {
+      that.properties.hoverColor = v; that._markDirty();
+    });
+    this.addWidget('color', 'Active色', this.properties.activeColor, function(v) {
+      that.properties.activeColor = v; that._markDirty();
+    });
+    this.addWidget('number', '圆角', this.properties.borderRadius, function(v) {
+      that.properties.borderRadius = v; that._markDirty();
+    }, { min: 0, max: 9999, step: 1 });
+    this.addWidget('combo', '内边距', this.properties.padding, function(v) {
+      that.properties.padding = v; that._markDirty();
+    }, { values: ['xs', 'sm', 'md', 'lg', 'xl'] });
+
+    this._paddingMap = {
+      xs: '4px 8px', sm: '8px 16px', md: '12px 24px', lg: '16px 32px', xl: '20px 40px'
+    };
+
+    this.size = [320, 280];
+  }
+
+  ButtonNode.title = '按钮';
+  ButtonNode.desc = '完整按钮 · 三态颜色/圆角/内边距';
+
+  ButtonNode.prototype._markDirty = function() {
+    this.setDirtyCanvas(true, true);
+    this.graph?.onAfterChange?.(this.graph);
+  };
+
+  ButtonNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    if (input && typeof input === 'string') this.properties.text = input;
+    this._lastOutput = {
+      type: 'interactive',
+      kind: 'button',
+      text: this.properties.text,
+      css: {
+        display: 'inline-block',
+        padding: this._paddingMap[this.properties.padding] || '8px 16px',
+        background: this.properties.color,
+        color: '#FFFFFF',
+        'border-radius': this.properties.borderRadius + 'px',
+        border: 'none',
+        cursor: 'pointer',
+        'font-size': '14px',
+        'font-weight': 500,
+        transition: 'background 0.15s, color 0.15s'
+      },
+      hover: { background: this.properties.hoverColor },
+      active: { background: this.properties.activeColor }
+    };
+    this.setOutputData(0, this._lastOutput);
+  };
+
+  LiteGraph.registerNodeType('sill/button', ButtonNode);
+
+  // =====================
+  //  ⑥ 图标节点（Phase 2 新增）
+  // =====================
+
+  var ICON_LIST = ['🔍','🔔','⚙️','📁','❤️','⭐','💬','📌','🔗','💾','📤','📥','🔄','🎯','🧩','🔒','🌐','✏️','🗑️','📊'];
+
+  function IconNode() {
+    this.addInput('input', PORT_TYPES.ANY);
+    this.addOutput('css', PORT_TYPES.CSS);
+    this.properties = {
+      icon: '🔍',
+      size: 24,
+      color: '#000000',
+      opacity: 100
+    };
+
+    var ts = window.TokenStore;
+    if (ts) {
+      var textColor = ts.get('--color-text-primary');
+      if (textColor) this.properties.color = textColor;
+    }
+
+    var that = this;
+    this.addWidget('combo', '图标', this.properties.icon, function(v) {
+      that.properties.icon = v; that._markDirty();
+    }, { values: ICON_LIST });
+    this.addWidget('number', '大小', this.properties.size, function(v) {
+      that.properties.size = v; that._markDirty();
+    }, { min: 8, max: 128, step: 1 });
+    this.addWidget('color', '颜色', this.properties.color, function(v) {
+      that.properties.color = v; that._markDirty();
+    });
+    this.addWidget('slider', '透明度', this.properties.opacity, function(v) {
+      that.properties.opacity = v; that._markDirty();
+    }, { min: 0, max: 100 });
+
+    this.size = [320, 200];
+  }
+
+  IconNode.title = '图标';
+  IconNode.desc = '图标库 · 大小/颜色/透明度';
+
+  IconNode.prototype._markDirty = function() {
+    this.setDirtyCanvas(true, true);
+    this.graph?.onAfterChange?.(this.graph);
+  };
+
+  IconNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    if (input && typeof input === 'string') this.properties.icon = input;
+    this._lastOutput = {
+      type: 'css',
+      icon: this.properties.icon,
+      css: {
+        'font-size': this.properties.size + 'px',
+        color: this.properties.color,
+        opacity: this.properties.opacity / 100,
+        'line-height': 1
+      },
+      html: '<span style="font-size:' + this.properties.size + 'px;color:' + this.properties.color + ';opacity:' + (this.properties.opacity/100) + '">' + this.properties.icon + '</span>'
+    };
+    this.setOutputData(0, this._lastOutput);
+  };
+
+  LiteGraph.registerNodeType('sill/icon', IconNode);
+
+  // =====================
+  //  ⑧ 全局 Token 节点
   // =====================
 
   function GlobalTokenNode() {
@@ -494,9 +710,9 @@
 
   NodeEditor.getGroups = function() {
     return {
-      '基础组件': ['sill/color-block', 'sill/text', 'sill/image'],
+      '基础组件': ['sill/color-block', 'sill/text', 'sill/image', 'sill/video', 'sill/icon'],
       '工具': ['sill/convert', 'sill/merge'],
-      '全局控制': ['sill/global-token', 'sill/output']
+      '全局控制': ['sill/global-token', 'sill/output', 'sill/button']
     };
   };
 
