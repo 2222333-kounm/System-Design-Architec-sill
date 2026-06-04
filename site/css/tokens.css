@@ -1,0 +1,188 @@
+/* ========================================
+   Apple 中国官网设计系统 — Design Token
+   自动生成自 DESIGN.md v1.4.0
+   生成日期: 2026-06-04
+   ======================================== */
+
+:root {
+  color-scheme: light dark;
+  accent-color: var(--color-primary-500);
+
+  /* ========================================
+     1. 颜色系统 — 品牌主色板
+     ======================================== */
+
+  --color-primary-50: #E8F4FD;  /* 极浅主色（背景色调） */
+  --color-primary-100: #B8DAFF;  /* 浅主色（hover 背景） */
+  --color-primary-500: #0071E3;  /* 主色（按钮、交互元素） */
+  --color-primary-700: #0066CC;  /* 深主色（链接文字） */
+  --color-primary-900: #004080;  /* 最深主色（Active 状态） */
+
+  /* ========================================
+     2. 颜色系统 — 辅助色板
+     ======================================== */
+
+  --color-secondary-500: #1D1D1F;  /* 辅色（暗模式按钮/文字） */
+  --color-accent-500: #B64400;  /* 强调色（特殊标注/徽章） */
+  --color-success-500: #03A10E;  /* 成功状态 */
+  --color-warning-500: #FFE045;  /* 警告/促销标签 */
+  --color-error-500: #E30000;  /* 错误状态 */
+  --color-info-500: #2997FF;  /* 信息提示（暗模式链接色） */
+
+  /* ========================================
+     3. 颜色系统 — 中性色板（亮色模式）
+     ======================================== */
+
+  --color-neutral-50: #FFFFFF;  /* 页面主背景 */
+  --color-neutral-100: #FAFAFC;  /* 极浅背景 */
+  --color-neutral-150: #F5F5F7;  /* 产品卡片/区块背景 */
+  --color-neutral-200: #E8E8ED;  /* 边框/分割线 */
+  --color-neutral-300: #D2D2D7;  /* 轻边框/占位符 */
+  --color-neutral-500: #86868B;  /* 次要文字/辅助信息 */
+  --color-neutral-600: #6E6E73;  /* 副标题文字 */
+  --color-neutral-700: #424245;  /* 正文备选色 */
+  --color-neutral-900: #1D1D1F;  /* 标题/主文字 */
+
+  /* ========================================
+     4. 颜色系统 — 中性色板（暗色模式）
+     ======================================== */
+
+  --color-dark-bg: #000000;  /* 页面主背景 */
+  --color-dark-bg-secondary: #161617;  /* 次要背景 */
+  --color-dark-bg-tertiary: #1D1D1F;  /* 区块背景 */
+  --color-dark-text: #F5F5F7;  /* 主文字 */
+  --color-dark-text-secondary: #86868B;  /* 次要文字 */
+  --color-dark-border: #333336;  /* 边框 */
+  --color-dark-link: #2997FF;  /* 链接文字 */
+
+  /* ========================================
+     5. 颜色系统 — 语义色别名
+     ======================================== */
+
+  --color-bg-primary: #FFFFFF;  /* 页面主背景 */
+  --color-bg-card: #F5F5F7;  /* 卡片/产品区块背景 */
+  --color-bg-dark: #000000;  /* 暗色区块背景 */
+  --color-text-primary: #1D1D1F;  /* 主标题/正文 */
+  --color-text-secondary: #6E6E73;  /* 副标题/辅助文字 */
+  --color-text-tertiary: #86868B;  /* 脚注/次要信息 */
+  --color-text-inverse: #FFFFFF;  /* 深色背景上文字 */
+  --color-link: #0066CC;  /* 超链接 */
+  --color-link-hover: #0071E3;  /* 链接悬停 */
+  --color-link-dark: #2997FF;  /* 暗模式链接 */
+  --color-border: #D2D2D7;  /* 边框/分割线 */
+  --color-button-primary: #0071E3;  /* 主按钮背景 */
+  --color-button-primary-hover: #0076DF;  /* 主按钮悬停 */
+  --color-button-primary-active: #006EDB;  /* 主按钮按下 */
+  --color-button-dark: #1D1D1F;  /* 暗色按钮背景 */
+  --color-button-dark-hover: #272729;  /* 暗色按钮悬停 */
+  --color-button-dark-active: #18181A;  /* 暗色按钮按下 */
+
+  /* ========================================
+     6. 排版系统 — 字体家族
+     ======================================== */
+
+  --font-family-display: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;  /* 标题/展示文字 */
+  --font-family-text: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;  /* 正文/UI 文字 */
+  --font-family-cn: "SF Pro SC", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;  /* 中文内容 */
+  --font-family-mono: "SF Mono", "SF Pro Icons", "Menlo", "Monaco", "Consolas", monospace;  /* 代码字体 */
+
+  /* ========================================
+     7. 排版系统 — 字号层级
+     ======================================== */
+
+  --font-size-hero: 56px;  /* 首页 Hero 大标题 */ (行高 1.071, 字重 600 (Semibold), 字间距 -0.022em)
+  --font-size-display: 40px;  /* 产品区块标题 */ (行高 1.125, 字重 600 (Semibold), 字间距 -0.016em)
+  --font-size-headline: 24px;  /* 副标题 */ (行高 1.25, 字重 400 (Regular), 字间距 +0.012em)
+  --font-size-subhead: 21px;  /* 小副标题 */ (行高 1.25, 字重 400 (Regular), 字间距 +0.012em)
+  --font-size-body: 17px;  /* 正文/按钮文字 */ (行高 1.470, 字重 400 (Regular), 字间距 -0.022em)
+  --font-size-callout: 14px;  /* 标注/小字 */ (行高 1.286, 字重 400 (Regular), 字间距 -0.016em)
+  --font-size-caption: 12px;  /* 脚注 */ (行高 1.333, 字重 400 (Regular), 字间距 -0.01em)
+
+  /* ========================================
+     8. 排版系统 — 字重映射
+     ======================================== */
+
+  --font-weight-regular: 400;  /* 正文、副标题 */
+  --font-weight-medium: 500;  /* 按钮文字 */
+  --font-weight-semibold: 600;  /* 标题、Hero */
+  --font-weight-bold: 700;  /* 强调标题 */
+
+  /* ========================================
+     9. 间距系统
+     ======================================== */
+
+  --spacing-xs: 9px;  /* 按钮垂直内边距 */
+  --spacing-sm: 14px;  /* 按钮水平间距 */
+  --spacing-md: 24px;  /* 栅格间距、区块内边距 */
+  --spacing-lg: 39-44px;  /* 产品卡片上内边距 */
+  --spacing-xl: 53-61px;  /* 大区块间距 */
+  --spacing-2xl: 80-110px;  /* 页面顶级分区间距 */
+
+  /* ========================================
+     10. 断点系统
+     ======================================== */
+
+  --breakpoint-sm: 734px;
+  --breakpoint-md: 1068px;
+  --breakpoint-lg: 1440px;
+  --breakpoint-xl: --;
+
+  /* ========================================
+     11. 阴影系统
+     ======================================== */
+
+  --shadow-none: none;  /* 默认（无阴影） */
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);  /* 轻度浮动（极少使用） */
+
+  /* ========================================
+     12. 圆角系统
+     ======================================== */
+
+  --radius-sm: 5px;  /* 小按钮、标签 */
+  --radius-md: 8px;  /* 按钮（移动端）、小卡片 */
+  --radius-lg: 12px;  /* 大按钮（移动端变体） */
+  --radius-full: 980px;  /* 胶囊形按钮（所有桌面按钮） */
+
+}
+
+/* ========================================
+   暗色模式 — 变量覆盖
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-bg-primary: #000000;
+    --color-bg-card: #1D1D1F;
+    --color-neutral-150: #1D1D1F;
+    --color-neutral-200: #333336;
+    --color-neutral-300: #333336;
+    --color-text-primary: #F5F5F7;
+    --color-text-secondary: #86868B;
+    --color-text-tertiary: #6E6E73;
+    --color-text-inverse: #F5F5F7;
+    --color-link: #2997FF;
+    --color-link-hover: #2997FF;
+    --color-border: #333336;
+    --color-button-dark: #F5F5F7;
+    --color-button-dark-hover: #FFFFFF;
+    --color-button-dark-active: #86868B;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg-primary: #000000;
+  --color-bg-card: #1D1D1F;
+  --color-neutral-150: #1D1D1F;
+  --color-neutral-200: #333336;
+  --color-neutral-300: #333336;
+  --color-text-primary: #F5F5F7;
+  --color-text-secondary: #86868B;
+  --color-text-tertiary: #6E6E73;
+  --color-text-inverse: #F5F5F7;
+  --color-link: #2997FF;
+  --color-link-hover: #2997FF;
+  --color-border: #333336;
+  --color-button-dark: #F5F5F7;
+  --color-button-dark-hover: #FFFFFF;
+  --color-button-dark-active: #86868B;
+}

@@ -1,7 +1,8 @@
 # DESIGN.md — Apple 中国官网设计系统规范
 
-> **版本：** 1.0.0
+> **版本：** 1.5.0
 > **生成日期：** 2026-06-03
+> **最近更新：** 2026-06-04
 > **来源素材：** https://www.apple.com.cn
 > **设计流派：** 极简主义 + 科技/SaaS 现代风
 > **适用行业：** 消费电子、科技零售
@@ -79,6 +80,25 @@ Apple 官网以 **极简主义 (Minimalist)** 为核心基座，融合 **科技/
 | `--color-dark-text-secondary` | `#86868B` | 次要文字 |
 | `--color-dark-border` | `#333336` | 边框 |
 | `--color-dark-link` | `#2997FF` | 链接文字 |
+
+#### 暗色模式实现说明
+
+暗色模式通过三层机制实现：
+
+1. **Token 层** (`tokens.css`)：`@media (prefers-color-scheme: dark)` 内覆盖语义色 CSS 变量
+   - `--color-bg-primary`: `#FFFFFF` → `#000000`
+   - `--color-bg-card`: `#F5F5F7` → `#1D1D1F`
+   - `--color-text-primary`: `#1D1D1F` → `#F5F5F7`
+   - `--color-link`: `#0066CC` → `#2997FF`
+   - `--color-button-dark`: `#1D1D1F` → `#F5F5F7`（按钮文字色反转）
+2. **组件层** (`style.css`)：部分组件需要额外的样式覆盖
+   - Hero 浅色背景变体 → `var(--color-bg-card)`
+   - Hero 浅色模式图片 → `opacity: 0.85`（降低亮度，适配暗色背景）
+   - 导航栏 → `background: rgba(0, 0, 0, 0.96)`（加深，避免与黑色背景融成一片）
+3. **声明层**：
+   - `:root { color-scheme: light dark; }` — 告诉浏览器支持双模式
+   - `<meta name="color-scheme" content="light dark">` — HTML 级声明
+   - `:root { accent-color: var(--color-primary-500); }` — 表单控件自适应
 
 ### 2.5 语义色别名
 
@@ -417,8 +437,9 @@ Apple 官网极少使用阴影，保持扁平极简风格。
 3. **以产品图片为核心** — UI 元素不遮盖产品细节，图片占版面 60% 以上
 4. **一致的按钮语言** — 所有按钮统一胶囊形圆角（980px），同一页面不混用不同按钮风格
 5. **响应式字号缩减** — 大屏到小屏按比例缩小字号，保持视觉层级清晰
-6. **深色/亮色模式兼容** — 同时定义两套中性色板，通过 `@media (prefers-color-scheme: dark)` 切换
-7. **导航毛玻璃效果** — 导航栏使用 `backdrop-filter: blur(20px)` 增强层次感
+6. **深色/亮色模式兼容** — 同时定义两套中性色板，通过 `@media (prefers-color-scheme: dark)` 切换。使用语义色 CSS 变量实现自动适配，组件无需手动判断当前模式
+7. **无障碍适配** — 支持 `prefers-reduced-motion` 禁用所有过渡动画和毛玻璃效果，支持 `prefers-color-scheme` 自动切换模式
+8. **导航毛玻璃效果** — 导航栏使用 `backdrop-filter: blur(20px)` 增强层次感
 
 ### ❌ Don'ts（应避免）
 
@@ -432,5 +453,64 @@ Apple 官网极少使用阴影，保持扁平极简风格。
 
 ---
 
-> **调用方式：** 本文件为 Apple 中国官网的设计规范文档，可直接提供给 Claude Code 或其他 AI 工具
+---
+
+## 更新记录 (Changelog)
+
+### v1.5.0 (2026-06-04)
+- **新增**: `scripts/extract-tokens.js` — DESIGN.md → Code 自动提取工具
+  - `parse` 模式：从 DESIGN.md 解析 75 个 Design Token，输出 Machine-readable 的 `css/tokens.json`
+  - `css` 模式：从 DESIGN.md 自动生成 `css/tokens.css`（含暗色模式 `@media` + `[data-theme]` 双通道）
+  - `verify` 模式：验证 `tokens.css` 中定义的 75 个变量是否与 DESIGN.md 完全一致
+  - 支持 13 类 Token 分类：品牌色板、辅助色板、中性色、暗色调色板、语义色、字体家族、字号、字重、间距、断点、阴影、圆角、导航
+  - 遵循 Single Source of Truth：`DESIGN.md` 是唯一数据源，`tokens.css` 完全由其驱动
+  - `node scripts/extract-tokens.js` 查看用法说明
+
+### v1.4.0 (2026-06-04)
+- **新增**: 深色/亮色模式手动切换按钮
+  - 导航栏右侧添加主题切换按钮（太阳/月亮图标）
+  - 头部内联脚本在渲染前设置 `data-theme`，实现零闪烁切换
+  - 点击切换并 `localStorage` 持久化偏好
+  - 监听系统主题变化（用户未保存偏好时自动跟随）
+- **重构**: CSS 暗色模式改为 `data-theme` 属性驱动
+  - `tokens.css`：`:root[data-theme="dark"]` 为 JS 驱动的主入口
+  - `tokens.css`：`@media (prefers-color-scheme: dark) { :root:not([data-theme]) }` 为 JS 禁用回退
+  - `style.css`：组件级暗色覆盖精简为仅保留非变量属性（opacity、nav background）
+  - 按钮样式：`[data-theme="light"] 显示太阳图标，[data-theme="dark"] 显示月亮图标
+- **优化**: 导航栏响应式规则适配主题按钮（始终可见）
+
+### v1.3.0 (2026-06-04)
+- **增强**: 图片资源本地化 + 三级回退机制
+  - 生成本地 SVG 占位图（`images/placeholders/`）：暗色 Hero、浅色 Hero、暗色卡片、浅色卡片 4 种
+  - CDN 路径保留为主源（浏览器通常可加载）
+  - 所有 `<img>` 添加 `onerror="this.onerror=null;this.src='images/placeholders/...'"` 回退（JS 层）
+  - 所有图片容器添加 CSS 渐变背景回退（样式层）
+  - 占位图统一样式：`opacity: 0.6; filter: saturate(0.5)`（降低视觉突兀感）
+  - 消除 `<source>` 无回退风险（主 `<img>` 承担最终回退）
+- **注意**: Apple CDN 对 curl 返回 404，浏览器通常可正常加载。如 CDN 变更，只需替换 `src`
+
+### v1.2.0 (2026-06-04)
+- **增强**: 暗色模式全面完善
+  - `:root` 添加 `color-scheme: light dark` 声明
+  - `:root` 添加 `accent-color` 属性
+  - HTML 添加 `<meta name="color-scheme" content="light dark">`
+  - 暗色模式补全变量覆盖：`--color-neutral-150`, `--color-neutral-200`, `--color-neutral-300`, `--color-text-inverse`, `--color-button-dark`, `--color-button-dark-hover`, `--color-button-dark-active`
+  - 暗色模式下 Hero 浅色图片降低透明度 (`opacity: 0.85`)
+  - 暗色模式下导航栏背景加深 (`rgba(0,0,0,0.96)`)
+  - 消除 HTML 中的硬编码内联样式 (`style="color: #FFFFFF"` → `.tile-headline-inverse` 类)
+- **增强**: 新增全局 `prefers-reduced-motion` 支持（禁用过渡动画 + 导航毛玻璃）
+
+### v1.1.0 (2026-06-04)
+- **重构**: Token 定义从 `style.css` 分离为独立 `css/tokens.css` 文件
+- **新增**: 补充完整色板 — `--color-primary-50`, `--color-primary-100`, `--color-primary-900`, 辅助色板全部 6 色
+- **新增**: 补充暗色模式变量 — `--color-dark-bg-secondary`, `--color-dark-bg-tertiary`, `--color-dark-border`, `--color-dark-link`
+- **新增**: 补充语义色 — `--color-text-tertiary`, `--color-link-hover`, `--color-link-dark`, `--color-button-dark-hover`, `--color-button-dark-active`
+- **新增**: 添加字号层级 Token 7 级、字重映射 4 级、断点系统 3 级、阴影系统 2 级
+- **规范**: 实现命名一致性 — 统一使用 DESIGN.md 命名标准（如 `--font-display` → `--font-family-display`）
+- **消除**: 移除硬编码值 — `#272729` → `--color-button-dark-hover`, `#18181A` → `--color-button-dark-active`
+- **消除**: 暗色模式组件样式中的硬编码色值替换为 CSS 变量
+- **消除**: `style.css` 中与 `tokens.css` 重复的 `:root` 变量定义
+
+### v1.0.0 (2026-06-03)
+- 初始版本：从 apple.com.cn 逆向工程提取完整设计系统
 > 作为代码生成的设计依据。在生成 UI 组件代码前，请先加载本文件作为设计参考。

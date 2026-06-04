@@ -6,6 +6,13 @@
 .codegraph/*.log
 .codegraph/.dirty
 
+# Claude Code local state (per-machine)
+.claude/
+.understand-anything/
+
+# Debug / test artifacts
+site/images/test.*
+
 # OS files
 .DS_Store
 Thumbs.db

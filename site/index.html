@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
   <title>Apple (中国大陆) - 官方网站</title>
+  <!-- 主题初始化脚本 — 在渲染前执行，避免闪烁 -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('sill-theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.documentElement.setAttribute('data-theme', saved);
+        return;
+      }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -34,6 +50,19 @@
               <path d="m17.594 33.742-5.241-5.241a7.484 7.484 0 0 0 1.648-4.75c0-4.145-3.373-7.518-7.518-7.518s-7.518 3.373-7.518 7.518 3.373 7.518 7.518 7.518a7.47 7.47 0 0 0 4.446-1.512l5.268 5.267a.997.997 0 0 0 1.411 0 1.002 1.002 0 0 0-.014-1.282zm-16.111-9.991a5.508 5.508 0 1 1 11.016 0 5.508 5.508 0 0 1-11.016 0z" fill="currentColor"/>
             </svg>
           </a>
+        </li>
+        <li class="globalnav-item globalnav-item-theme">
+          <button class="globalnav-link theme-toggle" aria-label="切换深色/亮色模式" title="切换主题">
+            <!-- 太阳图标 (亮色模式) -->
+            <svg class="theme-icon-sun" height="44" viewBox="0 0 44 44" width="44" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="22" cy="22" r="6" fill="currentColor"/>
+              <path d="M22 10v-3M22 37v-3M10 22H7M37 22h-3M13.4 13.4l-2.1-2.1M32.7 32.7l-2.1-2.1M13.4 30.6l-2.1 2.1M32.7 11.3l-2.1 2.1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+            <!-- 月亮图标 (暗色模式) -->
+            <svg class="theme-icon-moon" height="44" viewBox="0 0 44 44" width="44" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 26.5A12.5 12.5 0 0 1 17.5 12c0-1.8.4-3.5 1-5A14.5 14.5 0 1 0 33 25.5a12.7 12.7 0 0 1-1 1z" fill="currentColor"/>
+            </svg>
+          </button>
         </li>
         <li class="globalnav-item globalnav-item-bag">
           <a href="#" class="globalnav-link" aria-label="购物袋">
@@ -67,7 +96,7 @@
       <div class="hero-image">
         <picture>
           <source media="(max-width: 734px)" srcset="https://www.apple.com.cn/home/images/heroes/iphone-16-pro/iphone-16-pro-small.jpg">
-          <img src="https://www.apple.com.cn/home/images/heroes/iphone-16-pro/iphone-16-pro-large.jpg" alt="iPhone 16 Pro">
+          <img src="https://www.apple.com.cn/home/images/heroes/iphone-16-pro/iphone-16-pro-large.jpg" alt="iPhone 16 Pro" onerror="this.onerror=null;this.src='images/placeholders/hero-dark.svg'">
         </picture>
       </div>
     </section>
@@ -85,7 +114,7 @@
       <div class="hero-image">
         <picture>
           <source media="(max-width: 734px)" srcset="https://www.apple.com.cn/home/images/heroes/iphone-16/iphone-16-small.jpg">
-          <img src="https://www.apple.com.cn/home/images/heroes/iphone-16/iphone-16-large.jpg" alt="iPhone 16">
+          <img src="https://www.apple.com.cn/home/images/heroes/iphone-16/iphone-16-large.jpg" alt="iPhone 16" onerror="this.onerror=null;this.src='images/placeholders/hero-light.svg'">
         </picture>
       </div>
     </section>
@@ -102,7 +131,7 @@
       <div class="hero-image">
         <picture>
           <source media="(max-width: 734px)" srcset="https://www.apple.com.cn/home/images/heroes/wwdc26/wwdc26-small.jpg">
-          <img src="https://www.apple.com.cn/home/images/heroes/wwdc26/wwdc26-large.jpg" alt="WWDC26">
+          <img src="https://www.apple.com.cn/home/images/heroes/wwdc26/wwdc26-large.jpg" alt="WWDC26" onerror="this.onerror=null;this.src='images/placeholders/hero-dark.svg'">
         </picture>
       </div>
     </section>
@@ -121,7 +150,7 @@
             </div>
           </div>
           <div class="tile-image">
-            <img src="https://www.apple.com.cn/home/images/tiles/ipad-pro/ipad-pro.jpg" alt="iPad Pro">
+            <img src="https://www.apple.com.cn/home/images/tiles/ipad-pro/ipad-pro.jpg" alt="iPad Pro" onerror="this.onerror=null;this.src='images/placeholders/tile-dark.svg'">
           </div>
         </article>
 
@@ -135,7 +164,7 @@
             </div>
           </div>
           <div class="tile-image">
-            <img src="https://www.apple.com.cn/home/images/tiles/macbook-air/macbook-air.jpg" alt="MacBook Air">
+            <img src="https://www.apple.com.cn/home/images/tiles/macbook-air/macbook-air.jpg" alt="MacBook Air" onerror="this.onerror=null;this.src='images/placeholders/tile-light.svg'">
           </div>
         </article>
       </div>
@@ -152,21 +181,21 @@
             </div>
           </div>
           <div class="tile-image">
-            <img src="https://www.apple.com.cn/home/images/tiles/airpods-pro/airpods-pro.jpg" alt="AirPods Pro">
+            <img src="https://www.apple.com.cn/home/images/tiles/airpods-pro/airpods-pro.jpg" alt="AirPods Pro" onerror="this.onerror=null;this.src='images/placeholders/tile-light.svg'">
           </div>
         </article>
 
         <article class="tile tile-dark">
           <div class="tile-content">
             <h3 class="tile-eyebrow">Apple Watch</h3>
-            <p class="tile-headline typography-section-headline" style="color: #FFFFFF;">健康，由你掌控。</p>
+            <p class="tile-headline typography-section-headline tile-headline-inverse">健康，由你掌控。</p>
             <div class="button-group">
               <a href="#" class="button button-primary">进一步了解</a>
               <a href="#" class="button button-link-dark">购买</a>
             </div>
           </div>
           <div class="tile-image">
-            <img src="https://www.apple.com.cn/home/images/tiles/apple-watch/apple-watch.jpg" alt="Apple Watch">
+            <img src="https://www.apple.com.cn/home/images/tiles/apple-watch/apple-watch.jpg" alt="Apple Watch" onerror="this.onerror=null;this.src='images/placeholders/tile-dark.svg'">
           </div>
         </article>
       </div>
@@ -183,20 +212,20 @@
             </div>
           </div>
           <div class="tile-image">
-            <img src="https://www.apple.com.cn/home/images/tiles/ipad-mini/ipad-mini.jpg" alt="iPad mini">
+            <img src="https://www.apple.com.cn/home/images/tiles/ipad-mini/ipad-mini.jpg" alt="iPad mini" onerror="this.onerror=null;this.src='images/placeholders/tile-light.svg'">
           </div>
         </article>
 
         <article class="tile tile-dark">
           <div class="tile-content">
             <h3 class="tile-eyebrow">Apple 专属交通卡</h3>
-            <p class="tile-headline typography-section-headline" style="color: #FFFFFF;">iPhone 和 Apple Watch<br>就是你的交通卡。</p>
+            <p class="tile-headline typography-section-headline tile-headline-inverse">iPhone 和 Apple Watch<br>就是你的交通卡。</p>
             <div class="button-group">
               <a href="#" class="button button-primary">进一步了解</a>
             </div>
           </div>
           <div class="tile-image">
-            <img src="https://www.apple.com.cn/home/images/tiles/transit-card/transit-card.jpg" alt="Apple 专属交通卡">
+            <img src="https://www.apple.com.cn/home/images/tiles/transit-card/transit-card.jpg" alt="Apple 专属交通卡" onerror="this.onerror=null;this.src='images/placeholders/tile-dark.svg'">
           </div>
         </article>
       </div>
@@ -337,6 +366,32 @@
     </section>
   </div>
 </footer>
+
+<!-- ====== 主题切换脚本 ====== -->
+<script>
+  (function() {
+    var html = document.documentElement;
+    var btn = document.querySelector('.theme-toggle');
+    var KEY = 'sill-theme';
+
+    // 切换并保存
+    function toggleTheme() {
+      var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      try { localStorage.setItem(KEY, next); } catch(e) {}
+    }
+
+    // 监听点击
+    if (btn) btn.addEventListener('click', toggleTheme);
+
+    // 监听系统主题变化（仅当用户未手动保存偏好时生效）
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (!localStorage.getItem(KEY)) {
+        html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      }
+    });
+  })();
+</script>
 
 </body>
 </html>

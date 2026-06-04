@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="580" viewBox="0 0 1440 580">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5F5F7"/>
+      <stop offset="100%" stop-color="#E8E8ED"/>
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="580" fill="url(#g)"/>
+  <text x="720" y="290" font-family="SF Pro Display, Helvetica Neue, Arial, sans-serif" font-size="24" font-weight="600" fill="#999" text-anchor="middle" dominant-baseline="middle">图片占位 — 浅色卡片</text>
+</svg>
