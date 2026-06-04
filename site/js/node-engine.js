@@ -603,6 +603,197 @@
   LiteGraph.registerNodeType('sill/icon', IconNode);
 
   // =====================
+  //  ⑩ 变换节点（Phase 3 新增）
+  // =====================
+
+  function TransformNode() {
+    this.addInput('css', PORT_TYPES.CSS);
+    this.addOutput('css', PORT_TYPES.CSS);
+    this.properties = { scale: 1, rotation: 0, opacity: 100, borderRadius: 0 };
+
+    var that = this;
+    this.addWidget('number', '缩放', this.properties.scale, function(v) { that.properties.scale = v; that._markDirty(); }, { min: 0.1, max: 5, step: 0.1 });
+    this.addWidget('number', '旋转°', this.properties.rotation, function(v) { that.properties.rotation = v; that._markDirty(); }, { min: -360, max: 360, step: 1 });
+    this.addWidget('slider', '透明度%', this.properties.opacity, function(v) { that.properties.opacity = v; that._markDirty(); }, { min: 0, max: 100 });
+    this.addWidget('number', '圆角', this.properties.borderRadius, function(v) { that.properties.borderRadius = v; that._markDirty(); }, { min: 0, max: 9999, step: 1 });
+
+    this.size = [280, 180];
+  }
+  TransformNode.title = '变换'; TransformNode.desc = '缩放/旋转/透明度/圆角';
+  TransformNode.prototype._markDirty = function() { this.setDirtyCanvas(true, true); this.graph?.onAfterChange?.(this.graph); };
+  TransformNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    var base = (input && input.css) ? JSON.parse(JSON.stringify(input.css)) : {};
+    base.transform = 'scale(' + this.properties.scale + ') rotate(' + this.properties.rotation + 'deg)';
+    base.opacity = this.properties.opacity / 100;
+    base['border-radius'] = this.properties.borderRadius + 'px';
+    this._lastOutput = { type: 'css', css: base };
+    this.setOutputData(0, this._lastOutput);
+  };
+  LiteGraph.registerNodeType('sill/transform', TransformNode);
+
+  // =====================
+  //  ⑪ 蒙版节点（Phase 3 新增）
+  // =====================
+
+  function MaskNode() {
+    this.addInput('image', PORT_TYPES.IMAGE);
+    this.addOutput('image', PORT_TYPES.IMAGE);
+    this.properties = { shape: '矩形', feather: 0, invert: false };
+
+    var that = this;
+    this.addWidget('combo', '形状', this.properties.shape, function(v) { that.properties.shape = v; that._markDirty(); }, { values: ['矩形', '圆形', '渐变'] });
+    this.addWidget('number', '羽化', this.properties.feather, function(v) { that.properties.feather = v; that._markDirty(); }, { min: 0, max: 100, step: 1 });
+    this.addWidget('toggle', '反转', this.properties.invert, function(v) { that.properties.invert = v; that._markDirty(); });
+
+    this.size = [280, 140];
+  }
+  MaskNode.title = '蒙版'; MaskNode.desc = '矩形/圆形/渐变 · 羽化/反转';
+  MaskNode.prototype._markDirty = function() { this.setDirtyCanvas(true, true); this.graph?.onAfterChange?.(this.graph); };
+  MaskNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    var base = (input && input.css) ? JSON.parse(JSON.stringify(input.css)) : {};
+    this._lastOutput = {
+      type: 'image',
+      url: input ? input.url : '',
+      mask: { shape: this.properties.shape, feather: this.properties.feather, invert: this.properties.invert },
+      css: base
+    };
+    this.setOutputData(0, this._lastOutput);
+  };
+  LiteGraph.registerNodeType('sill/mask', MaskNode);
+
+  // =====================
+  //  ⑫ 边框节点（Phase 3 新增）
+  // =====================
+
+  function BorderNode() {
+    this.addInput('css', PORT_TYPES.CSS);
+    this.addOutput('css', PORT_TYPES.CSS);
+    this.properties = { lineType: '实线', thickness: 2, color: '#E5E5E5', borderRadius: 8 };
+
+    var ts = window.TokenStore;
+    if (ts) { var border = ts.get('--color-border'); if (border) this.properties.color = border; }
+
+    var that = this;
+    this.addWidget('combo', '线型', this.properties.lineType, function(v) { that.properties.lineType = v; that._markDirty(); }, { values: ['实线', '虚线', '点线'] });
+    this.addWidget('number', '粗细', this.properties.thickness, function(v) { that.properties.thickness = v; that._markDirty(); }, { min: 0, max: 20, step: 1 });
+    this.addWidget('color', '颜色', this.properties.color, function(v) { that.properties.color = v; that._markDirty(); });
+    this.addWidget('number', '圆角', this.properties.borderRadius, function(v) { that.properties.borderRadius = v; that._markDirty(); }, { min: 0, max: 9999, step: 1 });
+
+    this.size = [280, 200];
+    this._lineMap = { '实线': 'solid', '虚线': 'dashed', '点线': 'dotted' };
+  }
+  BorderNode.title = '边框'; BorderNode.desc = '实线/虚线/点线 · 粗细/颜色/圆角';
+  BorderNode.prototype._markDirty = function() { this.setDirtyCanvas(true, true); this.graph?.onAfterChange?.(this.graph); };
+  BorderNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    var base = (input && input.css) ? JSON.parse(JSON.stringify(input.css)) : {};
+    base.border = this.properties.thickness + 'px ' + (this._lineMap[this.properties.lineType] || 'solid') + ' ' + this.properties.color;
+    base['border-radius'] = this.properties.borderRadius + 'px';
+    this._lastOutput = { type: 'css', css: base };
+    this.setOutputData(0, this._lastOutput);
+  };
+  LiteGraph.registerNodeType('sill/border', BorderNode);
+
+  // =====================
+  //  ⑬ 阴影节点（Phase 3 新增）
+  // =====================
+
+  function ShadowNode() {
+    this.addInput('css', PORT_TYPES.CSS);
+    this.addOutput('css', PORT_TYPES.CSS);
+    this.properties = { shadowType: '投影', offsetX: 0, offsetY: 4, blur: 10, spread: 0, color: 'rgba(0,0,0,0.1)' };
+
+    var that = this;
+    this.addWidget('combo', '类型', this.properties.shadowType, function(v) { that.properties.shadowType = v; that._markDirty(); }, { values: ['投影', '内阴影'] });
+    this.addWidget('number', 'X偏移', this.properties.offsetX, function(v) { that.properties.offsetX = v; that._markDirty(); }, { min: -50, max: 50, step: 1 });
+    this.addWidget('number', 'Y偏移', this.properties.offsetY, function(v) { that.properties.offsetY = v; that._markDirty(); }, { min: -50, max: 50, step: 1 });
+    this.addWidget('number', '模糊', this.properties.blur, function(v) { that.properties.blur = v; that._markDirty(); }, { min: 0, max: 100, step: 1 });
+    this.addWidget('number', '扩展', this.properties.spread, function(v) { that.properties.spread = v; that._markDirty(); }, { min: 0, max: 50, step: 1 });
+    this.addWidget('color', '颜色', this.properties.color, function(v) { that.properties.color = v; that._markDirty(); });
+
+    this.size = [280, 260];
+  }
+  ShadowNode.title = '阴影'; ShadowNode.desc = '投影/内阴影 · 偏移/模糊/扩展/颜色';
+  ShadowNode.prototype._markDirty = function() { this.setDirtyCanvas(true, true); this.graph?.onAfterChange?.(this.graph); };
+  ShadowNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    var base = (input && input.css) ? JSON.parse(JSON.stringify(input.css)) : {};
+    var inset = this.properties.shadowType === '内阴影' ? 'inset ' : '';
+    base['box-shadow'] = inset + this.properties.offsetX + 'px ' + this.properties.offsetY + 'px ' + this.properties.blur + 'px ' + this.properties.spread + 'px ' + this.properties.color;
+    this._lastOutput = { type: 'css', css: base };
+    this.setOutputData(0, this._lastOutput);
+  };
+  LiteGraph.registerNodeType('sill/shadow', ShadowNode);
+
+  // =====================
+  //  ⑭ 鼠标跟随节点（Phase 3 新增）
+  // =====================
+
+  function MouseFollowNode() {
+    this.addInput('css', PORT_TYPES.CSS);
+    this.addOutput('interactive', PORT_TYPES.INTERACTIVE);
+    this.properties = { effect: '视差', strength: 0.3, range: 200 };
+
+    var that = this;
+    this.addWidget('combo', '效果', this.properties.effect, function(v) { that.properties.effect = v; that._markDirty(); }, { values: ['视差', '发光', '3D倾斜'] });
+    this.addWidget('number', '强度', this.properties.strength, function(v) { that.properties.strength = v; that._markDirty(); }, { min: 0, max: 1, step: 0.05 });
+    this.addWidget('number', '范围', this.properties.range, function(v) { that.properties.range = v; that._markDirty(); }, { min: 50, max: 500, step: 10 });
+
+    this.size = [280, 160];
+  }
+  MouseFollowNode.title = '鼠标跟随'; MouseFollowNode.desc = '视差/发光/3D倾斜 · 强度/范围';
+  MouseFollowNode.prototype._markDirty = function() { this.setDirtyCanvas(true, true); this.graph?.onAfterChange?.(this.graph); };
+  MouseFollowNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    var baseCss = (input && input.css) ? JSON.parse(JSON.stringify(input.css)) : {};
+    this._lastOutput = {
+      type: 'interactive', kind: 'mouse-follow',
+      effect: this.properties.effect,
+      strength: this.properties.strength,
+      range: this.properties.range,
+      css: baseCss
+    };
+    this.setOutputData(0, this._lastOutput);
+  };
+  LiteGraph.registerNodeType('sill/mouse-follow', MouseFollowNode);
+
+  // =====================
+  //  ⑮ 转场节点（Phase 3 新增）
+  // =====================
+
+  function TransitionNode() {
+    this.addInput('css', PORT_TYPES.CSS);
+    this.addOutput('interactive', PORT_TYPES.INTERACTIVE);
+    this.properties = { trigger: 'hover', transformType: '缩放', duration: 0.3, easing: 'ease-out' };
+
+    var that = this;
+    this.addWidget('combo', '触发', this.properties.trigger, function(v) { that.properties.trigger = v; that._markDirty(); }, { values: ['hover', 'click'] });
+    this.addWidget('combo', '变换类型', this.properties.transformType, function(v) { that.properties.transformType = v; that._markDirty(); }, { values: ['缩放', '位移', '淡入'] });
+    this.addWidget('number', '时长(s)', this.properties.duration, function(v) { that.properties.duration = v; that._markDirty(); }, { min: 0.1, max: 5, step: 0.1 });
+    this.addWidget('combo', '缓动', this.properties.easing, function(v) { that.properties.easing = v; that._markDirty(); }, { values: ['ease-out', 'ease-in', 'linear', 'ease-in-out'] });
+
+    this.size = [280, 180];
+  }
+  TransitionNode.title = '转场'; TransitionNode.desc = 'hover/click · 缩放/位移/淡入';
+  TransitionNode.prototype._markDirty = function() { this.setDirtyCanvas(true, true); this.graph?.onAfterChange?.(this.graph); };
+  TransitionNode.prototype.onExecute = function() {
+    var input = this.getInputData(0);
+    var baseCss = (input && input.css) ? JSON.parse(JSON.stringify(input.css)) : {};
+    this._lastOutput = {
+      type: 'interactive', kind: 'transition',
+      trigger: this.properties.trigger,
+      transformType: this.properties.transformType,
+      duration: this.properties.duration,
+      easing: this.properties.easing,
+      css: baseCss
+    };
+    this.setOutputData(0, this._lastOutput);
+  };
+  LiteGraph.registerNodeType('sill/transition', TransitionNode);
+
+  // =====================
   //  ⑧ 全局 Token 节点
   // =====================
 
@@ -711,6 +902,7 @@
   NodeEditor.getGroups = function() {
     return {
       '基础组件': ['sill/color-block', 'sill/text', 'sill/image', 'sill/video', 'sill/icon'],
+      '变换特效': ['sill/transform', 'sill/mask', 'sill/border', 'sill/shadow', 'sill/mouse-follow', 'sill/transition'],
       '工具': ['sill/convert', 'sill/merge'],
       '全局控制': ['sill/global-token', 'sill/output', 'sill/button']
     };
