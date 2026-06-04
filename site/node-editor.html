@@ -128,6 +128,44 @@
         onOutputChange: updatePreview
       });
 
+      // ===== 安装右键/搜索/Tab 钩子 =====
+      (function installHooks() {
+        var c = engine.canvas;
+        if (!c) { setTimeout(installHooks, 100); return; }
+
+        // 右键 → 自定义中文分组菜单
+        c.onShowCustomMenu = function(options, e) {
+          showContextMenu(e.clientX, e.clientY);
+          return true;
+        };
+
+        // Tab 快捷键 → 弹出搜索
+        canvasWrap.setAttribute('tabindex', '0');
+        canvasWrap.addEventListener('keydown', function(e) {
+          if (e.key === 'Tab' && !e.shiftKey) {
+            e.preventDefault();
+            showSearchBox();
+          }
+        });
+        canvasWrap.addEventListener('click', function() {
+          canvasWrap.focus();
+        });
+
+        // 双击 canvas 元素 → 弹出组件选择面板（搜索框+分组列表）
+        var canvasEl = c.canvas;
+        if (canvasEl) {
+          canvasEl.addEventListener('dblclick', function(e) {
+            e.stopPropagation();
+            showSearchBox();
+          });
+        }
+
+        // 验证
+        var types = LiteGraph.registered_node_types || {};
+        var sillTypes = Object.keys(types).filter(function(k) { return k.indexOf('sill/') === 0; });
+        console.log('[节点编辑器]', sillTypes.length, '个节点已注册');
+      })();
+
       // 状态更新
       function updateStatus() {
         var count = engine.graph._nodes ? engine.graph._nodes.length : 0;
@@ -217,6 +255,201 @@
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && engine.canvas) engine.canvas.selectNodes([]);
       });
+
+      // 自定义右键和搜索菜单（通过 LiteGraph 钩子触发，见上方 init 处）
+      var LABEL_MAP = {
+        'sill/color-block': '🎨 色块',    'sill/text': '📝 文字',
+        'sill/image': '🖼️ 图片',          'sill/video': '🎬 视频',
+        'sill/icon': '🔣 图标',
+        'sill/transform': '🔄 变换',      'sill/mask': '🎭 蒙版',
+        'sill/border': '📦 边框',         'sill/shadow': '💡 阴影',
+        'sill/mouse-follow': '🖱️ 鼠标跟随','sill/transition': '✨ 转场',
+        'sill/convert': '🔄 转换',        'sill/merge': '🗂️ 合并',
+        'sill/global-token': '🌐 全局 Token', 'sill/button': '🔘 按钮',
+        'sill/output': '📤 输出',         'sill/note': '📌 备注'
+      };
+
+      function showContextMenu(x, y) {
+        var existing = document.getElementById('custom-context-menu');
+        if (existing) existing.remove();
+
+        var menu = document.createElement('div');
+        menu.id = 'custom-context-menu';
+        menu.style.cssText =
+          'position:fixed;z-index:99999;background:rgba(22,24,30,0.97);' +
+          'backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);' +
+          'border-radius:12px;padding:6px 0;min-width:200px;' +
+          'box-shadow:0 16px 40px rgba(0,0,0,0.5);font-size:12px;' +
+          'max-height:70vh;overflow-y:auto;';
+
+        var groups = NodeEditor.getGroups();
+        var first = true;
+        Object.keys(groups).forEach(function(groupName) {
+          if (!first) {
+            var sep = document.createElement('div');
+            sep.style.cssText = 'height:1px;background:rgba(255,255,255,0.06);margin:4px 12px;';
+            menu.appendChild(sep);
+          }
+          first = false;
+
+          var header = document.createElement('div');
+          header.style.cssText = 'color:#6B7280;font-size:10px;padding:4px 14px 2px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;';
+          header.textContent = groupName;
+          menu.appendChild(header);
+
+          groups[groupName].forEach(function(type) {
+            var displayName = LABEL_MAP[type] || type.replace('sill/', '');
+            var item = document.createElement('div');
+            item.style.cssText =
+              'display:flex;align-items:center;gap:8px;padding:5px 14px;' +
+              'cursor:pointer;color:#D1D5DB;transition:background 0.1s;';
+            item.innerHTML = displayName;
+            item.addEventListener('mouseenter', function() { this.style.background = 'rgba(255,255,255,0.06)'; });
+            item.addEventListener('mouseleave', function() { this.style.background = ''; });
+            item.addEventListener('click', function() {
+              menu.remove();
+              addNodeToCanvas(type);
+            });
+            menu.appendChild(item);
+          });
+        });
+
+        // 定位
+        var mx = Math.min(x, window.innerWidth - 220);
+        var my = Math.min(y, window.innerHeight - 300);
+        menu.style.left = mx + 'px';
+        menu.style.top = my + 'px';
+        document.body.appendChild(menu);
+
+        function closeMenu(e) {
+          if (!menu.contains(e.target)) {
+            menu.remove();
+            document.removeEventListener('click', closeMenu);
+            document.removeEventListener('contextmenu', closeMenu);
+          }
+        }
+        setTimeout(function() {
+          document.addEventListener('click', closeMenu);
+          document.addEventListener('contextmenu', closeMenu);
+        }, 10);
+      }
+
+      function addNodeToCanvas(type) {
+        var viewport = canvasWrap;
+        var cx = viewport ? viewport.clientWidth / 2 : 400;
+        var cy = viewport ? viewport.clientHeight / 2 : 300;
+        var currentScale = 1;
+        try { currentScale = engine.canvas.ds.scale || 1; } catch(e) {}
+        var posX = (cx - 160 + Math.random() * 80) / currentScale;
+        var posY = (cy - 100 + Math.random() * 80) / currentScale;
+
+        var node = LiteGraph.createNode(type);
+        if (node) {
+          node.pos = [posX, posY];
+          engine.graph.add(node);
+          engine.graph.onAfterChange(engine.graph);
+        }
+      }
+
+      function showSearchBox() {
+        var existing = document.getElementById('custom-search-box');
+        if (existing) existing.remove();
+
+        var overlay = document.createElement('div');
+        overlay.id = 'custom-search-box';
+        overlay.style.cssText =
+          'position:fixed;z-index:99999;top:0;left:0;right:0;bottom:0;' +
+          'display:flex;align-items:center;justify-content:center;' +
+          'background:rgba(0,0,0,0.3);';
+
+        var box = document.createElement('div');
+        box.style.cssText =
+          'background:rgba(22,24,30,0.98);backdrop-filter:blur(20px);' +
+          'border:1px solid rgba(255,255,255,0.1);border-radius:14px;' +
+          'padding:16px 20px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.5);';
+
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = '搜索节点… 输入名称后回车添加';
+        input.style.cssText =
+          'width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);' +
+          'border-radius:8px;padding:8px 12px;color:white;font-size:13px;outline:none;' +
+          'box-sizing:border-box;';
+
+        var results = document.createElement('div');
+        results.id = 'search-results';
+        results.style.cssText = 'margin-top:8px;max-height:300px;overflow-y:auto;';
+
+        box.appendChild(input);
+        box.appendChild(results);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        function doSearch(keyword) {
+          results.innerHTML = '';
+          if (!keyword) {
+            // 显示所有分组
+            var groups = NodeEditor.getGroups();
+            Object.keys(groups).forEach(function(g) {
+              var gh = document.createElement('div');
+              gh.style.cssText = 'color:#6B7280;font-size:10px;padding:6px 4px 2px;font-weight:600;';
+              gh.textContent = g;
+              results.appendChild(gh);
+              groups[g].forEach(function(type) {
+                var name = LABEL_MAP[type] || type;
+                if (name.indexOf(keyword) >= 0 || type.indexOf(keyword) >= 0) {
+                  var item = createSearchItem(type, name, overlay);
+                  results.appendChild(item);
+                }
+              });
+            });
+            return;
+          }
+          var kw = keyword.toLowerCase();
+          var groups = NodeEditor.getGroups();
+          Object.keys(groups).forEach(function(g) {
+            groups[g].forEach(function(type) {
+              var name = LABEL_MAP[type] || type;
+              if (name.toLowerCase().indexOf(kw) >= 0 || type.indexOf(kw) >= 0) {
+                var item = createSearchItem(type, name, overlay);
+                results.appendChild(item);
+              }
+            });
+          });
+        }
+
+        input.addEventListener('input', function() { doSearch(this.value); });
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            var first = results.querySelector('.search-item');
+            if (first) { first.click(); }
+          }
+          if (e.key === 'Escape') { overlay.remove(); }
+        });
+
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) overlay.remove();
+        });
+
+        setTimeout(function() { input.focus(); }, 50);
+        doSearch('');
+      }
+
+      function createSearchItem(type, name, overlay) {
+        var item = document.createElement('div');
+        item.className = 'search-item';
+        item.style.cssText =
+          'padding:5px 6px;border-radius:6px;cursor:pointer;color:#D1D5DB;font-size:12px;' +
+          'transition:background 0.1s;';
+        item.textContent = name;
+        item.addEventListener('mouseenter', function() { this.style.background = 'rgba(255,255,255,0.06)'; });
+        item.addEventListener('mouseleave', function() { this.style.background = ''; });
+        item.addEventListener('click', function() {
+          overlay.remove();
+          addNodeToCanvas(type);
+        });
+        return item;
+      }
 
       console.log('[节点编辑器] Phase 1 启动完成: 7 个节点 + 分屏预览 + 快捷键');
     })();

@@ -30,15 +30,56 @@
     if (window.TokenStore) window.TokenStore.refresh();
 
     var graph = new LGraph();
-    var canvas = new LGraphCanvas(canvasContainer, graph);
+
+    // 传入的是容器 div，需要创建 canvas 元素
+    var canvasEl;
+    if (canvasContainer.tagName === 'CANVAS') {
+      canvasEl = canvasContainer;
+    } else {
+      canvasEl = document.createElement('canvas');
+      canvasEl.style.width = '100%';
+      canvasEl.style.height = '100%';
+      canvasEl.style.display = 'block';
+      canvasEl.id = 'litegraph-canvas';
+      canvasContainer.appendChild(canvasEl);
+
+      // 方案 1+3: 创建 canvas 后立即获取容器真实尺寸并设置
+      var w = canvasContainer.clientWidth;
+      var h = canvasContainer.clientHeight;
+      if (w === 0) w = canvasContainer.offsetWidth;
+      if (h === 0) h = canvasContainer.offsetHeight;
+      if (w === 0) w = window.innerWidth - 420; // 右侧预览面板约 420px
+      if (h === 0) h = window.innerHeight - 44; // 顶栏 44px
+      canvasEl.width = Math.max(w, 400);
+      canvasEl.height = Math.max(h, 400);
+    }
+
+    var canvas = new LGraphCanvas(canvasEl, graph);
     canvas.background_image = '';
     canvas.node_title_color = '#FAFAFA';
-    canvas.allow_searchbox = false;
+    canvas.allow_searchbox = true;
 
-    // 双击空白 → 搜索
-    canvas.onSearchBox = function(e) {
-      canvas.showSearchBox(e);
-    };
+    // 方案 2: 用 canvas.setSize 强制设置
+    canvas.setSize(canvasEl.width, canvasEl.height);
+
+    // 方案 2: 监听 resize
+    window.addEventListener('resize', function() {
+      var cw = canvasContainer.clientWidth;
+      var ch = canvasContainer.clientHeight;
+      if (cw > 0 && ch > 0) {
+        canvasEl.width = cw;
+        canvasEl.height = ch;
+        canvas.setSize(cw, ch);
+      }
+    });
+
+    // 方案 5: 延迟强制重绘
+    setTimeout(function() {
+      canvasEl.width = canvasEl.clientWidth || canvasEl.width;
+      canvasEl.height = canvasEl.clientHeight || canvasEl.height;
+      canvas.setSize(canvasEl.width, canvasEl.height);
+      canvas.draw(true);
+    }, 100);
 
     // 监听输出变化 → 通知预览面板
     graph.onAfterChange = function() {
