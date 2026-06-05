@@ -281,6 +281,10 @@
     'sill/video': '🎬 视频',
     'sill/button': '🔘 按钮',
     'sill/icon': '🔣 图标',
+    'sill/layout-container': '📐 布局容器',
+    'sill/spacing': '↔ 间距',
+    'sill/instance': '♻ 组件实例',
+    'sill/breakpoint': '📱 断点',
     'sill/output': '📤 输出'
   };
 
@@ -299,6 +303,7 @@
     // 注册的节点类型（按分组显示）
     var groups = {
       '基础组件': ['sill/color-block', 'sill/text', 'sill/image', 'sill/video', 'sill/button', 'sill/icon'],
+      '布局 & 结构': ['sill/layout-container', 'sill/spacing', 'sill/instance', 'sill/breakpoint'],
       '全局控制': ['sill/output']
     };
 
