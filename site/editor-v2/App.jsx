@@ -34,6 +34,7 @@ import AIScanner from './components/AIScanner';
 import ExportPanel from './components/ExportPanel';
 import TokenEditor from './components/TokenEditor';
 import DesignCheck from './components/DesignCheck';
+import { buildHierarchy, getMergedCss } from './utils/cascade';
 import { useStore, setStore, componentStore } from './store';
 
 const nodeTypes = {
@@ -617,6 +618,33 @@ function Flow() {
         break;
       }
       default:
+    }
+
+    // CSS 级联：从父级布局容器继承样式
+    if (output && output.css) {
+      const { parentMap } = buildHierarchy(nodes, edges);
+      if (parentMap[sourceNode.id]) {
+        const parentId = parentMap[sourceNode.id];
+        const parentNode = nodes.find(n => n.id === parentId);
+        if (parentNode && parentNode.data?.properties) {
+          const pp = parentNode.data.properties;
+          // 父级可继承的属性
+          const inheritMap = {
+            color: pp.color, fontFamily: pp.fontFamily,
+            fontSize: pp.fontSize, fontWeight: pp.fontWeight,
+            lineHeight: pp.lineHeight, textAlign: pp.textAlign,
+            gap: pp.gap,
+          };
+          // 只填充子节点未设置的属性
+          Object.entries(inheritMap).forEach(([key, val]) => {
+            if (val !== undefined && !output.css[key]) {
+              output.css[key] = String(val) + (key === 'fontSize' && pp.fontSizeUnit ? pp.fontSizeUnit : '');
+            }
+          });
+          output._inherited = true;
+          output._parentId = parentId;
+        }
+      }
     }
 
     setStore({ previewData: output });

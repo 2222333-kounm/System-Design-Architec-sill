@@ -134,7 +134,9 @@ export default function PreviewPanel() {
         height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center',
         borderTop: '1px solid rgba(255,255,255,0.04)', color: '#374151', fontSize: 9, flexShrink: 0,
       }}>
-        {previewData?._via
+        {previewData?._inherited
+          ? `⬆ 继承自 ${previewData._parentId || '父级'} · 子节点可覆盖`
+          : previewData?._via
           ? `经由 ${previewData._via} 节点 · 连接节点到输出节点`
           : '💡 连接节点到输出节点'}
       </div>
