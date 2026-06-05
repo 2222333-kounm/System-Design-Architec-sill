@@ -291,6 +291,9 @@
     'sill/shadow': '💡 阴影',
     'sill/mouse-follow': '🖱️ 鼠标跟随',
     'sill/transition': '✨ 转场',
+    'sill/convert': '🔄 转换',
+    'sill/merge': '🗂️ 合并',
+    'sill/global-token': '🌐 全局 Token',
     'sill/output': '📤 输出'
   };
 
@@ -311,7 +314,7 @@
       '基础组件': ['sill/color-block', 'sill/text', 'sill/image', 'sill/video', 'sill/button', 'sill/icon'],
       '布局 & 结构': ['sill/layout-container', 'sill/spacing', 'sill/instance', 'sill/breakpoint'],
       '变换 & 特效': ['sill/transform', 'sill/mask', 'sill/border', 'sill/shadow', 'sill/mouse-follow', 'sill/transition'],
-      '全局控制': ['sill/output']
+      '工具 & 全局': ['sill/convert', 'sill/merge', 'sill/global-token', 'sill/output']
     };
 
     var first = true;
