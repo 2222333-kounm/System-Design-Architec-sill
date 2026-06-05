@@ -73,6 +73,61 @@ function Flow() {
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
+  // =====================
+  //  撤销/重做
+  // =====================
+
+  const [history, setHistory] = useState([{ nodes: initialNodes, edges: [] }]);
+  const [historyIndex, setHistoryIndex] = useState(0);
+  const historySkipRef = useRef(false);
+
+  const pushHistory = useCallback((nds, eds) => {
+    if (historySkipRef.current) { historySkipRef.current = false; return; }
+    setHistory((prev) => {
+      const trimmed = prev.slice(0, historyIndex + 1);
+      const entry = { nodes: JSON.parse(JSON.stringify(nds)), edges: JSON.parse(JSON.stringify(eds)) };
+      return [...trimmed, entry].slice(-50); // 最多50步
+    });
+    setHistoryIndex((i) => Math.min(i + 1, 49));
+  }, [historyIndex]);
+
+  const undo = useCallback(() => {
+    if (historyIndex <= 0) return;
+    const newIdx = historyIndex - 1;
+    const entry = history[newIdx];
+    if (!entry) return;
+    historySkipRef.current = true;
+    setNodes(JSON.parse(JSON.stringify(entry.nodes)));
+    setEdges(JSON.parse(JSON.stringify(entry.edges)));
+    setHistoryIndex(newIdx);
+  }, [history, historyIndex, setNodes, setEdges]);
+
+  const redo = useCallback(() => {
+    if (historyIndex >= history.length - 1) return;
+    const newIdx = historyIndex + 1;
+    const entry = history[newIdx];
+    if (!entry) return;
+    historySkipRef.current = true;
+    setNodes(JSON.parse(JSON.stringify(entry.nodes)));
+    setEdges(JSON.parse(JSON.stringify(entry.edges)));
+    setHistoryIndex(newIdx);
+  }, [history, historyIndex, setNodes, setEdges]);
+
+  // 节点/边变化 → 记录历史
+  const onNodesChangeWrapped = useCallback((changes) => {
+    onNodesChange(changes);
+  }, [onNodesChange]);
+
+  const onEdgesChangeWrapped = useCallback((changes) => {
+    onEdgesChange(changes);
+  }, [onEdgesChange]);
+
+  React.useEffect(() => {
+    if (historySkipRef.current) return;
+    const timer = setTimeout(() => pushHistory(nodes, edges), 200);
+    return () => clearTimeout(timer);
+  }, [nodes, edges, pushHistory]);
+
   // 全局 handleNodeChange
   const handleNodeChange = useCallback((nodeId, properties) => {
     setNodes((nds) =>
@@ -501,6 +556,103 @@ function Flow() {
     setNodes((nds) => nds.concat(newNode));
   }, []);
 
+  // =====================
+  //  预览面板宽度（可拖拽）
+  // =====================
+
+  const [previewWidth, setPreviewWidth] = useState(420);
+  const dividerRef = useRef(null);
+  const isDraggingDivider = useRef(false);
+
+  const onDividerMouseDown = useCallback((e) => {
+    isDraggingDivider.current = true;
+    e.preventDefault();
+    document.body.style.cursor = 'col-resize';
+  }, []);
+
+  React.useEffect(() => {
+    const onMouseMove = (e) => {
+      if (!isDraggingDivider.current) return;
+      const totalWidth = document.body.clientWidth;
+      const newWidth = Math.max(280, Math.min(600, totalWidth - e.clientX));
+      setPreviewWidth(newWidth);
+    };
+    const onMouseUp = () => {
+      if (isDraggingDivider.current) {
+        isDraggingDivider.current = false;
+        document.body.style.cursor = '';
+      }
+    };
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => { window.removeEventListener('mousemove', onMouseMove); window.removeEventListener('mouseup', onMouseUp); };
+  }, []);
+
+  // =====================
+  //  Ctrl+S 保存 / Ctrl+O 加载
+  // =====================
+
+  const saveToFile = useCallback(() => {
+    const data = JSON.stringify({ nodes, edges }, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'node-editor-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [nodes, edges]);
+
+  const loadFromFile = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (data.nodes) { setNodes(data.nodes); }
+          if (data.edges) { setEdges(data.edges); }
+        } catch(err) { alert('加载失败: ' + err.message); }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }, [setNodes, setEdges]);
+
+  // =====================
+  //  键盘快捷键
+  // =====================
+
+  React.useEffect(() => {
+    const handler = (e) => {
+      const ctrl = e.ctrlKey || e.metaKey;
+      if (ctrl && e.key === 's') { e.preventDefault(); saveToFile(); }
+      if (ctrl && e.key === 'o') { e.preventDefault(); loadFromFile(); }
+      if (ctrl && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+      if (ctrl && e.key === 'z' && e.shiftKey) { e.preventDefault(); redo(); }
+      if (ctrl && e.key === 'y') { e.preventDefault(); redo(); }
+      if (e.key === 'r' && !ctrl) {
+        e.preventDefault();
+        if (reactFlowInstance && nodes.length > 0) {
+          reactFlowInstance.fitView({ padding: 0.2, duration: 200 });
+        }
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [saveToFile, loadFromFile, undo, redo, reactFlowInstance, nodes]);
+
+  // 暴露保存/加载到 Store（供 App 工具栏按钮使用）
+  React.useEffect(() => {
+    setStore({ saveToFile, loadFromFile });
+  }, [saveToFile, loadFromFile]);
+
   return (
     <div style={{ display: 'flex', width: '100%', height: '100%' }}>
       {/* 画布 */}
@@ -508,8 +660,8 @@ function Flow() {
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
+          onNodesChange={onNodesChangeWrapped}
+          onEdgesChange={onEdgesChangeWrapped}
           onConnect={onConnect}
           onInit={(instance) => { setReactFlowInstance(instance); setStore({ reactFlowInstance: instance }); }}
           onDrop={onDrop}
@@ -551,6 +703,22 @@ function Flow() {
           />
         </ReactFlow>
         <AIScanner addNodes={handleAiAddNodes} />
+
+        {/* 浮动工具按钮（撤销/重做/保存/加载/重置） */}
+        <div style={{ position: 'absolute', bottom: 16, right: previewWidth + 16, zIndex: 10, display: 'flex', gap: 4 }}>
+          <button onClick={undo} title="撤销 Ctrl+Z"
+            style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(30,32,38,0.9)', border: '1px solid rgba(255,255,255,0.08)', color: '#9CA3AF', cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>↩</button>
+          <button onClick={redo} title="重做 Ctrl+Shift+Z"
+            style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(30,32,38,0.9)', border: '1px solid rgba(255,255,255,0.08)', color: '#9CA3AF', cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>↪</button>
+          <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 2px' }} />
+          <button onClick={saveToFile} title="保存 Ctrl+S"
+            style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(30,32,38,0.9)', border: '1px solid rgba(255,255,255,0.08)', color: '#9CA3AF', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>💾</button>
+          <button onClick={loadFromFile} title="加载 Ctrl+O"
+            style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(30,32,38,0.9)', border: '1px solid rgba(255,255,255,0.08)', color: '#9CA3AF', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📂</button>
+          <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 2px' }} />
+          <button onClick={() => reactFlowInstance?.fitView({ padding: 0.2, duration: 200 })} title="重置视图 R"
+            style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(30,32,38,0.9)', border: '1px solid rgba(255,255,255,0.08)', color: '#9CA3AF', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>⌂</button>
+        </div>
 
         {/* 右键菜单 */}
         {contextMenu && (
@@ -618,8 +786,24 @@ function Flow() {
         <DraggableNode type="output" label="📤 输出" />
       </div>
 
-      {/* 右侧预览 */}
-      <div style={{ width: 420, minWidth: 280, maxWidth: 600, flexShrink: 0 }}>
+      {/* 可拖拽分隔线 */}
+      <div
+        ref={dividerRef}
+        onMouseDown={onDividerMouseDown}
+        style={{
+          width: 5, cursor: 'col-resize', flexShrink: 0,
+          background: 'rgba(255,255,255,0.04)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'background 0.15s',
+        }}
+        onMouseEnter={(e) => { if (!isDraggingDivider.current) e.target.style.background = 'rgba(59,130,246,0.15)'; }}
+        onMouseLeave={(e) => { if (!isDraggingDivider.current) e.target.style.background = 'rgba(255,255,255,0.04)'; }}
+      >
+        <div style={{ width: 2, height: 32, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} />
+      </div>
+
+      {/* 右侧预览（可变宽度） */}
+      <div style={{ width: previewWidth, minWidth: 280, maxWidth: 600, flexShrink: 0 }}>
         <PreviewPanel />
       </div>
     </div>
