@@ -26,3 +26,4 @@ desktop.ini
 .idea/
 site/editor-v2/node_modules
 site/editor-v2/dist
+site/dist
