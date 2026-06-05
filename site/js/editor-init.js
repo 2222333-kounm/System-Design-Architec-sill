@@ -276,6 +276,11 @@
 
   var LABEL_MAP = {
     'sill/color-block': '🎨 色块',
+    'sill/text': '📝 文字',
+    'sill/image': '🖼️ 图片',
+    'sill/video': '🎬 视频',
+    'sill/button': '🔘 按钮',
+    'sill/icon': '🔣 图标',
     'sill/output': '📤 输出'
   };
 
@@ -293,7 +298,7 @@
 
     // 注册的节点类型（按分组显示）
     var groups = {
-      '基础组件': ['sill/color-block'],
+      '基础组件': ['sill/color-block', 'sill/text', 'sill/image', 'sill/video', 'sill/button', 'sill/icon'],
       '全局控制': ['sill/output']
     };
 
