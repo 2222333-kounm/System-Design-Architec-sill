@@ -15,6 +15,9 @@ import ColorBlockNode from './nodes/ColorBlockNode';
 import TextNode from './nodes/TextNode';
 import ButtonNode from './nodes/ButtonNode';
 import IconNode from './nodes/IconNode';
+import LayoutContainerNode from './nodes/LayoutContainerNode';
+import SpacingNode from './nodes/SpacingNode';
+import BreakpointNode from './nodes/BreakpointNode';
 import OutputNode from './nodes/OutputNode';
 import PreviewPanel from './components/PreviewPanel';
 import { setStore } from './store';
@@ -24,6 +27,9 @@ const nodeTypes = {
   text: TextNode,
   button: ButtonNode,
   icon: IconNode,
+  layoutContainer: LayoutContainerNode,
+  spacing: SpacingNode,
+  breakpoint: BreakpointNode,
   output: OutputNode,
 };
 
@@ -200,6 +206,57 @@ function Flow() {
           content: props.icon || '❤️',
         };
         break;
+      case 'layoutContainer':
+        output = {
+          type: 'layout',
+          css: props.display === 'grid' ? {
+            display: 'grid',
+            gridTemplateColumns: props.gridTemplateColumns || '1fr 1fr 1fr',
+            gridTemplateRows: props.gridTemplateRows || 'auto',
+            rowGap: (props.rowGap ?? 16) + 'px',
+            columnGap: (props.columnGap ?? 16) + 'px',
+            justifyItems: props.justifyItems || 'center',
+            gridAutoFlow: props.gridAutoFlow || 'row',
+          } : {
+            display: 'flex',
+            flexDirection: props.flexDirection || 'row',
+            justifyContent: props.justifyContent || 'center',
+            alignItems: props.alignItems || 'center',
+            gap: (props.gap ?? 16) + 'px',
+            flexWrap: props.flexWrap || 'nowrap',
+            padding: (props.padding ?? 0) + 'px',
+          },
+        };
+        break;
+      case 'spacing': {
+        const uk = props.unit || 'px';
+        const mode = props.mode || 'padding';
+        const prefix = mode === 'padding' ? 'padding' : 'margin';
+        let css = {};
+        if (props.control === 'individual') {
+          css[prefix + 'Top'] = (props[mode + 'Top'] ?? 0) + uk;
+          css[prefix + 'Right'] = (props[mode + 'Right'] ?? 0) + uk;
+          css[prefix + 'Bottom'] = (props[mode + 'Bottom'] ?? 0) + uk;
+          css[prefix + 'Left'] = (props[mode + 'Left'] ?? 0) + uk;
+        } else {
+          css[prefix] = (props.uniformValue ?? 16) + uk;
+        }
+        output = { type: 'css', css };
+        break;
+      }
+      case 'breakpoint': {
+        const isCustom = props.breakpoint === 'custom';
+        const presets = { mobile: { w: 734, c: 'max-width' }, tablet: { w: 1068, c: 'max-width' }, desktop: { w: 1069, c: 'min-width' } };
+        const preset = presets[props.breakpoint];
+        const w = isCustom ? (props.customWidth || 734) : (preset?.w || 734);
+        const c = isCustom ? (props.condition || 'max-width') : (preset?.c || 'max-width');
+        output = {
+          type: 'responsive',
+          css: {},
+          extra: { mediaQuery: `(${c}: ${w}px)`, overrides: props.overrides || '' },
+        };
+        break;
+      }
       default:
         output = { type: 'unknown', css: {} };
     }
@@ -282,6 +339,9 @@ function Flow() {
         <DraggableNode type="text" label="📝 文字" />
         <DraggableNode type="button" label="🔘 按钮" />
         <DraggableNode type="icon" label="🔣 图标" />
+        <DraggableNode type="layoutContainer" label="📐 布局" />
+        <DraggableNode type="spacing" label="↔ 间距" />
+        <DraggableNode type="breakpoint" label="📱 断点" />
         <DraggableNode type="output" label="📤 输出" />
       </div>
 
@@ -332,6 +392,12 @@ function getDefaultProps(type) {
       return { text: '立即购买', color: '#0071E3', hoverColor: '#0077ED', activeColor: '#0068D9', textColor: '#FFFFFF', borderRadius: 980, padding: 'sm', fontSize: 14 };
     case 'icon':
       return { icon: '❤️', size: 24, color: '#1D1D1F', opacity: 100 };
+    case 'layoutContainer':
+      return { display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 16, flexWrap: 'nowrap', padding: 0, gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: 'auto', rowGap: 16, columnGap: 16, justifyItems: 'center', gridAutoFlow: 'row' };
+    case 'spacing':
+      return { mode: 'padding', control: 'uniform', uniformValue: 16, paddingTop: 16, paddingRight: 16, paddingBottom: 16, paddingLeft: 16, unit: 'px' };
+    case 'breakpoint':
+      return { breakpoint: 'mobile', customWidth: 734, condition: 'max-width', overrides: '' };
     case 'output':
       return {};
     default:
