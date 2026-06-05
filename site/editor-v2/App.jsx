@@ -12,12 +12,18 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import ColorBlockNode from './nodes/ColorBlockNode';
+import TextNode from './nodes/TextNode';
+import ButtonNode from './nodes/ButtonNode';
+import IconNode from './nodes/IconNode';
 import OutputNode from './nodes/OutputNode';
 import PreviewPanel from './components/PreviewPanel';
 import { setStore } from './store';
 
 const nodeTypes = {
   colorBlock: ColorBlockNode,
+  text: TextNode,
+  button: ButtonNode,
+  icon: IconNode,
   output: OutputNode,
 };
 
@@ -151,6 +157,49 @@ function Flow() {
           },
         };
         break;
+      case 'text':
+        output = {
+          type: 'text',
+          css: {
+            fontFamily: props.fontFamily || 'PingFang SC',
+            fontSize: (props.fontSize || 16) + (props.fontSizeUnit || 'px'),
+            fontWeight: String(props.fontWeight || 400),
+            lineHeight: String(props.lineHeight || 1.5),
+            letterSpacing: (props.letterSpacing ?? 0) + 'em',
+            color: props.color || '#1D1D1F',
+            textAlign: props.textAlign || 'left',
+          },
+          content: props.content || '',
+        };
+        break;
+      case 'button':
+        output = {
+          type: 'interactive',
+          css: {
+            display: 'inline-block',
+            padding: { xs: '4px 8px', sm: '8px 16px', md: '12px 24px', lg: '16px 32px', xl: '20px 40px' }[props.padding] || '8px 16px',
+            background: props.color || '#0071E3',
+            color: props.textColor || '#FFFFFF',
+            borderRadius: (props.borderRadius ?? 980) + 'px',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: (props.fontSize || 14) + 'px',
+          },
+          content: props.text || '按钮',
+        };
+        break;
+      case 'icon':
+        output = {
+          type: 'css',
+          css: {
+            fontSize: (props.size || 24) + 'px',
+            color: props.color || '#1D1D1F',
+            opacity: String((props.opacity ?? 100) / 100),
+            lineHeight: '1',
+          },
+          content: props.icon || '❤️',
+        };
+        break;
       default:
         output = { type: 'unknown', css: {} };
     }
@@ -230,6 +279,9 @@ function Flow() {
         gap: 4,
       }}>
         <DraggableNode type="colorBlock" label="🎨 色块" />
+        <DraggableNode type="text" label="📝 文字" />
+        <DraggableNode type="button" label="🔘 按钮" />
+        <DraggableNode type="icon" label="🔣 图标" />
         <DraggableNode type="output" label="📤 输出" />
       </div>
 
@@ -274,6 +326,12 @@ function getDefaultProps(type) {
   switch (type) {
     case 'colorBlock':
       return { color: '#3B82F6', width: 320, height: 120, borderRadius: 12, opacity: 100 };
+    case 'text':
+      return { content: '示例文字', fontFamily: 'PingFang SC', fontSize: 16, fontSizeUnit: 'px', fontWeight: 400, lineHeight: 1.5, letterSpacing: 0, color: '#1D1D1F', textAlign: 'left' };
+    case 'button':
+      return { text: '立即购买', color: '#0071E3', hoverColor: '#0077ED', activeColor: '#0068D9', textColor: '#FFFFFF', borderRadius: 980, padding: 'sm', fontSize: 14 };
+    case 'icon':
+      return { icon: '❤️', size: 24, color: '#1D1D1F', opacity: 100 };
     case 'output':
       return {};
     default:
