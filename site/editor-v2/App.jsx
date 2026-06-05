@@ -275,6 +275,44 @@ function Flow() {
         };
         break;
       }
+      case 'transform':
+        output = { type: 'css', css: {
+          transform: 'scale(' + (props.scale ?? 1) + ') rotate(' + (props.rotation ?? 0) + 'deg)',
+          opacity: String((props.opacity ?? 100) / 100),
+          borderRadius: (props.borderRadius ?? 0) + 'px',
+        }};
+        break;
+      case 'mask':
+        output = { type: 'image', css: {
+          clipPath: props.shape === '圆形' ? 'circle(50%)' : props.shape === '渐变' ? 'url(#grad)' : 'inset(0 round ' + (props.borderRadius ?? 0) + 'px)',
+        }, extra: { shape: props.shape || '矩形', feather: props.feather ?? 0, invert: !!props.invert }};
+        break;
+      case 'border':
+        output = { type: 'css', css: {
+          border: (props.thickness ?? 2) + 'px ' + ({ '实线': 'solid', '虚线': 'dashed', '点线': 'dotted', '双线': 'double' }[props.lineType] || 'solid') + ' ' + (props.color || '#E5E5E5'),
+          borderRadius: (props.borderRadius ?? 8) + 'px',
+        }};
+        break;
+      case 'shadow':
+        output = { type: 'css', css: {
+          boxShadow: (props.shadowType === '内阴影' ? 'inset ' : '') + (props.offsetX ?? 0) + 'px ' + (props.offsetY ?? 4) + 'px ' + (props.blur ?? 10) + 'px ' + (props.spread ?? 0) + 'px ' + (props.color || 'rgba(0,0,0,0.15)'),
+        }};
+        break;
+      case 'mouseFollow':
+        output = { type: 'interactive', css: { transition: 'all 0.3s ' + (props.easing || 'ease-out'), willChange: 'transform' }, extra: { kind: 'mouse-follow', effect: props.effect || '视差', strength: props.strength ?? 0.3, range: props.range ?? 200 }};
+        break;
+      case 'transition':
+        output = { type: 'interactive', css: { transition: 'all ' + (props.duration ?? 0.3) + 's ' + (props.easing || 'ease-out') + ' ' + (props.delay ?? 0) + 's' }, extra: { kind: 'transition', trigger: props.trigger || 'hover', transformType: props.transformType || '缩放' }};
+        break;
+      case 'convert':
+        output = { type: 'css', css: {}, extra: { mode: props.mode || 'text→css' }};
+        break;
+      case 'merge':
+        output = { type: 'merged', css: {}, extra: { mode: props.mode || '叠加' }};
+        break;
+      case 'globalToken':
+        output = { type: 'tokens', css: {}, extra: { count: window.TokenStore?.keys().length || 0 }};
+        break;
       default:
         output = { type: 'unknown', css: {} };
     }
