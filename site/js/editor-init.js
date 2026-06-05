@@ -115,6 +115,25 @@
   Store.set('canvas', engine.canvas);
   Store.set('canvasWrap', canvasWrap);
 
+  // 初始化增强层: NodeRenderer + PortLabels
+  var liteCanvasEl = canvasWrap.querySelector('canvas');
+  if (liteCanvasEl) {
+    if (window.NodeRenderer) {
+      NodeRenderer.init(liteCanvasEl, canvasWrap);
+      NodeRenderer.start();
+    }
+    if (window.PortLabels) {
+      PortLabels.init(liteCanvasEl, canvasWrap);
+      PortLabels.start();
+    }
+  }
+
+  // 监听 graph 变化 → 刷新叠加层
+  Store.subscribe('graph:change', function() {
+    if (window.NodeRenderer) NodeRenderer.refresh();
+    if (window.PortLabels) PortLabels.refresh();
+  });
+
   // 状态跟踪
   engine.graph.onAfterChange = function() {
     updateStatus();
