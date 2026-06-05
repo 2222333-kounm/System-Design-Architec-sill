@@ -18,6 +18,12 @@ import IconNode from './nodes/IconNode';
 import LayoutContainerNode from './nodes/LayoutContainerNode';
 import SpacingNode from './nodes/SpacingNode';
 import BreakpointNode from './nodes/BreakpointNode';
+import TransformNode from './nodes/TransformNode';
+import MaskNode from './nodes/MaskNode';
+import BorderNode from './nodes/BorderNode';
+import ShadowNode from './nodes/ShadowNode';
+import MouseFollowNode from './nodes/MouseFollowNode';
+import TransitionNode from './nodes/TransitionNode';
 import OutputNode from './nodes/OutputNode';
 import PreviewPanel from './components/PreviewPanel';
 import { setStore } from './store';
@@ -30,6 +36,12 @@ const nodeTypes = {
   layoutContainer: LayoutContainerNode,
   spacing: SpacingNode,
   breakpoint: BreakpointNode,
+  transform: TransformNode,
+  mask: MaskNode,
+  border: BorderNode,
+  shadow: ShadowNode,
+  mouseFollow: MouseFollowNode,
+  transition: TransitionNode,
   output: OutputNode,
 };
 
@@ -342,6 +354,12 @@ function Flow() {
         <DraggableNode type="layoutContainer" label="📐 布局" />
         <DraggableNode type="spacing" label="↔ 间距" />
         <DraggableNode type="breakpoint" label="📱 断点" />
+        <DraggableNode type="transform" label="🔄 变换" />
+        <DraggableNode type="mask" label="🎭 蒙版" />
+        <DraggableNode type="border" label="📦 边框" />
+        <DraggableNode type="shadow" label="💡 阴影" />
+        <DraggableNode type="mouseFollow" label="🖱️ 跟随" />
+        <DraggableNode type="transition" label="✨ 转场" />
         <DraggableNode type="output" label="📤 输出" />
       </div>
 
@@ -398,6 +416,18 @@ function getDefaultProps(type) {
       return { mode: 'padding', control: 'uniform', uniformValue: 16, paddingTop: 16, paddingRight: 16, paddingBottom: 16, paddingLeft: 16, unit: 'px' };
     case 'breakpoint':
       return { breakpoint: 'mobile', customWidth: 734, condition: 'max-width', overrides: '' };
+    case 'transform':
+      return { scale: 1, rotation: 0, opacity: 100, borderRadius: 0 };
+    case 'mask':
+      return { shape: '矩形', feather: 0, invert: false, borderRadius: 0 };
+    case 'border':
+      return { lineType: '实线', thickness: 2, color: '#E5E5E5', borderRadius: 8 };
+    case 'shadow':
+      return { shadowType: '投影', offsetX: 0, offsetY: 4, blur: 10, spread: 0, color: '#000000' };
+    case 'mouseFollow':
+      return { effect: '视差', strength: 0.3, range: 200, easing: 'ease-out' };
+    case 'transition':
+      return { trigger: 'hover', transformType: '缩放', targetValue: 1.2, duration: 0.3, delay: 0, easing: 'ease-out' };
     case 'output':
       return {};
     default:
