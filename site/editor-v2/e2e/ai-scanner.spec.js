@@ -8,8 +8,8 @@ test.describe('AI 扫描面板', () => {
   });
 
   test('打开 AI 扫描面板显示输入界面', async ({ page }) => {
-    // 点击 AI 按钮打开扫描面板
-    const aiBtn = page.locator('button:has-text("🤖")');
+    // 点击 AI 按钮打开扫描面板（按钮在画布区域内，文本含 AI）
+    const aiBtn = page.locator('button', { hasText: 'AI' }).first();
     await aiBtn.click();
     await page.waitForTimeout(500);
 
@@ -20,16 +20,16 @@ test.describe('AI 扫描面板', () => {
     await expect(page.locator('input[placeholder*="URL"]')).toBeVisible();
 
     // 验证「扫描」按钮存在
-    await expect(page.locator('button:has-text("扫描")')).toBeVisible();
+    await expect(page.locator('button:has-text("扫描")').first()).toBeVisible();
 
-    // 验证关闭操作
-    await page.locator('button:has-text("✕")').click();
+    // 验证关闭操作 — 点"取消"按钮
+    await page.locator('button:has-text("取消")').click();
     await page.waitForTimeout(300);
     await expect(page.locator('h2:has-text("AI 扫描")')).not.toBeVisible();
   });
 
   test('扫描完成后显示结果列表和添加按钮', async ({ page }) => {
-    const aiBtn = page.locator('button:has-text("🤖")');
+    const aiBtn = page.locator('button', { hasText: 'AI' }).first();
     await aiBtn.click();
     await page.waitForTimeout(500);
 
