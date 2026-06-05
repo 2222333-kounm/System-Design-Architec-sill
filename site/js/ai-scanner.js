@@ -398,9 +398,13 @@
 
   AIScanner.setGraph = function(graph) {
     _graph = graph;
-    var canvasWrap = document.getElementById('canvasWrap');
-    if (canvasWrap) canvasWrap._editorGraph = graph;
+    Store.set('scannerGraph', graph);
   };
+
+  // 自动从 Store 获取 graph
+  function getGraph() {
+    return _graph || Store.get('graph');
+  }
 
   console.log('[AIScanner] AI 扫描模块已加载（结构化输出 + 去重 + 视图中心定位）');
 })();

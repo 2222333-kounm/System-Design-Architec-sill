@@ -109,6 +109,12 @@
     }
   });
 
+  // 将引擎实例存入 Store
+  Store.set('engine', engine);
+  Store.set('graph', engine.graph);
+  Store.set('canvas', engine.canvas);
+  Store.set('canvasWrap', canvasWrap);
+
   // 状态跟踪
   engine.graph.onAfterChange = function() {
     updateStatus();
