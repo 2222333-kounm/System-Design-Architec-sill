@@ -24,6 +24,9 @@ import BorderNode from './nodes/BorderNode';
 import ShadowNode from './nodes/ShadowNode';
 import MouseFollowNode from './nodes/MouseFollowNode';
 import TransitionNode from './nodes/TransitionNode';
+import ConvertNode from './nodes/ConvertNode';
+import MergeNode from './nodes/MergeNode';
+import GlobalTokenNode from './nodes/GlobalTokenNode';
 import OutputNode from './nodes/OutputNode';
 import PreviewPanel from './components/PreviewPanel';
 import { setStore } from './store';
@@ -42,6 +45,9 @@ const nodeTypes = {
   shadow: ShadowNode,
   mouseFollow: MouseFollowNode,
   transition: TransitionNode,
+  convert: ConvertNode,
+  merge: MergeNode,
+  globalToken: GlobalTokenNode,
   output: OutputNode,
 };
 
@@ -360,6 +366,9 @@ function Flow() {
         <DraggableNode type="shadow" label="💡 阴影" />
         <DraggableNode type="mouseFollow" label="🖱️ 跟随" />
         <DraggableNode type="transition" label="✨ 转场" />
+        <DraggableNode type="convert" label="🔄 转换" />
+        <DraggableNode type="merge" label="🗂️ 合并" />
+        <DraggableNode type="globalToken" label="🌐 全局Token" />
         <DraggableNode type="output" label="📤 输出" />
       </div>
 
@@ -428,6 +437,12 @@ function getDefaultProps(type) {
       return { effect: '视差', strength: 0.3, range: 200, easing: 'ease-out' };
     case 'transition':
       return { trigger: 'hover', transformType: '缩放', targetValue: 1.2, duration: 0.3, delay: 0, easing: 'ease-out' };
+    case 'convert':
+      return { mode: 'text→css' };
+    case 'merge':
+      return { mode: '叠加' };
+    case 'globalToken':
+      return {};
     case 'output':
       return {};
     default:
