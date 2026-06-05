@@ -88,9 +88,96 @@ function Flow() {
     );
   }, []);
 
-  // 连线
+  // =====================
+  //  端口类型匹配
+  // =====================
+
+  const PORT_GROUPS = {
+    color: ['color', 'css'],
+    image: ['image', 'css'],
+    text: ['text', 'css'],
+    css: ['css'],
+    interactive: ['interactive', 'css'],
+    layout: ['layout', 'css'],
+    responsive: ['responsive', 'css'],
+    merged: ['merged', 'css'],
+    tokens: ['tokens', 'css'],
+    any: ['color', 'image', 'text', 'css', 'interactive', 'layout', 'responsive', 'merged', 'tokens'],
+    number: ['number'],
+    video: ['video', 'css'],
+    instance: ['instance', 'css'],
+    masked: ['masked', 'image', 'css'],
+  };
+
+  // 每个节点输出端口的类型
+  const OUTPUT_TYPE_MAP = {
+    colorBlock: 'color',
+    text: 'text',
+    image: 'image',
+    video: 'video',
+    button: 'interactive',
+    icon: 'css',
+    layoutContainer: 'layout',
+    spacing: 'css',
+    breakpoint: 'responsive',
+    transform: 'css',
+    mask: 'masked',
+    border: 'css',
+    shadow: 'css',
+    mouseFollow: 'interactive',
+    transition: 'interactive',
+    convert: 'any',
+    merge: 'merged',
+    globalToken: 'tokens',
+    output: null,
+  };
+
+  // 输出节点接受什么类型
+  const INPUT_TYPE_MAP = {
+    output: ['color', 'text', 'image', 'css', 'interactive', 'layout', 'responsive', 'merged', 'tokens', 'any'],
+    colorBlock: ['color', 'any'],
+    text: ['any'],
+    image: ['any'],
+    video: ['any'],
+    button: ['text', 'any'],
+    icon: ['any'],
+    layoutContainer: ['css', 'any'],
+    spacing: ['css', 'any'],
+    breakpoint: ['css', 'any'],
+    transform: ['css', 'any'],
+    mask: ['image', 'any'],
+    border: ['css', 'any'],
+    shadow: ['css', 'any'],
+    mouseFollow: ['css', 'any'],
+    transition: ['css', 'any'],
+    convert: ['any'],
+    merge: ['css', 'any'],
+    globalToken: [],
+  };
+
+  function isPortCompatible(sourceType, targetType) {
+    if (!sourceType || !targetType) return false;
+    const allowed = PORT_GROUPS[sourceType] || [sourceType];
+    return allowed.indexOf(targetType) >= 0;
+  }
+
+  // 连线（带端口类型匹配 + 循环检测）
   const onConnect = useCallback(
     (params) => {
+      // 端口类型匹配
+      const sourceNode = nodes.find(n => n.id === params.source);
+      const targetNode = nodes.find(n => n.id === params.target);
+      if (!sourceNode || !targetNode) return;
+
+      const sourceType = OUTPUT_TYPE_MAP[sourceNode.type] || 'any';
+      const acceptedTypes = INPUT_TYPE_MAP[targetNode.type] || [];
+      const targetType = OUTPUT_TYPE_MAP[targetNode.type]; // 用于判断输出连输入是否合理
+
+      if (acceptedTypes.length > 0 && !acceptedTypes.some(t => isPortCompatible(sourceType, t))) {
+        console.warn('[ReactFlow] 端口类型不兼容:', sourceType, '→', targetNode.type, acceptedTypes);
+        return;
+      }
+
       // 循环检测
       const isCycle = (() => {
         const visited = new Set();
@@ -114,8 +201,82 @@ function Flow() {
 
       setEdges((eds) => addEdge({ ...params, animated: true }, eds));
     },
-    [edges]
+    [nodes, edges]
   );
+
+  // =====================
+  //  右键中文菜单
+  // =====================
+
+  const [contextMenu, setContextMenu] = useState(null);
+
+  const onNodeContextMenu = useCallback((event, node) => {
+    event.preventDefault();
+    setContextMenu({
+      x: event.clientX, y: event.clientY,
+      nodeId: node.id, nodeType: node.type,
+    });
+  }, []);
+
+  const onPaneContextMenu = useCallback((event) => {
+    event.preventDefault();
+    setContextMenu({
+      x: event.clientX, y: event.clientY,
+      nodeId: null, nodeType: null,
+    });
+  }, []);
+
+  const closeContextMenu = useCallback(() => setContextMenu(null), []);
+
+  const addNodeFromMenu = useCallback((type) => {
+    if (!reactFlowInstance) return;
+    const position = reactFlowInstance.screenToFlowPosition({ x: contextMenu.x, y: contextMenu.y });
+    const id = `${type}-${Date.now()}`;
+    setNodes((nds) => nds.concat({
+      id, type, position,
+      data: { id, properties: getDefaultProps(type), onChange: handleNodeChange },
+    }));
+    setNodeCount((c) => c + 1);
+    closeContextMenu();
+  }, [reactFlowInstance, contextMenu, handleNodeChange, closeContextMenu]);
+
+  const NODE_GROUPS = {
+    '基础组件': ['colorBlock', 'text', 'button', 'icon'],
+    '布局 & 结构': ['layoutContainer', 'spacing', 'breakpoint'],
+    '变换 & 特效': ['transform', 'mask', 'border', 'shadow', 'mouseFollow', 'transition'],
+    '工具 & 全局': ['convert', 'merge', 'globalToken', 'output'],
+  };
+
+  const NODE_LABELS = {
+    colorBlock: '🎨 色块', text: '📝 文字', button: '🔘 按钮', icon: '🔣 图标',
+    layoutContainer: '📐 布局容器', spacing: '↔ 间距', breakpoint: '📱 断点',
+    transform: '🔄 变换', mask: '🎭 蒙版', border: '📦 边框', shadow: '💡 阴影',
+    mouseFollow: '🖱️ 鼠标跟随', transition: '✨ 转场',
+    convert: '🔄 转换', merge: '🗂️ 合并', globalToken: '🌐 全局Token', output: '📤 输出',
+  };
+
+  // =====================
+  //  Ctrl+E 折叠/展开
+  // =====================
+
+  React.useEffect(() => {
+    const handler = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+        e.preventDefault();
+        document.querySelectorAll('.react-flow__node.selected').forEach((el) => {
+          const nodeEl = el.querySelector(':scope > div');
+          if (nodeEl) {
+            const currentMaxH = nodeEl.style.maxHeight;
+            nodeEl.style.maxHeight = currentMaxH === '40px' ? '' : '40px';
+            nodeEl.style.overflow = currentMaxH === '40px' ? '' : 'hidden';
+            nodeEl.style.transition = 'max-height 0.2s ease';
+          }
+        });
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, []);
 
   // 拖放添加节点
   const onDragOver = useCallback((event) => {
@@ -354,6 +515,9 @@ function Flow() {
           onDrop={onDrop}
           onDragOver={onDragOver}
           onNodeClick={onNodeClick}
+          onNodeContextMenu={onNodeContextMenu}
+          onPaneContextMenu={onPaneContextMenu}
+          onEdgeClick={(e, edge) => { /* 点击边可选中 */ }}
           nodeTypes={nodeTypes}
           defaultViewport={defaultViewport}
           fitView={false}
@@ -387,6 +551,43 @@ function Flow() {
           />
         </ReactFlow>
         <AIScanner addNodes={handleAiAddNodes} />
+
+        {/* 右键菜单 */}
+        {contextMenu && (
+          <div onClick={closeContextMenu}
+            style={{
+              position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999,
+            }}>
+            <div onClick={(e) => e.stopPropagation()}
+              style={{
+                position: 'fixed', left: contextMenu.x, top: contextMenu.y, zIndex: 10000,
+                background: 'rgba(22,24,30,0.97)', backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12,
+                padding: '6px 0', minWidth: 180,
+                boxShadow: '0 16px 40px rgba(0,0,0,0.5)', fontSize: 12,
+              }}>
+              {Object.entries(NODE_GROUPS).map(([group, types], gi) => (
+                <React.Fragment key={group}>
+                  {gi > 0 && <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px 12px' }} />}
+                  <div style={{ color: '#6B7280', fontSize: 10, padding: '4px 14px 2px', fontWeight: 600, letterSpacing: '0.5px' }}>
+                    {group}
+                  </div>
+                  {types.map(type => (
+                    <div key={type} onClick={() => addNodeFromMenu(type)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '5px 14px',
+                        cursor: 'pointer', color: '#D1D5DB', transition: 'background 0.1s',
+                      }}
+                      onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.06)'}
+                      onMouseLeave={(e) => e.target.style.background = ''}>
+                      {NODE_LABELS[type] || type}
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 组件拖拽面板 - 浮动在画布左下 */}
