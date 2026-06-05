@@ -1,17 +1,24 @@
 # CodeGraph data files (local per-machine)
-.codegraph/*.db
-.codegraph/*.db-wal
-.codegraph/*.db-shm
-.codegraph/cache/
-.codegraph/*.log
-.codegraph/.dirty
+.codegraph/
 
 # Claude Code local state (per-machine)
 .claude/
 .understand-anything/
+.superpowers/
+
+# Root artifacts
+.boot-task.ps1
+analyze.cmd
+analyze.ps1
+color-chip-design.png
 
 # Debug / test artifacts
 site/images/test.*
+site/editor-v2/test-results/
+site/dist/
+
+# Build
+site/editor-v2/dist/
 
 # OS files
 .DS_Store
