@@ -285,6 +285,12 @@
     'sill/spacing': '↔ 间距',
     'sill/instance': '♻ 组件实例',
     'sill/breakpoint': '📱 断点',
+    'sill/transform': '🔄 变换',
+    'sill/mask': '🎭 蒙版',
+    'sill/border': '📦 边框',
+    'sill/shadow': '💡 阴影',
+    'sill/mouse-follow': '🖱️ 鼠标跟随',
+    'sill/transition': '✨ 转场',
     'sill/output': '📤 输出'
   };
 
@@ -304,6 +310,7 @@
     var groups = {
       '基础组件': ['sill/color-block', 'sill/text', 'sill/image', 'sill/video', 'sill/button', 'sill/icon'],
       '布局 & 结构': ['sill/layout-container', 'sill/spacing', 'sill/instance', 'sill/breakpoint'],
+      '变换 & 特效': ['sill/transform', 'sill/mask', 'sill/border', 'sill/shadow', 'sill/mouse-follow', 'sill/transition'],
       '全局控制': ['sill/output']
     };
 
