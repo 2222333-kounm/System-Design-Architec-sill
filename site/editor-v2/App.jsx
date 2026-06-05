@@ -31,6 +31,7 @@ import InstanceNode from './nodes/InstanceNode';
 import OutputNode from './nodes/OutputNode';
 import PreviewPanel from './components/PreviewPanel';
 import AIScanner from './components/AIScanner';
+import ExportPanel from './components/ExportPanel';
 import { useStore, setStore, componentStore } from './store';
 
 const nodeTypes = {
@@ -80,6 +81,7 @@ function Flow() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const compVersionRef = useRef(0);
+  const [showExport, setShowExport] = useState(false);
 
   // Toast 通知
   const showToast = useCallback((msg, type) => {
@@ -920,7 +922,13 @@ function Flow() {
           <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 2px' }} />
           <button onClick={() => reactFlowInstance?.fitView({ padding: 0.2, duration: 200 })} title="重置视图 R"
             style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(30,32,38,0.9)', border: '1px solid rgba(255,255,255,0.08)', color: '#9CA3AF', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>⌂</button>
+          <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 2px' }} />
+          <button onClick={() => setShowExport(true)} title="导出代码"
+            style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.2)', color: '#6EE7B7', cursor: 'pointer', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📤</button>
         </div>
+
+        {/* 导出面板 */}
+        {showExport && <ExportPanel nodes={nodes} edges={edges} onClose={() => setShowExport(false)} />}
 
         {/* 快捷键提示面板 */}
         {showShortcuts && (
