@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node Editor · Design System</title>
+  <!-- LiteGraph CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litegraph.js@0.7.0/build/litegraph.css">
+  <script src="https://cdn.jsdelivr.net/npm/litegraph.js@0.7.0/build/litegraph.min.js"></script>
+  <!-- Editor styles -->
+  <link rel="stylesheet" href="css/editor.css">
+  <link rel="stylesheet" href="css/tokens.css">
+</head>
+<body>
+  <!-- 顶栏 -->
+  <div class="editor-toolbar">
+    <div class="toolbar-brand">🔌 <span>Node</span> Editor</div>
+    <div class="toolbar-status" id="statusDisplay">就绪</div>
+    <div class="toolbar-spacer"></div>
+    <button class="toolbar-btn" id="aiScanBtn">🤖 AI</button>
+    <button class="toolbar-btn" id="loadBtn">📂 打开</button>
+    <button class="toolbar-btn" id="saveBtn">💾 保存</button>
+  </div>
+
+  <!-- 主体 -->
+  <div class="editor-main">
+
+    <!-- 左：画布 -->
+    <div class="editor-canvas-wrap" id="canvasWrap">
+      <div class="canvas-float-zoom">
+        <button id="zoomOutBtn">−</button>
+        <span id="zoomLabel">100%</span>
+        <button id="zoomInBtn">+</button>
+        <button id="resetViewBtn">⌂</button>
+      </div>
+    </div>
+
+    <!-- 可拖拽分隔线 -->
+    <div class="editor-divider" id="editorDivider"></div>
+
+    <!-- 右：预览面板 -->
+    <div class="editor-preview" id="previewPanel">
+      <div class="preview-topbar">
+        <span class="preview-label">📱 预览</span>
+        <button id="copyHtmlBtn" title="复制输出">📋</button>
+      </div>
+      <div class="preview-body" id="previewBody">
+        <div class="preview-empty">
+          <div class="preview-empty-icon">🔌</div>
+          <div>连接节点到「输出」即可预览</div>
+        </div>
+      </div>
+      <div class="preview-bottombar">💡 连接节点到输出节点</div>
+    </div>
+
+  </div>
+
+  <!-- JS 依赖（按加载顺序） -->
+  <script src="js/node-token.js"></script>
+  <script src="js/node-token-ref.js"></script>
+  <script src="js/node-token-lock.js"></script>
+  <script src="js/editor-engine.js"></script>
+  <script src="js/nodes/core.js"></script>
+  <script src="js/nodes/color-block.js"></script>
+  <script src="js/nodes/output.js"></script>
+  <script src="js/editor-init.js"></script>
+</body>
+</html>

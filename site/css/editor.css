@@ -1,0 +1,265 @@
+/* ========================================
+   节点编辑器 — 布局样式
+   左画布 + 可拖拽分隔线 + 右预览
+   ======================================== */
+
+/* ---- 全局 ---- */
+html, body {
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #1A1C23;
+  color: #E2E8F0;
+}
+
+/* ---- 顶栏 ---- */
+.editor-toolbar {
+  height: 44px;
+  background: #22242B;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.toolbar-brand {
+  font-size: 13px;
+  font-weight: 600;
+  color: #E2E8F0;
+}
+.toolbar-brand span { color: #3B82F6; }
+
+.toolbar-status {
+  color: #4B5563;
+  font-size: 11px;
+}
+
+.toolbar-spacer { flex: 1; }
+
+.toolbar-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #9CA3AF;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s;
+}
+.toolbar-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #E2E8F0;
+}
+
+/* ---- 主体：左画布 + 分隔线 + 右预览 ---- */
+.editor-main {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 44px);
+}
+
+/* 左：画布面板 */
+.editor-canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+}
+
+.editor-canvas-wrap canvas#litegraph-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.editor-canvas-wrap .litegraph {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ---- 可拖拽分隔线 ---- */
+.editor-divider {
+  width: 5px;
+  cursor: col-resize;
+  background: rgba(255,255,255,0.04);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.editor-divider::before {
+  content: '';
+  width: 2px;
+  height: 32px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  transition: all 0.15s;
+}
+
+.editor-divider:hover,
+.editor-divider.active {
+  background: rgba(59,130,246,0.15);
+}
+.editor-divider:hover::before,
+.editor-divider.active::before {
+  background: rgba(59,130,246,0.5);
+  height: 48px;
+}
+
+/* ---- 右：预览面板 ---- */
+.editor-preview {
+  width: 420px;
+  min-width: 280px;
+  max-width: 600px;
+  background: #181A20;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+
+.preview-topbar {
+  height: 28px;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.preview-label {
+  color: #6B7280;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.preview-topbar button {
+  margin-left: auto;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #6B7280;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  padding: 0;
+}
+.preview-topbar button:hover {
+  background: rgba(59,130,246,0.15);
+  color: #60A5FA;
+}
+
+.preview-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow: auto;
+}
+
+.preview-empty {
+  text-align: center;
+  color: #4B5563;
+  font-size: 13px;
+}
+.preview-empty-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+.preview-error {
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: #FCA5A5;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  max-width: 100%;
+}
+
+.preview-bottombar {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  color: #374151;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+/* ---- 预览内容 ---- */
+.preview-body .preview-content {
+  width: 100%;
+  min-height: 100px;
+}
+
+/* ---- 画布浮动缩放控件 ---- */
+.canvas-float-zoom {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  gap: 4px;
+  z-index: 100;
+}
+
+.canvas-float-zoom button {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(30,32,38,0.9);
+  color: #9CA3AF;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  backdrop-filter: blur(8px);
+}
+.canvas-float-zoom button:hover {
+  background: rgba(255,255,255,0.1);
+  color: #E2E8F0;
+}
+
+.canvas-float-zoom #zoomLabel {
+  width: 48px;
+  text-align: center;
+  background: rgba(30,32,38,0.9);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: #6B7280;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+/* ---- 空状态 & 错误动效 ---- */
+@keyframes port-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.litegraph .connection-error {
+  animation: port-flash 0.4s ease;
+}
