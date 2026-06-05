@@ -72,6 +72,7 @@ function Flow() {
   const [nodeCount, setNodeCount] = useState(1);
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   // =====================
   //  撤销/重做
@@ -678,6 +679,8 @@ function Flow() {
       if (ctrl && e.key === 'y') { e.preventDefault(); redo(); }
       if (ctrl && e.key === 'c') { e.preventDefault(); copySelected(); }
       if (ctrl && e.key === 'v') { e.preventDefault(); pasteClipboard(); }
+      if (e.key === '?' && !ctrl) { e.preventDefault(); setShowShortcuts((s) => !s); }
+      if (e.key === 'Escape') { setShowShortcuts(false); }
       if (e.key === 'r' && !ctrl) {
         e.preventDefault();
         if (reactFlowInstance && nodes.length > 0) {
@@ -760,6 +763,41 @@ function Flow() {
           <button onClick={() => reactFlowInstance?.fitView({ padding: 0.2, duration: 200 })} title="重置视图 R"
             style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(30,32,38,0.9)', border: '1px solid rgba(255,255,255,0.08)', color: '#9CA3AF', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>⌂</button>
         </div>
+
+        {/* 快捷键提示面板 */}
+        {showShortcuts && (
+          <div onClick={() => setShowShortcuts(false)}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9998, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }}>
+            <div onClick={(e) => e.stopPropagation()}
+              style={{ background: 'rgba(22,24,30,0.98)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16, padding: 24, width: 400, maxHeight: '70vh', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.6)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                <h2 style={{ margin: 0, fontSize: 15, fontWeight: 600, color: '#E2E8F0' }}>⌨️ 快捷键</h2>
+                <button onClick={() => setShowShortcuts(false)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#6B7280', fontSize: 18, cursor: 'pointer', padding: '4px 8px', borderRadius: 6 }}>✕</button>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {[
+                  ['Ctrl+S', '保存节点图'],
+                  ['Ctrl+O', '加载节点图'],
+                  ['Ctrl+Z', '撤销'],
+                  ['Ctrl+Shift+Z / Ctrl+Y', '重做'],
+                  ['Ctrl+C', '复制选中节点'],
+                  ['Ctrl+V', '粘贴节点'],
+                  ['R', '重置视图 (fitView)'],
+                  ['Ctrl+E', '折叠/展开选中节点'],
+                  ['Backspace / Delete', '删除选中'],
+                  ['Shift + 点击', '多选'],
+                  ['?', '显示/关闭此面板'],
+                  ['ESC', '关闭面板 / 取消选中'],
+                ].map(([key, desc]) => (
+                  <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <kbd style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 4, padding: '3px 8px', color: '#93C5FD', fontSize: 10, fontFamily: 'monospace', minWidth: 100, textAlign: 'center' }}>{key}</kbd>
+                    <span style={{ color: '#9CA3AF', fontSize: 11 }}>{desc}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 右键菜单 */}
         {contextMenu && (
