@@ -1,0 +1,198 @@
+<h2>📐 正确布局</h2>
+<p class="subtitle">左：无限画布 · 右：最终输出 · AI扫描为弹出浮层</p>
+
+<div class="mockup" style="margin-top: 24px;">
+  <div style="display:flex;height:420px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);position:relative;">
+
+    <!-- 顶栏 -->
+    <div style="position:absolute;top:0;left:0;right:0;height:36px;background:rgba(30,32,38,0.95);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;padding:0 16px;z-index:10;border-radius:12px 12px 0 0;">
+      <span style="color:#60A5FA;font-size:12px;font-weight:600;">🔌 Node Editor</span>
+      <span style="flex:1"></span>
+      <span style="background:rgba(16,185,129,0.15);color:#6EE7B7;padding:3px 10px;border-radius:30px;font-size:10px;cursor:pointer;display:flex;align-items:center;gap:4px;">🤖 AI 扫描</span>
+      <span style="width:1px;height:16px;background:rgba(255,255,255,0.06);margin:0 10px;"></span>
+      <span style="color:#4B5563;font-size:10px;">状态: 3 个节点</span>
+      <span style="width:1px;height:16px;background:rgba(255,255,255,0.06);margin:0 10px;"></span>
+      <span style="color:#6B7280;font-size:10px;cursor:pointer;">📂</span>
+      <span style="color:#6B7280;font-size:10px;margin-left:8px;cursor:pointer;">💾</span>
+    </div>
+
+    <!-- 左：无限画布 -->
+    <div style="flex:1;background:#1A1C23;padding-top:36px;position:relative;">
+      <div style="position:absolute;top:36px;left:0;right:0;bottom:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;"></div>
+
+      <!-- 节点示例 -->
+      <div style="position:absolute;top:70px;left:50px;background:rgba(30,33,40,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;width:160px;z-index:2;">
+        <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
+          <div style="width:6px;height:6px;border-radius:50%;background:#3B82F6;"></div>
+          <span style="color:#E2E8F0;font-size:10px;font-weight:600;">🎨 色块</span>
+          <span style="flex:1"></span>
+          <div style="width:6px;height:6px;border-radius:50%;background:#10B981;"></div>
+        </div>
+        <div style="height:30px;background:#0071E3;border-radius:4px;"></div>
+      </div>
+
+      <div style="position:absolute;top:80px;left:240px;background:rgba(30,33,40,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;width:160px;z-index:2;">
+        <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
+          <div style="width:6px;height:6px;border-radius:50%;background:#3B82F6;"></div>
+          <span style="color:#E2E8F0;font-size:10px;font-weight:600;">📝 文字</span>
+          <span style="flex:1"></span>
+          <div style="width:6px;height:6px;border-radius:50%;background:#10B981;"></div>
+        </div>
+        <div style="color:#E2E8F0;font-size:10px;">iPhone 16 Pro</div>
+      </div>
+
+      <!-- 连线 -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;">
+        <path d="M 210 95 C 225 95, 225 100, 240 100" stroke="rgba(59,130,246,0.3)" stroke-width="1.5" fill="none"/>
+      </svg>
+
+      <!-- 输出 -->
+      <div style="position:absolute;top:130px;left:150px;background:rgba(30,33,40,0.95);border:1px solid rgba(250,204,21,0.3);border-radius:10px;padding:8px;width:90px;z-index:2;">
+        <div style="color:#FCD34D;font-size:10px;font-weight:600;text-align:center;">📤 输出</div>
+      </div>
+
+      <!-- 缩放 -->
+      <div style="position:absolute;bottom:12px;left:12px;display:flex;gap:4px;z-index:2;">
+        <div style="width:26px;height:26px;border-radius:6px;background:rgba(30,32,38,0.9);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:12px;">−</div>
+        <div style="height:26px;padding:0 8px;border-radius:6px;background:rgba(30,32,38,0.9);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;color:#6B7280;font-size:9px;">100%</div>
+        <div style="width:26px;height:26px;border-radius:6px;background:rgba(30,32,38,0.9);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:12px;">+</div>
+      </div>
+    </div>
+
+    <!-- 可拖拽分隔线 -->
+    <div style="width:4px;background:rgba(255,255,255,0.06);cursor:col-resize;display:flex;align-items:center;justify-content:center;">
+      <div style="width:2px;height:32px;background:rgba(255,255,255,0.15);border-radius:2px;"></div>
+    </div>
+
+    <!-- 右：最终输出（铺满） -->
+    <div style="width:320px;background:#181A20;padding-top:36px;display:flex;flex-direction:column;position:relative;">
+
+      <!-- 右上角圆形按钮 -->
+      <div style="position:absolute;top:44px;right:12px;z-index:5;display:flex;gap:8px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;" title="渲染">▶</div>
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;" title="导出">⬇</div>
+      </div>
+
+      <!-- 预览内容铺满 -->
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px;">
+        <div style="text-align:center;">
+          <div style="background:#0071E3;width:200px;height:80px;border-radius:10px;margin:0 auto 14px;box-shadow:0 6px 16px rgba(0,113,227,0.25);"></div>
+          <div style="color:#E2E8F0;font-size:16px;font-weight:600;">iPhone 16 Pro</div>
+          <div style="color:#6B7280;font-size:11px;margin:4px 0 14px;">A18 Pro · Apple 智能</div>
+          <div style="display:flex;gap:8px;justify-content:center;">
+            <div style="padding:6px 14px;background:#0071E3;color:white;border-radius:980px;font-size:11px;">进一步了解</div>
+            <div style="padding:6px 14px;background:transparent;color:#2997FF;border:1px solid #2997FF;border-radius:980px;font-size:11px;">购买</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部提示 -->
+      <div style="height:22px;display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(255,255,255,0.04);flex-shrink:0;">
+        <span style="color:#374151;font-size:8px;">连接节点到「输出」即可预览</span>
+      </div>
+    </div>
+
+    <!-- ====== AI 扫描浮层（弹出状态） ====== -->
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;width:480px;background:rgba(22,24,30,0.98);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
+      <!-- 浮层顶栏 -->
+      <div style="display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span style="color:#E2E8F0;font-size:14px;font-weight:600;">🤖 AI 扫描</span>
+        <span style="flex:1"></span>
+        <span style="color:#6B7280;font-size:18px;cursor:pointer;">✕</span>
+      </div>
+
+      <div style="padding:16px;">
+
+        <!-- URL 输入 -->
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <input type="text" placeholder="输入网页 URL…" value="https://www.apple.com.cn"
+            style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 12px;color:white;font-size:13px;outline:none;">
+          <div style="background:#3B82F6;color:white;padding:10px 18px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;">扫描</div>
+        </div>
+
+        <!-- 或拖拽上传 -->
+        <div style="border:1px dashed rgba(255,255,255,0.08);border-radius:8px;padding:14px;text-align:center;cursor:pointer;margin-bottom:16px;">
+          <span style="color:#4B5563;font-size:11px;">📁 或拖放本地 HTML / CSS 文件</span>
+        </div>
+
+        <!-- 扫描结果 -->
+        <div style="color:#6B7280;font-size:11px;font-weight:600;margin-bottom:8px;">扫描结果 · 共 6 项</div>
+
+        <div style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:rgba(59,130,246,0.1);border-radius:6px;">
+            <div style="width:16px;height:16px;border-radius:4px;background:#0071E3;"></div>
+            <span style="color:#E2E8F0;font-size:11px;">主色 #0071E3</span>
+            <span style="flex:1"></span>
+            <span style="color:#10B981;font-size:9px;">已添加 ✓</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;">
+            <span style="font-size:14px;">📝</span>
+            <span style="color:#E2E8F0;font-size:11px;">SF Pro 56px Hero</span>
+            <span style="flex:1"></span>
+            <span style="color:#6B7280;font-size:9px;cursor:pointer;">+ 添加</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;">
+            <span style="font-size:14px;">🔘</span>
+            <span style="color:#E2E8F0;font-size:11px;">胶囊按钮 980px</span>
+            <span style="flex:1"></span>
+            <span style="color:#6B7280;font-size:9px;cursor:pointer;">+ 添加</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;">
+            <span style="font-size:14px;">📐</span>
+            <span style="color:#E2E8F0;font-size:11px;">Flex center 布局</span>
+            <span style="flex:1"></span>
+            <span style="color:#6B7280;font-size:9px;cursor:pointer;">+ 添加</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部按钮 -->
+      <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:8px;">
+        <div style="flex:1;background:#3B82F6;color:white;padding:8px;border-radius:8px;text-align:center;font-size:12px;cursor:pointer;font-weight:500;">全部添加到画布</div>
+        <div style="background:rgba(255,255,255,0.06);color:#9CA3AF;padding:8px 16px;border-radius:8px;text-align:center;font-size:12px;cursor:pointer;">取消</div>
+      </div>
+    </div>
+
+    <!-- 浮层遮罩 -->
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:15;border-radius:12px;"></div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>结构总结</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px;">
+    <div class="card" style="padding:12px;">
+      <h4>🖥️ 左 · 无限画布</h4>
+      <p style="font-size:12px;color:#64748B;">节点拖拽/连线/编辑</p>
+    </div>
+    <div class="card" style="padding:12px;">
+      <h4>📱 右 · 最终输出</h4>
+      <p style="font-size:12px;color:#64748B;">铺满显示 · 圆形渲染/导出按钮</p>
+    </div>
+    <div class="card" style="padding:12px;">
+      <h4>🤖 AI 扫描（浮层）</h4>
+      <p style="font-size:12px;color:#64748B;">点顶栏按钮弹出 · 选择结果添加到画布</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>这个结构对吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>✅ 对</h3>
+        <p>确认这个布局，继续下一步</p>
+      </div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>🔄 调</h3>
+        <p>在终端告诉我</p>
+      </div>
+    </div>
+  </div>
+</div>

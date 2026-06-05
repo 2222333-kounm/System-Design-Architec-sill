@@ -1,0 +1,148 @@
+<h2>📝 文字节点 · 设计</h2>
+<p class="subtitle">字体、字号、行高、字重、颜色、对齐</p>
+
+<div class="mockup" style="margin-top:24px;">
+  <div style="display:flex;gap:40px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+
+    <!-- 文字节点 -->
+    <div style="background:rgba(30,33,40,0.95);border:2px solid rgba(255,255,255,0.08);border-radius:12px;width:300px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+
+      <!-- 标题栏 -->
+      <div style="background:rgba(139,92,246,0.15);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,0.2);"></div>
+          <span style="color:#93C5FD;font-size:8px;font-weight:500;">any in</span>
+        </div>
+        <span style="flex:1;text-align:center;color:#E2E8F0;font-size:12px;font-weight:600;">📝 文字</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:#6EE7B7;font-size:8px;font-weight:500;">text →</span>
+          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.2);"></div>
+        </div>
+      </div>
+
+      <!-- 参数区 -->
+      <div style="padding:12px;">
+
+        <!-- 内容 -->
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+          <span style="color:#6B7280;font-size:10px;">内容</span>
+          <textarea style="width:100%;height:50px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:6px 8px;color:#E2E8F0;font-size:11px;outline:none;resize:none;font-family:inherit;">这是一段示例文字，展示了节点上的排版效果。</textarea>
+        </div>
+
+        <!-- 字体 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">字体</span>
+          <select style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 6px;color:#E2E8F0;font-size:10px;outline:none;">
+            <option>SF Pro Display</option>
+            <option selected>PingFang SC</option>
+            <option>Inter</option>
+            <option>Georgia</option>
+            <option>monospace</option>
+          </select>
+        </div>
+
+        <!-- 字号 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">字号</span>
+          <input type="range" value="30" style="flex:1;height:3px;accent-color:#8B5CF6;">
+          <input type="text" value="16" style="width:32px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:3px 4px;color:#E2E8F0;font-size:10px;text-align:right;outline:none;">
+          <span style="color:#4B5563;font-size:8px;">px</span>
+        </div>
+
+        <!-- 字重 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">字重</span>
+          <select style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 6px;color:#E2E8F0;font-size:10px;outline:none;">
+            <option>300 Light</option>
+            <option selected>400 Regular</option>
+            <option>500 Medium</option>
+            <option>600 Semibold</option>
+            <option>700 Bold</option>
+          </select>
+        </div>
+
+        <!-- 行高 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">行高</span>
+          <input type="range" value="50" style="flex:1;height:3px;accent-color:#8B5CF6;">
+          <input type="text" value="1.5" style="width:32px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:3px 4px;color:#E2E8F0;font-size:10px;text-align:right;outline:none;">
+        </div>
+
+        <!-- 字距 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">字距</span>
+          <input type="range" value="30" style="flex:1;height:3px;accent-color:#8B5CF6;">
+          <input type="text" value="0" style="width:32px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:3px 4px;color:#E2E8F0;font-size:10px;text-align:right;outline:none;">
+          <span style="color:#4B5563;font-size:8px;">em</span>
+        </div>
+
+        <!-- 颜色 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">颜色</span>
+          <div style="flex:1;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:4px;">
+            <div style="width:24px;height:24px;border-radius:6px;background:#1D1D1F;border:2px solid rgba(255,255,255,0.1);cursor:pointer;"></div>
+            <input type="text" value="#1D1D1F" style="flex:1;background:none;border:none;color:#E2E8F0;font-size:10px;font-family:monospace;outline:none;">
+            <span style="color:#4B5563;font-size:8px;cursor:pointer;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,0.04);">HEX ▾</span>
+          </div>
+        </div>
+
+        <!-- 对齐 -->
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">对齐</span>
+          <div style="flex:1;display:flex;gap:4px;">
+            <div style="flex:1;padding:4px;text-align:center;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.3);border-radius:6px;color:#C4B5FD;font-size:10px;cursor:pointer;">⬅</div>
+            <div style="flex:1;padding:4px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:#6B7280;font-size:10px;cursor:pointer;">⬌</div>
+            <div style="flex:1;padding:4px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:#6B7280;font-size:10px;cursor:pointer;">➡</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部预览 -->
+      <div style="padding:0 12px 12px;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:12px 12px;min-height:48px;display:flex;align-items:center;">
+          <span style="color:#E2E8F0;font-size:16px;font-weight:400;line-height:1.5;font-family:'PingFang SC',sans-serif;">这是一段示例文字，展示了节点上的排版效果。</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:6px;justify-content:center;">
+          <span style="color:#4B5563;font-size:8px;cursor:pointer;">🔽 折叠参数</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 参数概览 -->
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;">
+      <div style="color:#E2E8F0;font-size:14px;font-weight:600;margin-bottom:4px;">参数清单</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;"><span style="color:#C4B5FD;font-size:10px;">内容</span><br><span style="color:#64748B;font-size:9px;">多行文本输入</span></div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;"><span style="color:#C4B5FD;font-size:10px;">字体</span><br><span style="color:#64748B;font-size:9px;">下拉选择字体家族</span></div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;"><span style="color:#C4B5FD;font-size:10px;">字号</span><br><span style="color:#64748B;font-size:9px;">8-120px 滑块+输入</span></div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;"><span style="color:#C4B5FD;font-size:10px;">字重</span><br><span style="color:#64748B;font-size:9px;">300-700 下拉</span></div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;"><span style="color:#C4B5FD;font-size:10px;">行高</span><br><span style="color:#64748B;font-size:9px;">0.5-3 滑块+输入</span></div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;"><span style="color:#C4B5FD;font-size:10px;">字距</span><br><span style="color:#64748B;font-size:9px;">-5~20em 滑块+输入</span></div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;"><span style="color:#C4B5FD;font-size:10px;">颜色</span><br><span style="color:#64748B;font-size:9px;">取色器 + HEX/RGB</span></div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;"><span style="color:#C4B5FD;font-size:10px;">对齐</span><br><span style="color:#64748B;font-size:9px;">左/中/右 按钮组</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>文字节点这个设计你满意吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>✅ 满意</h3>
+        <p>继续下一个节点</p>
+      </div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>🔄 修改</h3>
+        <p>在终端告诉我</p>
+      </div>
+    </div>
+  </div>
+</div>

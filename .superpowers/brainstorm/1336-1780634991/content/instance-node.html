@@ -1,0 +1,180 @@
+<h2>♻ 组件实例节点</h2>
+<p class="subtitle">复用组件抽象 · 支持引用 · 插槽映射</p>
+
+<div class="mockup" style="margin-top:24px;">
+  <div style="display:flex;gap:40px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+
+    <!-- 组件实例节点 -->
+    <div style="background:rgba(30,33,40,0.95);border:2px solid rgba(255,255,255,0.08);border-radius:12px;width:310px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+
+      <!-- 标题栏 -->
+      <div style="background:rgba(139,92,246,0.15);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,0.2);"></div>
+          <span style="color:#93C5FD;font-size:8px;font-weight:500;">slot in</span>
+        </div>
+        <span style="flex:1;text-align:center;color:#E2E8F0;font-size:12px;font-weight:600;">♻ 组件实例</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:#6EE7B7;font-size:8px;font-weight:500;">instance →</span>
+          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.2);"></div>
+        </div>
+      </div>
+
+      <!-- 参数区 -->
+      <div style="padding:12px;">
+
+        <!-- 组件引用选择 -->
+        <div style="margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:9px;display:block;margin-bottom:4px;">引用组件</span>
+          <select style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:5px 6px;color:#E2E8F0;font-size:9px;outline:none;">
+            <option>— 选择已保存的组件 —</option>
+            <option>🃏 产品卡片 v1</option>
+            <option selected>🃏 导航栏</option>
+            <option>🃏 促销横幅</option>
+            <option>🃏 页脚链接组</option>
+          </select>
+          <div style="margin-top:4px;display:flex;gap:4px;">
+            <span style="color:#4B5563;font-size:7px;cursor:pointer;">🔄 刷新列表</span>
+            <span style="color:#4B5563;font-size:7px;margin:0 4px;">·</span>
+            <span style="color:#4B5563;font-size:7px;cursor:pointer;">📁 管理组件</span>
+          </div>
+        </div>
+
+        <!-- 实例名称 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:9px;width:55px;">实例名</span>
+          <input type="text" value="导航栏 · 首页" style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:4px 6px;color:#E2E8F0;font-size:9px;outline:none;">
+        </div>
+
+        <!-- 插槽映射 -->
+        <div style="margin-bottom:6px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <span style="color:#6B7280;font-size:9px;">插槽映射</span>
+            <span style="color:#4B5563;font-size:7px;background:rgba(139,92,246,0.1);padding:1px 6px;border-radius:10px;cursor:pointer;">+ 添加插槽</span>
+          </div>
+
+          <!-- 插槽条目 -->
+          <div style="background:rgba(0,0,0,0.2);border-radius:5px;padding:6px;margin-bottom:4px;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+              <span style="color:#C4B5FD;font-size:8px;background:rgba(139,92,246,0.2);padding:1px 5px;border-radius:3px;">title</span>
+              <span style="color:#4B5563;font-size:7px;">→</span>
+              <span style="color:#E2E8F0;font-size:8px;">iPhone 16 Pro</span>
+              <span style="flex:1"></span>
+              <span style="color:#4B5563;font-size:7px;cursor:pointer;">✎</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+              <span style="color:#C4B5FD;font-size:8px;background:rgba(139,92,246,0.2);padding:1px 5px;border-radius:3px;">button</span>
+              <span style="color:#4B5563;font-size:7px;">→</span>
+              <span style="color:#E2E8F0;font-size:8px;">进一步了解</span>
+              <span style="flex:1"></span>
+              <span style="color:#4B5563;font-size:7px;cursor:pointer;">✎</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;">
+              <span style="color:#C4B5FD;font-size:8px;background:rgba(139,92,246,0.2);padding:1px 5px;border-radius:3px;">image</span>
+              <span style="color:#4B5563;font-size:7px;">→</span>
+              <span style="color:#6B7280;font-size:7px;font-style:italic;">未连接</span>
+              <span style="flex:1"></span>
+              <span style="color:#4B5563;font-size:7px;cursor:pointer;">✎</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 覆盖样式（可选） -->
+        <details style="margin-top:4px;">
+          <summary style="color:#4B5563;font-size:8px;cursor:pointer;">覆盖样式（可选）</summary>
+          <div style="margin-top:4px;background:rgba(0,0,0,0.2);border-radius:5px;padding:6px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="color:#6B7280;font-size:8px;width:40px;">颜色</span>
+              <div style="flex:1;display:flex;align-items:center;gap:4px;">
+                <div style="width:16px;height:16px;border-radius:4px;background:#0071E3;border:1px solid rgba(255,255,255,0.1);cursor:pointer;"></div>
+                <input type="text" value="" placeholder="默认" style="flex:1;background:rgba(0,0,0,0.3);border:none;border-radius:3px;padding:2px 4px;color:#E2E8F0;font-size:8px;outline:none;">
+              </div>
+            </div>
+          </div>
+        </details>
+
+      </div>
+
+      <!-- 底部预览 -->
+      <div style="padding:0 12px 10px;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:8px;">
+          <!-- 模拟引用组件展示 -->
+          <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(0,0,0,0.3);border-radius:6px;">
+            <span style="color:rgba(255,255,255,0.8);font-size:11px;">🍎</span>
+            <span style="color:rgba(255,255,255,0.5);font-size:8px;">Mac</span>
+            <span style="color:rgba(255,255,255,0.5);font-size:8px;">iPad</span>
+            <span style="color:rgba(255,255,255,0.5);font-size:8px;">iPhone</span>
+            <span style="color:rgba(255,255,255,0.5);font-size:8px;">Watch</span>
+          </div>
+          <div style="display:flex;gap:4px;margin-top:4px;justify-content:center;">
+            <span style="color:#4B5563;font-size:7px;">♻ 导航栏 · 首页</span>
+            <span style="color:#4B5563;font-size:7px;">·</span>
+            <span style="color:#4B5563;font-size:7px;">🔗 2/3 插槽已连接</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 参数 & 输出 -->
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;">
+      <div style="color:#E2E8F0;font-size:13px;font-weight:600;">参数 & 说明</div>
+
+      <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;">
+        <span style="color:#C4B5FD;font-size:9px;">什么是组件实例？</span><br>
+        <span style="color:#64748B;font-size:8px;line-height:1.5;">AI 扫描网页时识别出的复用结构（如卡片、导航栏）可保存为"组件"。<br><br>实例节点引用这些组件，并通过插槽映射注入不同内容（标题、图片、按钮）。<br><br>修改组件定义 → 所有实例自动更新。</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#C4B5FD;font-size:9px;">引用</span><br>
+          <span style="color:#64748B;font-size:8px;">选择已保存的组件</span>
+        </div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#C4B5FD;font-size:9px;">插槽</span><br>
+          <span style="color:#64748B;font-size:8px;">每个组件预设的替换点</span>
+        </div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#C4B5FD;font-size:9px;">覆盖</span><br>
+          <span style="color:#64748B;font-size:8px;">可选样式覆盖</span>
+        </div>
+        <div style="background:rgba(139,92,246,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#C4B5FD;font-size:9px;">联动</span><br>
+          <span style="color:#64748B;font-size:8px;">组件定义更新 → 实例同步</span>
+        </div>
+      </div>
+
+      <div style="background:rgba(30,33,40,0.6);border-radius:10px;padding:10px;border:1px solid rgba(255,255,255,0.06);">
+        <span style="color:#C4B5FD;font-size:10px;font-weight:600;">📋 输出格式</span>
+        <pre style="background:rgba(0,0,0,0.3);padding:6px;border-radius:4px;margin-top:4px;font-size:8px;color:#94A3B8;line-height:1.4;font-family:monospace;overflow-x:auto;">{
+  type: 'instance',
+  css: { /* 合并后的样式 */ },
+  extra: {
+    componentRef: 'nav-bar',
+    instanceName: '导航栏 · 首页',
+    slots: {
+      title: { value: 'iPhone 16 Pro', source: 'input' },
+      button: { value: '进一步了解', source: 'input' }
+    },
+    overrides: { color: '#0071E3' }
+  }
+}</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>组件实例节点满意吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content"><h3>✅ 满意，继续</h3></div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content"><h3>🔄 修改</h3></div>
+    </div>
+  </div>
+</div>

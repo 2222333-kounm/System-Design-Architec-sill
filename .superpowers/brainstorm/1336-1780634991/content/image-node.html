@@ -1,0 +1,129 @@
+<h2>🖼️ 图片节点</h2>
+<p class="subtitle">图像填充/适配 · 上传或 URL</p>
+
+<div class="mockup" style="margin-top:24px;">
+  <div style="display:flex;gap:40px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+
+    <!-- 图片节点 -->
+    <div style="background:rgba(30,33,40,0.95);border:2px solid rgba(255,255,255,0.08);border-radius:12px;width:300px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+
+      <!-- 标题栏 -->
+      <div style="background:rgba(16,185,129,0.15);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,0.2);"></div>
+          <span style="color:#93C5FD;font-size:8px;font-weight:500;">src in</span>
+        </div>
+        <span style="flex:1;text-align:center;color:#E2E8F0;font-size:12px;font-weight:600;">🖼️ 图片</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:#6EE7B7;font-size:8px;font-weight:500;">image →</span>
+          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.2);"></div>
+        </div>
+      </div>
+
+      <!-- 参数区 -->
+      <div style="padding:12px;">
+
+        <!-- 图片 URL / 上传 -->
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+          <span style="color:#6B7280;font-size:10px;">图片源</span>
+          <div style="display:flex;gap:6px;">
+            <input type="text" placeholder="输入图片 URL…" value="https://www.apple.com.cn/home/images/heroes/iphone-16-pro/iphone-16-pro-large.jpg"
+              style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:6px 8px;color:#E2E8F0;font-size:10px;outline:none;">
+          </div>
+          <div style="border:1px dashed rgba(255,255,255,0.08);border-radius:6px;padding:8px;text-align:center;cursor:pointer;">
+            <span style="color:#4B5563;font-size:9px;">📁 拖放或点击上传图片</span>
+          </div>
+          <div style="color:#4B5563;font-size:8px;">支持 PNG / JPG / WebP / SVG / GIF</div>
+        </div>
+
+        <!-- 适配模式 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">适配</span>
+          <select style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 6px;color:#E2E8F0;font-size:10px;outline:none;">
+            <option selected>cover（覆盖）</option>
+            <option>contain（包含）</option>
+            <option>fill（拉伸）</option>
+            <option>none（原始）</option>
+            <option>scale-down（缩小）</option>
+          </select>
+        </div>
+
+        <!-- 背景重复 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">重复</span>
+          <select style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 6px;color:#E2E8F0;font-size:10px;outline:none;">
+            <option selected>no-repeat</option>
+            <option>repeat</option>
+            <option>repeat-x</option>
+            <option>repeat-y</option>
+          </select>
+        </div>
+
+        <!-- 图片背景色（加载失败回退） -->
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="color:#6B7280;font-size:10px;width:50px;">背景色</span>
+          <div style="flex:1;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:3px;">
+            <div style="width:20px;height:20px;border-radius:5px;background:#374151;border:2px solid rgba(255,255,255,0.1);cursor:pointer;"></div>
+            <input type="text" value="#374151" style="flex:1;background:none;border:none;color:#E2E8F0;font-size:10px;font-family:monospace;outline:none;">
+            <span style="color:#4B5563;font-size:8px;cursor:pointer;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,0.04);">HEX ▾</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部预览 -->
+      <div style="padding:0 12px 12px;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:4px;display:flex;align-items:center;justify-content:center;min-height:80px;">
+          <div style="width:100%;height:80px;background:#374151;border-radius:6px;display:flex;align-items:center;justify-content:center;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%236B7280%22%3E%3Cpath d=%22M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z%22/%3E%3C/svg%3E');background-size:32px;background-position:center;background-repeat:no-repeat;">
+            <span style="color:rgba(255,255,255,0.4);font-size:8px;">图片加载中…</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:5px;justify-content:center;">
+          <span style="color:#4B5563;font-size:8px;">🖼️ 图片预览</span>
+          <span style="color:#4B5563;font-size:8px;cursor:pointer;">🔽 折叠参数</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 参数说明 -->
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;">
+      <div style="color:#E2E8F0;font-size:14px;font-weight:600;margin-bottom:4px;">参数清单</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="background:rgba(16,185,129,0.1);padding:8px;border-radius:8px;"><span style="color:#6EE7B7;font-size:10px;">图片源</span><br><span style="color:#64748B;font-size:9px;">URL 输入 + 文件上传</span></div>
+        <div style="background:rgba(16,185,129,0.1);padding:8px;border-radius:8px;"><span style="color:#6EE7B7;font-size:10px;">适配</span><br><span style="color:#64748B;font-size:9px;">cover/contain/fill 等</span></div>
+        <div style="background:rgba(16,185,129,0.1);padding:8px;border-radius:8px;"><span style="color:#6EE7B7;font-size:10px;">重复</span><br><span style="color:#64748B;font-size:9px;">no-repeat/repeat 等</span></div>
+        <div style="background:rgba(16,185,129,0.1);padding:8px;border-radius:8px;"><span style="color:#6EE7B7;font-size:10px;">背景色</span><br><span style="color:#64748B;font-size:9px;">加载失败回退色</span></div>
+      </div>
+      <div style="margin-top:8px;padding:8px;background:rgba(16,185,129,0.08);border-radius:8px;">
+        <span style="color:#6EE7B7;font-size:10px;">📌 端口说明</span><br>
+        <span style="color:#64748B;font-size:9px;">输入 "src in" — 接收上游图片 URL 或 data URL<br>输出 "image →" — 输出带 object-fit 和 background-repeat 的 CSS 数据</span>
+      </div>
+      <div style="margin-top:4px;padding:8px;background:rgba(245,158,11,0.08);border-radius:8px;">
+        <span style="color:#FCD34D;font-size:10px;">⚡ 边界处理</span><br>
+        <span style="color:#64748B;font-size:9px;">URL 为空 → 显示背景色 + 占位图标<br>加载失败 → 回退到背景色<br>不支持格式 → 提示错误</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>图片节点你满意吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>✅ 满意</h3>
+        <p>继续下一个</p>
+      </div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>🔄 修改</h3>
+        <p>在终端告诉我</p>
+      </div>
+    </div>
+  </div>
+</div>

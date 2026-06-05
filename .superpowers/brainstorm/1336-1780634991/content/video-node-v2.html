@@ -1,0 +1,132 @@
+<h2>🎬 视频节点 v2 — 统一数据格式</h2>
+<p class="subtitle">css 只负责布局，extra 负责播放行为</p>
+
+<div class="mockup" style="margin-top:24px;">
+  <div style="display:flex;gap:40px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+
+    <!-- 视频节点 -->
+    <div style="background:rgba(30,33,40,0.95);border:2px solid rgba(255,255,255,0.08);border-radius:12px;width:310px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+
+      <div style="background:rgba(239,68,68,0.15);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,0.2);"></div>
+          <span style="color:#93C5FD;font-size:8px;font-weight:500;">src in</span>
+        </div>
+        <span style="flex:1;text-align:center;color:#E2E8F0;font-size:12px;font-weight:600;">🎬 视频</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:#6EE7B7;font-size:8px;font-weight:500;">video →</span>
+          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.2);"></div>
+        </div>
+      </div>
+
+      <div style="padding:12px;">
+        <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px;">
+          <span style="color:#6B7280;font-size:9px;">视频源</span>
+          <input type="text" placeholder="输入视频 URL…" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:5px 8px;color:#E2E8F0;font-size:9px;outline:none;box-sizing:border-box;">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <div style="flex:1;border:1px dashed rgba(255,255,255,0.08);border-radius:5px;padding:6px;text-align:center;cursor:pointer;">
+              <span style="color:#4B5563;font-size:8px;">📁 上传视频文件</span>
+            </div>
+            <span style="color:#4B5563;font-size:7px;">MP4/WebM/OGG</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:9px;width:50px;">宽高比</span>
+          <select style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:4px 6px;color:#E2E8F0;font-size:9px;outline:none;">
+            <option selected>16:9（默认）</option>
+            <option>4:3</option>
+            <option>1:1</option>
+            <option>9:16</option>
+            <option>自定义</option>
+          </select>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:rgba(0,0,0,0.2);padding:5px 8px;border-radius:5px;">
+            <input type="checkbox" checked style="accent-color:#EF4444;"> <span style="color:#E2E8F0;font-size:9px;">自动播放</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:rgba(0,0,0,0.2);padding:5px 8px;border-radius:5px;">
+            <input type="checkbox" checked style="accent-color:#EF4444;"> <span style="color:#E2E8F0;font-size:9px;">循环</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:rgba(0,0,0,0.2);padding:5px 8px;border-radius:5px;">
+            <input type="checkbox" style="accent-color:#EF4444;"> <span style="color:#E2E8F0;font-size:9px;">静音</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:rgba(0,0,0,0.2);padding:5px 8px;border-radius:5px;">
+            <input type="checkbox" checked style="accent-color:#EF4444;"> <span style="color:#E2E8F0;font-size:9px;">控件</span>
+          </label>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="color:#6B7280;font-size:9px;width:50px;">封面</span>
+          <input type="text" placeholder="封面图片 URL（可选）" style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:4px 6px;color:#E2E8F0;font-size:8px;outline:none;">
+        </div>
+      </div>
+
+      <div style="padding:0 12px 10px;">
+        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:4px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(239,68,68,0.8);display:flex;align-items:center;justify-content:center;">
+            <span style="color:white;font-size:18px;margin-left:3px;">▶</span>
+          </div>
+          <div style="position:absolute;bottom:8px;left:8px;right:8px;height:3px;background:rgba(255,255,255,0.2);border-radius:2px;">
+            <div style="width:30%;height:100%;background:#EF4444;border-radius:2px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 统一数据格式说明 -->
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:300px;">
+      <div style="color:#E2E8F0;font-size:13px;font-weight:600;">📋 统一数据格式</div>
+      <div style="background:rgba(30,33,40,0.6);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;gap:12px;margin-bottom:8px;">
+          <span style="background:rgba(59,130,246,0.15);color:#93C5FD;padding:2px 8px;border-radius:4px;font-size:9px;">type</span>
+          <span style="background:rgba(16,185,129,0.15);color:#6EE7B7;padding:2px 8px;border-radius:4px;font-size:9px;">css</span>
+          <span style="background:rgba(139,92,246,0.15);color:#C4B5FD;padding:2px 8px;border-radius:4px;font-size:9px;">extra</span>
+        </div>
+        <p style="color:#64748B;font-size:10px;margin-bottom:8px;">所有节点统一使用 <code style="background:rgba(0,0,0,0.3);padding:2px 4px;border-radius:3px;">{ type, css, extra }</code> 格式输出：</p>
+        <ul style="color:#64748B;font-size:9px;padding-left:16px;line-height:1.6;">
+          <li><strong style="color:#93C5FD;">type</strong> — 节点类型标识 ('color', 'text', 'image' 等)</li>
+          <li><strong style="color:#6EE7B7;">css</strong> — 仅含布局属性，下游读此即可排版</li>
+          <li><strong style="color:#C4B5FD;">extra</strong> — 非布局特有数据（播放行为、替代文本等）</li>
+        </ul>
+      </div>
+
+      <div style="background:rgba(30,33,40,0.6);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.06);">
+        <span style="color:#FCD34D;font-size:11px;font-weight:600;">🎬 视频节点输出</span>
+        <pre style="background:rgba(0,0,0,0.3);padding:8px;border-radius:6px;margin-top:6px;font-size:9px;color:#94A3B8;line-height:1.5;font-family:monospace;">{
+  type: 'video',
+  css: { aspectRatio: '16/9' },
+  extra: {
+    src: '...',
+    autoplay: true,
+    loop: true,
+    muted: false,
+    controls: true,
+    poster: '...'
+  }
+}</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>视频节点 v2 满意吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>✅ 满意，继续</h3>
+      </div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>🔄 修改</h3>
+      </div>
+    </div>
+  </div>
+</div>

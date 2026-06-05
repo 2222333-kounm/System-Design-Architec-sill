@@ -1,0 +1,155 @@
+<h2>↔ 间距节点</h2>
+<p class="subtitle">Padding / Margin 独立控制 · 四方向</p>
+
+<div class="mockup" style="margin-top:24px;">
+  <div style="display:flex;gap:40px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+
+    <!-- 间距节点 -->
+    <div style="background:rgba(30,33,40,0.95);border:2px solid rgba(255,255,255,0.08);border-radius:12px;width:310px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+
+      <!-- 标题栏 -->
+      <div style="background:rgba(245,158,11,0.15);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,0.2);"></div>
+          <span style="color:#93C5FD;font-size:8px;font-weight:500;">css in</span>
+        </div>
+        <span style="flex:1;text-align:center;color:#E2E8F0;font-size:12px;font-weight:600;">↔ 间距节点</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:#6EE7B7;font-size:8px;font-weight:500;">css →</span>
+          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.2);"></div>
+        </div>
+      </div>
+
+      <!-- 参数区 -->
+      <div style="padding:12px;">
+
+        <!-- 模式切换：Padding / Margin -->
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <div style="flex:1;padding:6px;text-align:center;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.3);border-radius:6px;color:#FCD34D;font-size:11px;font-weight:600;cursor:pointer;">Padding</div>
+          <div style="flex:1;padding:6px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:#6B7280;font-size:11px;cursor:pointer;">Margin</div>
+        </div>
+
+        <!-- 统一 / 独立 切换 -->
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+          <div style="flex:1;padding:3px;text-align:center;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.3);border-radius:5px;color:#FCD34D;font-size:8px;cursor:pointer;">统一</div>
+          <div style="flex:1;padding:3px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:5px;color:#6B7280;font-size:8px;cursor:pointer;">独立</div>
+        </div>
+
+        <!-- 统一值 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="color:#6B7280;font-size:9px;width:55px;">四方向</span>
+          <input type="range" value="30" style="flex:1;height:3px;accent-color:#F59E0B;">
+          <input type="text" value="16" style="width:30px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#E2E8F0;font-size:9px;text-align:right;outline:none;">
+          <span style="color:#4B5563;font-size:7px;">px</span>
+        </div>
+
+        <!-- 独立方向（四个方向并排） -->
+        <div style="margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:8px;display:block;margin-bottom:4px;">独立方向</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+            <div style="background:rgba(0,0,0,0.2);border-radius:5px;padding:4px;display:flex;align-items:center;gap:4px;">
+              <span style="color:#6B7280;font-size:7px;width:16px;">上</span>
+              <input type="range" value="15" min="0" max="100" style="flex:1;height:2px;accent-color:#F59E0B;">
+              <input type="text" value="16" style="width:24px;background:rgba(0,0,0,0.3);border:none;border-radius:3px;padding:1px 2px;color:#E2E8F0;font-size:7px;text-align:right;outline:none;">
+            </div>
+            <div style="background:rgba(0,0,0,0.2);border-radius:5px;padding:4px;display:flex;align-items:center;gap:4px;">
+              <span style="color:#6B7280;font-size:7px;width:16px;">下</span>
+              <input type="range" value="15" min="0" max="100" style="flex:1;height:2px;accent-color:#F59E0B;">
+              <input type="text" value="16" style="width:24px;background:rgba(0,0,0,0.3);border:none;border-radius:3px;padding:1px 2px;color:#E2E8F0;font-size:7px;text-align:right;outline:none;">
+            </div>
+            <div style="background:rgba(0,0,0,0.2);border-radius:5px;padding:4px;display:flex;align-items:center;gap:4px;">
+              <span style="color:#6B7280;font-size:7px;width:16px;">左</span>
+              <input type="range" value="15" min="0" max="100" style="flex:1;height:2px;accent-color:#F59E0B;">
+              <input type="text" value="16" style="width:24px;background:rgba(0,0,0,0.3);border:none;border-radius:3px;padding:1px 2px;color:#E2E8F0;font-size:7px;text-align:right;outline:none;">
+            </div>
+            <div style="background:rgba(0,0,0,0.2);border-radius:5px;padding:4px;display:flex;align-items:center;gap:4px;">
+              <span style="color:#6B7280;font-size:7px;width:16px;">右</span>
+              <input type="range" value="15" min="0" max="100" style="flex:1;height:2px;accent-color:#F59E0B;">
+              <input type="text" value="16" style="width:24px;background:rgba(0,0,0,0.3);border:none;border-radius:3px;padding:1px 2px;color:#E2E8F0;font-size:7px;text-align:right;outline:none;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 单位切换 -->
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="color:#6B7280;font-size:9px;width:55px;">单位</span>
+          <div style="flex:1;display:flex;gap:3px;">
+            <div style="flex:1;padding:3px;text-align:center;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.3);border-radius:4px;color:#FCD34D;font-size:8px;cursor:pointer;">px</div>
+            <div style="flex:1;padding:3px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:4px;color:#6B7280;font-size:8px;cursor:pointer;">em</div>
+            <div style="flex:1;padding:3px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:4px;color:#6B7280;font-size:8px;cursor:pointer;">%</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部预览（可视化间距效果） -->
+      <div style="padding:0 12px 10px;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:12px;">
+          <!-- 外层容器模拟 padding -->
+          <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.15);border-radius:6px;padding:16px;position:relative;">
+            <div style="color:#FCD34D;font-size:7px;position:absolute;top:-8px;left:8px;background:rgba(30,33,40,0.9);padding:0 4px;border-radius:3px;">padding: 16px</div>
+            <!-- 内层内容 -->
+            <div style="background:rgba(245,158,11,0.15);border-radius:4px;padding:8px;text-align:center;">
+              <span style="color:#FCD34D;font-size:8px;">内容区域</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 参数 & 输出 -->
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;">
+      <div style="color:#E2E8F0;font-size:13px;font-weight:600;">参数 & 输出</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="background:rgba(245,158,11,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#FCD34D;font-size:9px;">模式</span><br>
+          <span style="color:#64748B;font-size:8px;">Padding / Margin 切换</span>
+        </div>
+        <div style="background:rgba(245,158,11,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#FCD34D;font-size:9px;">控制方式</span><br>
+          <span style="color:#64748B;font-size:8px;">统一 / 四方向独立</span>
+        </div>
+        <div style="background:rgba(245,158,11,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#FCD34D;font-size:9px;">单位</span><br>
+          <span style="color:#64748B;font-size:8px;">px / em / % 切换</span>
+        </div>
+        <div style="background:rgba(245,158,11,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#FCD34D;font-size:9px;">范围</span><br>
+          <span style="color:#64748B;font-size:8px;">0~200px 滑块+输入</span>
+        </div>
+      </div>
+
+      <div style="background:rgba(30,33,40,0.6);border-radius:10px;padding:10px;border:1px solid rgba(255,255,255,0.06);">
+        <span style="color:#FCD34D;font-size:10px;font-weight:600;">📋 输出格式</span>
+        <pre style="background:rgba(0,0,0,0.3);padding:6px;border-radius:4px;margin-top:4px;font-size:8px;color:#94A3B8;line-height:1.4;font-family:monospace;overflow-x:auto;">{
+  type: 'css',
+  css: {
+    padding: '16px'  // 或 paddingTop/paddingRight/...
+  },
+  extra: {
+    mode: 'padding',
+    control: 'uniform',
+    values: { top: 16, right: 16, bottom: 16, left: 16 },
+    unit: 'px'
+  }
+}</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>间距节点满意吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content"><h3>✅ 满意，继续</h3></div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content"><h3>🔄 修改</h3></div>
+    </div>
+  </div>
+</div>

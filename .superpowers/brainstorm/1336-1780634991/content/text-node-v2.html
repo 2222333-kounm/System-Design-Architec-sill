@@ -1,0 +1,198 @@
+<h2>📝 文字节点 v2 — 采纳反馈</h2>
+<p class="subtitle">端口命名 · 字重范围 · 单位切换 · 预览换行 · 可选参数</p>
+
+<div class="mockup" style="margin-top:24px;">
+  <div style="display:flex;gap:40px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+
+    <!-- 文字节点 v2 -->
+    <div style="background:rgba(30,33,40,0.95);border:2px solid rgba(255,255,255,0.08);border-radius:12px;width:310px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+
+      <!-- 标题栏（端口名更新） -->
+      <div style="background:rgba(139,92,246,0.15);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,0.2);"></div>
+          <span style="color:#93C5FD;font-size:8px;font-weight:500;">content in</span>
+        </div>
+        <span style="flex:1;text-align:center;color:#E2E8F0;font-size:12px;font-weight:600;">📝 文字</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:#6EE7B7;font-size:8px;font-weight:500;">styled text →</span>
+          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.2);"></div>
+        </div>
+      </div>
+
+      <!-- 参数区 -->
+      <div style="padding:12px;max-height:380px;overflow-y:auto;">
+
+        <!-- 内容 -->
+        <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:9px;">内容</span>
+          <textarea style="width:100%;height:40px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:5px 8px;color:#E2E8F0;font-size:10px;outline:none;resize:none;font-family:inherit;">这是一段示例文字，展示了节点上的排版效果。</textarea>
+        </div>
+
+        <!-- 字体 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:9px;width:40px;">字体</span>
+          <select style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:4px 6px;color:#E2E8F0;font-size:9px;outline:none;">
+            <option>SF Pro Display</option>
+            <option selected>PingFang SC</option>
+            <option>Inter</option>
+            <option>Noto Sans SC</option>
+            <option>Georgia</option>
+            <option>monospace</option>
+          </select>
+        </div>
+
+        <!-- 字号 + 单位 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:9px;width:40px;">字号</span>
+          <input type="range" value="30" style="flex:1;height:3px;accent-color:#8B5CF6;">
+          <input type="text" value="16" style="width:30px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#E2E8F0;font-size:9px;text-align:right;outline:none;">
+          <span style="color:#4B5563;font-size:8px;cursor:pointer;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,0.04);">px ▾</span>
+        </div>
+
+        <!-- 字重（全范围 + 手动输入） -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:9px;width:40px;">字重</span>
+          <div style="flex:1;display:flex;gap:4px;">
+            <select style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:4px 6px;color:#E2E8F0;font-size:9px;outline:none;">
+              <option>100 Thin</option>
+              <option>200 ExtraLight</option>
+              <option>300 Light</option>
+              <option selected>400 Regular</option>
+              <option>500 Medium</option>
+              <option>600 Semibold</option>
+              <option>700 Bold</option>
+              <option>800 ExtraBold</option>
+              <option>900 Black</option>
+              <option>— 自定义 —</option>
+            </select>
+            <input type="text" value="400" style="width:28px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#E2E8F0;font-size:9px;text-align:center;outline:none;" title="自定义字重值">
+          </div>
+        </div>
+
+        <!-- 行高 + 单位切换 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:9px;width:40px;">行高</span>
+          <input type="range" value="50" style="flex:1;height:3px;accent-color:#8B5CF6;">
+          <input type="text" value="1.5" style="width:30px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#E2E8F0;font-size:9px;text-align:right;outline:none;">
+          <span style="color:#4B5563;font-size:8px;cursor:pointer;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,0.04);">— ▾</span>
+        </div>
+
+        <!-- 字距 + 单位切换 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:9px;width:40px;">字距</span>
+          <input type="range" value="30" style="flex:1;height:3px;accent-color:#8B5CF6;">
+          <input type="text" value="0" style="width:30px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#E2E8F0;font-size:9px;text-align:right;outline:none;">
+          <span style="color:#4B5563;font-size:8px;cursor:pointer;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,0.04);">em ▾</span>
+        </div>
+
+        <!-- 颜色 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:9px;width:40px;">颜色</span>
+          <div style="flex:1;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:3px;">
+            <div style="width:20px;height:20px;border-radius:5px;background:#1D1D1F;border:2px solid rgba(255,255,255,0.1);cursor:pointer;"></div>
+            <input type="text" value="#1D1D1F" style="flex:1;background:none;border:none;color:#E2E8F0;font-size:9px;font-family:monospace;outline:none;">
+            <span style="color:#4B5563;font-size:7px;cursor:pointer;padding:2px 4px;border-radius:4px;background:rgba(255,255,255,0.04);">HEX ▾</span>
+          </div>
+        </div>
+
+        <!-- 对齐 + 文字装饰 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:9px;width:40px;">对齐</span>
+          <div style="flex:1;display:flex;gap:3px;">
+            <div style="flex:1;padding:3px;text-align:center;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.3);border-radius:5px;color:#C4B5FD;font-size:9px;cursor:pointer;">⬅</div>
+            <div style="flex:1;padding:3px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:5px;color:#6B7280;font-size:9px;cursor:pointer;">⬌</div>
+            <div style="flex:1;padding:3px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:5px;color:#6B7280;font-size:9px;cursor:pointer;">➡</div>
+          </div>
+        </div>
+
+        <!-- 装饰：下划线 + 大小写（可选参数，折叠状态） -->
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="color:#4B5563;font-size:8px;width:40px;">装饰</span>
+          <div style="flex:1;display:flex;gap:6px;">
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer;">
+              <input type="checkbox" style="accent-color:#8B5CF6;"> <span style="color:#6B7280;font-size:8px;">下划线</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer;">
+              <input type="checkbox"> <span style="color:#6B7280;font-size:8px;">删除线</span>
+            </label>
+          </div>
+          <select style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#6B7280;font-size:8px;outline:none;">
+            <option>无</option>
+            <option>大写</option>
+            <option>小写</option>
+            <option>首字母大写</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- 底部预览（自动换行） -->
+      <div style="padding:0 12px 10px;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:10px 12px;max-width:100%;">
+          <span style="color:#E2E8F0;font-size:16px;font-weight:400;line-height:1.5;font-family:'PingFang SC',sans-serif;letter-spacing:0em;word-wrap:break-word;overflow-wrap:break-word;">这是一段示例文字，展示了节点上的排版效果。</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:5px;justify-content:center;">
+          <span style="color:#4B5563;font-size:7px;cursor:pointer;">🔽 折叠参数</span>
+          <span style="color:#4B5563;font-size:7px;cursor:pointer;">📐 实际大小</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 采纳项对照 -->
+    <div style="display:flex;flex-direction:column;gap:6px;max-width:280px;">
+      <div style="color:#E2E8F0;font-size:13px;font-weight:600;margin-bottom:4px;">✅ 已采纳</div>
+
+      <div style="display:flex;gap:6px;">
+        <span style="background:#10B981;color:white;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;">✓</span>
+        <span style="color:#E2E8F0;font-size:10px;">端口 "content in" / "styled text →"</span>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <span style="background:#10B981;color:white;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;">✓</span>
+        <span style="color:#E2E8F0;font-size:10px;">字重 100-900 全范围 + 手动输入</span>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <span style="background:#10B981;color:white;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;">✓</span>
+        <span style="color:#E2E8F0;font-size:10px;">行高支持 —/px/em/vw 单位切换</span>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <span style="background:#10B981;color:white;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;">✓</span>
+        <span style="color:#E2E8F0;font-size:10px;">字距 em/px 单位切换，范围 -10~20</span>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <span style="background:#10B981;color:white;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;">✓</span>
+        <span style="color:#E2E8F0;font-size:10px;">预览自动换行 + 实际大小按钮</span>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <span style="background:#F59E0B;color:white;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;">✦</span>
+        <span style="color:#E2E8F0;font-size:10px;">可选参数：下划线/删除线 + 大小写转换</span>
+      </div>
+
+      <div style="margin-top:8px;padding:8px;background:rgba(139,92,246,0.08);border-radius:8px;">
+        <span style="color:#C4B5FD;font-size:10px;">📐 预览宽度 = 节点内部宽度，文本超出自动换行；若设定了固定宽度则按固定值；否则最大宽度 = 节点宽度 - padding</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>文字节点 v2 你满意吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>✅ 满意</h3>
+        <p>继续下一个节点</p>
+      </div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>🔄 修改</h3>
+        <p>在终端告诉我</p>
+      </div>
+    </div>
+  </div>
+</div>

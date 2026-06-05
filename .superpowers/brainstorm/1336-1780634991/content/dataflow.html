@@ -1,0 +1,85 @@
+<h2>🔗 数据流规则（完整版）</h2>
+<p class="subtitle">循环检测 · 拓扑排序 · 多输出 · 错误处理</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+
+  <!-- 规则 1 -->
+  <div class="card" style="padding:16px;border-color:rgba(239,68,68,0.3);">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="background:#EF4444;color:white;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">!</span>
+      <h3 style="margin:0;">循环依赖检测</h3>
+    </div>
+    <p style="font-size:12px;color:#64748B;">输出节点连回色块 → 检测到环 → 弹窗警告 ❌ 检测到循环依赖，连接已被阻断，红色高亮显示违规连线。</p>
+  </div>
+
+  <!-- 规则 2 -->
+  <div class="card" style="padding:16px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="background:#3B82F6;color:white;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">①</span>
+      <h3 style="margin:0;">拓扑排序执行</h3>
+    </div>
+    <p style="font-size:12px;color:#64748B;">自动计算节点执行顺序，上游先执行 → 下游后执行。修改任意节点 → 只重算受影响的下游路径，不做全局重算。</p>
+  </div>
+
+  <!-- 规则 3 -->
+  <div class="card" style="padding:16px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="background:#8B5CF6;color:white;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">⊕</span>
+      <h3 style="margin:0;">多输出支持</h3>
+    </div>
+    <p style="font-size:12px;color:#64748B;">统一数据格式：<code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;font-size:10px;">{ type, css, extra }</code><br>合并节点可通过 extra 携带原始数据副本，不拆端口。</p>
+  </div>
+
+  <!-- 规则 4 -->
+  <div class="card" style="padding:16px;border-color:rgba(245,158,11,0.3);">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="background:#F59E0B;color:white;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">⚠</span>
+      <h3 style="margin:0;">错误处理</h3>
+    </div>
+    <p style="font-size:12px;color:#64748B;">节点计算失败 → 输出 <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;font-size:10px;">{ type: 'error', message }</code><br>上游出错时下游显示占位（灰色虚线框）并保持最后有效状态。</p>
+  </div>
+
+</div>
+
+<div class="section">
+  <h3>端口类型匹配规则</h3>
+  <div style="overflow-x:auto;margin-top:8px;">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead>
+        <tr style="background:rgba(255,255,255,0.04);">
+          <th style="padding:8px 12px;text-align:left;color:#6B7280;">端口类型</th>
+          <th style="padding:8px 12px;text-align:left;color:#6B7280;">可连接</th>
+          <th style="padding:8px 12px;text-align:left;color:#6B7280;">禁止连接</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:6px 12px;border-top:1px solid rgba(255,255,255,0.04);">color</td><td style="padding:6px 12px;color:#6EE7B7;">→ color, css</td><td style="padding:6px 12px;color:#FCA5A5;">→ image, text</td></tr>
+        <tr><td style="padding:6px 12px;border-top:1px solid rgba(255,255,255,0.04);">image</td><td style="padding:6px 12px;color:#6EE7B7;">→ image, css</td><td style="padding:6px 12px;color:#FCA5A5;">→ color, text</td></tr>
+        <tr><td style="padding:6px 12px;border-top:1px solid rgba(255,255,255,0.04);">text</td><td style="padding:6px 12px;color:#6EE7B7;">→ text, css, any</td><td style="padding:6px 12px;color:#FCA5A5;">→ image</td></tr>
+        <tr><td style="padding:6px 12px;border-top:1px solid rgba(255,255,255,0.04);">css</td><td style="padding:6px 12px;color:#6EE7B7;">→ css, any</td><td style="padding:6px 12px;color:#FCA5A5;">→ color, image</td></tr>
+        <tr><td style="padding:6px 12px;border-top:1px solid rgba(255,255,255,0.04);">interactive</td><td style="padding:6px 12px;color:#6EE7B7;">→ interactive, css</td><td style="padding:6px 12px;color:#FCA5A5;">→ color, image</td></tr>
+        <tr><td style="padding:6px 12px;border-top:1px solid rgba(255,255,255,0.04);">any</td><td style="padding:6px 12px;color:#6EE7B7;">→ 任意端口</td><td style="padding:6px 12px;color:#FCA5A5;">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <h3>数据流规则你确认吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>✅ 确认</h3>
+        <p>数据流规则定下了</p>
+      </div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>🔄 补充/修改</h3>
+        <p>在终端告诉我</p>
+      </div>
+    </div>
+  </div>
+</div>
