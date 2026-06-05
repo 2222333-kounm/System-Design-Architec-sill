@@ -33,6 +33,7 @@ import PreviewPanel from './components/PreviewPanel';
 import AIScanner from './components/AIScanner';
 import ExportPanel from './components/ExportPanel';
 import TokenEditor from './components/TokenEditor';
+import DesignCheck from './components/DesignCheck';
 import { useStore, setStore, componentStore } from './store';
 
 const nodeTypes = {
@@ -97,6 +98,7 @@ function Flow() {
   const compVersionRef = useRef(0);
   const [showExport, setShowExport] = useState(false);
   const [showTokenEditor, setShowTokenEditor] = useState(false);
+  const [showDesignCheck, setShowDesignCheck] = useState(false);
 
   // Toast 通知
   const showToast = useCallback((msg, type) => {
@@ -927,6 +929,8 @@ function Flow() {
           <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 2px' }} />
           <button onClick={() => setShowTokenEditor(true)} title="全局 Token"
             style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.2)', color: '#6EE7B7', cursor: 'pointer', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🌐</button>
+          <button onClick={() => setShowDesignCheck(true)} title="规范检查"
+            style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.2)', color: '#FCD34D', cursor: 'pointer', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📐</button>
           <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 2px' }} />
           <button onClick={() => setShowExport(true)} title="导出代码"
             style={{ width: 30, height: 30, borderRadius: 6, background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.2)', color: '#6EE7B7', cursor: 'pointer', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📤</button>
@@ -935,6 +939,7 @@ function Flow() {
         {/* 导出面板 */}
         {showExport && <ExportPanel nodes={nodes} edges={edges} onClose={() => setShowExport(false)} />}
         {showTokenEditor && <TokenEditor open={showTokenEditor} onClose={() => setShowTokenEditor(false)} />}
+        {showDesignCheck && <DesignCheck open={showDesignCheck} onClose={() => setShowDesignCheck(false)} nodes={nodes} onUpdateNode={handleNodeChange} />}
 
         {/* 快捷键提示面板 */}
         {showShortcuts && (
