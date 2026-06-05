@@ -29,6 +29,7 @@ import MergeNode from './nodes/MergeNode';
 import GlobalTokenNode from './nodes/GlobalTokenNode';
 import OutputNode from './nodes/OutputNode';
 import PreviewPanel from './components/PreviewPanel';
+import AIScanner from './components/AIScanner';
 import { setStore } from './store';
 
 const nodeTypes = {
@@ -334,6 +335,11 @@ function Flow() {
     setStore({ selectedNode: node });
   }, []);
 
+  // AI Scanner 添加节点
+  const handleAiAddNodes = useCallback((newNode) => {
+    setNodes((nds) => nds.concat(newNode));
+  }, []);
+
   return (
     <div style={{ display: 'flex', width: '100%', height: '100%' }}>
       {/* 画布 */}
@@ -344,7 +350,7 @@ function Flow() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          onInit={setReactFlowInstance}
+          onInit={(instance) => { setReactFlowInstance(instance); setStore({ reactFlowInstance: instance }); }}
           onDrop={onDrop}
           onDragOver={onDragOver}
           onNodeClick={onNodeClick}
@@ -380,6 +386,7 @@ function Flow() {
             maskColor="rgba(0,0,0,0.5)"
           />
         </ReactFlow>
+        <AIScanner addNodes={handleAiAddNodes} />
       </div>
 
       {/* 组件拖拽面板 - 浮动在画布左下 */}
