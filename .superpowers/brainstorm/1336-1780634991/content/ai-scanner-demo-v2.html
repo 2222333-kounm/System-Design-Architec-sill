@@ -1,0 +1,112 @@
+<h1>🤖 AI 扫描面板 — 三项改进</h1>
+<p class="subtitle">结构化输出 · 去重检测 · 视图中心定位</p>
+
+<div class="mockup" style="margin-top:16px;">
+  <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:24px;display:flex;align-items:center;justify-content:center;min-height:520px;">
+
+    <!-- 面板 -->
+    <div style="width:520px;background:rgba(22,24,30,0.98);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
+
+      <div style="display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span style="font-size:15px;font-weight:600;color:#E2E8F0;">🤖 AI 扫描</span>
+        <span style="margin-left:auto;color:#6B7280;font-size:20px;cursor:pointer;">✕</span>
+      </div>
+
+      <div style="padding:20px;">
+
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <input type="text" value="https://www.apple.com.cn" style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#E2E8F0;font-size:13px;outline:none;">
+          <div style="background:#3B82F6;color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;">扫描</div>
+        </div>
+
+        <div style="border:1px dashed rgba(255,255,255,0.08);border-radius:8px;padding:16px;text-align:center;cursor:pointer;margin-bottom:16px;">
+          <span style="color:#4B5563;font-size:11px;">📁 拖放本地 HTML / CSS 文件到此处</span>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>
+          <span style="color:#374151;font-size:10px;">或</span>
+          <div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(16,185,129,0.1);border-radius:8px;margin-bottom:12px;">
+          <span style="color:#6EE7B7;font-size:11px;">✅ 扫描完成 · 共 9 个元素（1 个已在画布上）</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:6px;">
+
+          <!-- 已添加状态 -->
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;opacity:0.6;border:1px solid rgba(16,185,129,0.15);">
+            <div style="width:28px;height:28px;border-radius:50%;background:#0071E3;border:2px solid rgba(255,255,255,0.1);flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="color:#E2E8F0;font-size:11px;font-weight:500;">🎨 主色调</div>
+              <div style="color:#4B5563;font-size:9px;"><span style="color:#6B7280;font-family:monospace;background:rgba(0,0,0,0.2);padding:1px 6px;border-radius:4px;">#0071E3</span> · color</div>
+            </div>
+            <span style="color:#10B981;font-size:10px;padding:4px 8px;">✓ 已添加</span>
+          </div>
+
+          <!-- 可添加状态 -->
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1D1D1F;border:2px solid rgba(255,255,255,0.1);flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="color:#E2E8F0;font-size:11px;font-weight:500;">🎨 文字色</div>
+              <div style="color:#4B5563;font-size:9px;"><span style="color:#6B7280;font-family:monospace;background:rgba(0,0,0,0.2);padding:1px 6px;border-radius:4px;">#1D1D1F</span> · color</div>
+            </div>
+            <span style="color:#6B7280;font-size:10px;padding:4px 8px;border-radius:4px;cursor:pointer;">+ 添加</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:#F5F5F7;border:2px solid rgba(255,255,255,0.1);flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="color:#E2E8F0;font-size:11px;font-weight:500;">🎨 背景色</div>
+              <div style="color:#4B5563;font-size:9px;"><span style="color:#6B7280;font-family:monospace;background:rgba(0,0,0,0.2);padding:1px 6px;border-radius:4px;">#F5F5F7</span> · color</div>
+            </div>
+            <span style="color:#6B7280;font-size:10px;padding:4px 8px;border-radius:4px;cursor:pointer;">+ 添加</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:8px;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.06);">
+        <div style="flex:1;background:#3B82F6;color:white;padding:10px;border-radius:8px;text-align:center;font-size:12px;font-weight:500;cursor:pointer;">全部添加到画布（8）</div>
+        <div style="background:rgba(255,255,255,0.06);color:#9CA3AF;padding:10px 20px;border-radius:8px;text-align:center;font-size:12px;cursor:pointer;">取消</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 三项改进说明 -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:20px;">
+  <div class="card" style="padding:16px;border-color:rgba(59,130,246,0.3);">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="background:#3B82F6;color:white;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">①</span>
+      <h3 style="margin:0;">结构化输出</h3>
+    </div>
+    <pre style="background:rgba(0,0,0,0.3);padding:8px;border-radius:6px;font-size:8px;color:#94A3B8;font-family:monospace;line-height:1.4;">{
+  type: 'color',
+  name: '主色调',
+  value: '#0071E3',
+  suggestedNode: 'sill/color-block'
+}</pre>
+  </div>
+
+  <div class="card" style="padding:16px;border-color:rgba(16,185,129,0.3);">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="background:#10B981;color:white;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">②</span>
+      <h3 style="margin:0;">视图中心定位</h3>
+    </div>
+    <p style="font-size:11px;color:#64748B;">新节点自动定位到画布视口中心 + 随机偏移（±100px），不会出现在看不见的地方。</p>
+  </div>
+
+  <div class="card" style="padding:16px;border-color:rgba(245,158,11,0.3);">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="background:#F59E0B;color:white;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">③</span>
+      <h3 style="margin:0;">去重检测</h3>
+    </div>
+    <p style="font-size:11px;color:#64748B;">扫描时遍历画布已有节点，匹配 <code style="background:rgba(0,0,0,0.3);padding:1px 4px;border-radius:3px;font-size:9px;">suggestedNode + value</code>，已存在的自动标记为✓已添加。</p>
+  </div>
+</div>
+
+<p style="margin-top:16px;color:#4B5563;font-size:11px;">实际体验请打开 editor.html → 点顶栏 🤖 AI 按钮。</p>
