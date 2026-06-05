@@ -1,0 +1,152 @@
+<h2>✨ 转场节点</h2>
+<p class="subtitle">过渡动画 · hover/click · 时长/缓动</p>
+
+<div class="mockup" style="margin-top:24px;">
+  <div style="display:flex;gap:40px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+
+    <div style="background:rgba(30,33,40,0.95);border:2px solid rgba(255,255,255,0.08);border-radius:12px;width:310px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+
+      <div style="background:rgba(59,130,246,0.15);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,0.2);"></div>
+          <span style="color:#93C5FD;font-size:8px;font-weight:500;">css in</span>
+        </div>
+        <span style="flex:1;text-align:center;color:#E2E8F0;font-size:12px;font-weight:600;">✨ 转场</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="color:#6EE7B7;font-size:8px;font-weight:500;">interactive →</span>
+          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.2);"></div>
+        </div>
+      </div>
+
+      <div style="padding:12px;">
+
+        <!-- 触发方式 -->
+        <div style="margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:9px;display:block;margin-bottom:4px;">触发方式</span>
+          <div style="display:flex;gap:6px;">
+            <div style="flex:1;padding:8px 4px;text-align:center;background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.3);border-radius:6px;color:#93C5FD;font-size:10px;cursor:pointer;font-weight:600;">hover</div>
+            <div style="flex:1;padding:8px 4px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:#6B7280;font-size:10px;cursor:pointer;">click</div>
+          </div>
+        </div>
+
+        <!-- 变换类型 -->
+        <div style="margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:9px;display:block;margin-bottom:4px;">变换类型</span>
+          <div style="display:flex;gap:6px;">
+            <div style="flex:1;padding:6px 4px;text-align:center;background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.3);border-radius:6px;color:#93C5FD;font-size:9px;cursor:pointer;font-weight:600;">缩放</div>
+            <div style="flex:1;padding:6px 4px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:#6B7280;font-size:9px;cursor:pointer;">位移</div>
+            <div style="flex:1;padding:6px 4px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:#6B7280;font-size:9px;cursor:pointer;">淡入</div>
+            <div style="flex:1;padding:6px 4px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:#6B7280;font-size:9px;cursor:pointer;">旋转</div>
+          </div>
+        </div>
+
+        <!-- 变换目标值 -->
+        <div style="margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:9px;display:block;margin-bottom:4px;">目标值</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="color:#6B7280;font-size:8px;width:30px;">缩放</span>
+            <input type="range" value="50" min="10" max="200" style="flex:1;height:3px;accent-color:#3B82F6;">
+            <input type="text" value="1.2" style="width:30px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#E2E8F0;font-size:9px;text-align:right;outline:none;">
+          </div>
+        </div>
+
+        <!-- 时长 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:9px;width:50px;">时长</span>
+          <input type="range" value="30" min="1" max="50" step="1" style="flex:1;height:3px;accent-color:#3B82F6;">
+          <input type="text" value="0.3" style="width:30px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#E2E8F0;font-size:9px;text-align:right;outline:none;">
+          <span style="color:#4B5563;font-size:7px;">s</span>
+        </div>
+
+        <!-- 缓动 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="color:#6B7280;font-size:9px;width:50px;">缓动</span>
+          <select style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:5px;padding:4px 6px;color:#E2E8F0;font-size:9px;outline:none;">
+            <option selected>ease-out</option>
+            <option>ease-in</option>
+            <option>ease-in-out</option>
+            <option>linear</option>
+            <option>cubic-bezier(0.25,0.1,0.25,1)</option>
+          </select>
+        </div>
+
+        <!-- 延迟 -->
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="color:#6B7280;font-size:9px;width:50px;">延迟</span>
+          <input type="range" value="0" min="0" max="50" step="1" style="flex:1;height:3px;accent-color:#3B82F6;">
+          <input type="text" value="0" style="width:30px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:2px 4px;color:#E2E8F0;font-size:9px;text-align:right;outline:none;">
+          <span style="color:#4B5563;font-size:7px;">s</span>
+        </div>
+
+      </div>
+
+      <!-- 底部预览 -->
+      <div style="padding:0 12px 10px;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:center;">
+          <div style="width:80px;height:50px;background:linear-gradient(135deg,#3B82F6,#2563EB);border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease-out;cursor:pointer;">
+            <span style="color:white;font-size:10px;">hover</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:4px;justify-content:center;">
+          <span style="color:#4B5563;font-size:7px;">✨ hover → 缩放 ×1.2 · 0.3s ease-out</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;">
+      <div style="color:#E2E8F0;font-size:13px;font-weight:600;">参数 & 输出</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="background:rgba(59,130,246,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#93C5FD;font-size:9px;">触发</span><br>
+          <span style="color:#64748B;font-size:8px;">hover / click</span>
+        </div>
+        <div style="background:rgba(59,130,246,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#93C5FD;font-size:9px;">变换类型</span><br>
+          <span style="color:#64748B;font-size:8px;">缩放/位移/淡入/旋转</span>
+        </div>
+        <div style="background:rgba(59,130,246,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#93C5FD;font-size:9px;">时长/延迟</span><br>
+          <span style="color:#64748B;font-size:8px;">0.1~5s</span>
+        </div>
+        <div style="background:rgba(59,130,246,0.1);padding:8px;border-radius:8px;">
+          <span style="color:#93C5FD;font-size:9px;">缓动</span><br>
+          <span style="color:#64748B;font-size:8px;">5种预设 + 自定义</span>
+        </div>
+      </div>
+
+      <div style="background:rgba(30,33,40,0.6);border-radius:10px;padding:10px;border:1px solid rgba(255,255,255,0.06);">
+        <span style="color:#93C5FD;font-size:10px;font-weight:600;">📋 输出格式</span>
+        <pre style="background:rgba(0,0,0,0.3);padding:6px;border-radius:4px;margin-top:4px;font-size:8px;color:#94A3B8;line-height:1.4;font-family:monospace;overflow-x:auto;">{
+  type: 'interactive',
+  css: {
+    transition: 'all 0.3s ease-out'
+  },
+  extra: {
+    kind: 'transition',
+    trigger: 'hover',
+    transformType: 'scale',
+    targetValue: 1.2,
+    duration: 0.3,
+    delay: 0,
+    easing: 'ease-out'
+  }
+}</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>转场节点满意吗？</h3>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content"><h3>✅ 满意，继续</h3></div>
+    </div>
+    <div class="option" data-choice="modify" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content"><h3>🔄 修改</h3></div>
+    </div>
+  </div>
+</div>
