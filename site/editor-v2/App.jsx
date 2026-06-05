@@ -623,9 +623,12 @@ function Flow() {
 
   // 替换原有的 handleNodeChange 以注入 componentDef
 
-  // 节点/边变化时更新预览
+  // 节点/边变化时更新预览（100ms 防抖）
+  const previewTimerRef = useRef(null);
   React.useEffect(() => {
-    updatePreview();
+    if (previewTimerRef.current) clearTimeout(previewTimerRef.current);
+    previewTimerRef.current = setTimeout(updatePreview, 100);
+    return () => { if (previewTimerRef.current) clearTimeout(previewTimerRef.current); };
   }, [nodes, edges, updatePreview]);
 
   // 更新节点计数
