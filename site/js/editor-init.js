@@ -203,6 +203,15 @@
     });
   }
 
+  // AI 扫描按钮
+  var aiBtn = document.getElementById('aiScanBtn');
+  if (aiBtn && window.AIScanner) {
+    aiBtn.addEventListener('click', function() {
+      AIScanner.setGraph(engine.graph);
+      AIScanner.open();
+    });
+  }
+
   // 复制 HTML
   var copyBtn = document.getElementById('copyHtmlBtn');
   if (copyBtn) {

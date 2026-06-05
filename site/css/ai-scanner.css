@@ -1,0 +1,351 @@
+/* ========================================
+   AI 扫描面板 — 浮动模态框样式
+   ======================================== */
+
+/* ---- 遮罩层 ---- */
+.ai-scan-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.ai-scan-overlay.hidden {
+  display: none;
+}
+
+/* ---- 面板主体 ---- */
+.ai-scan-panel {
+  width: 520px;
+  max-height: 80vh;
+  background: rgba(22, 24, 30, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ---- 头部 ---- */
+.ai-scan-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ai-scan-header h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #E2E8F0;
+}
+
+.ai-scan-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #6B7280;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.ai-scan-close:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #E2E8F0;
+}
+
+/* ---- 内容 ---- */
+.ai-scan-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ---- URL 输入区 ---- */
+.ai-scan-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ai-scan-input-row input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #E2E8F0;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.ai-scan-input-row input:focus {
+  border-color: rgba(59, 130, 246, 0.4);
+}
+.ai-scan-input-row input::placeholder {
+  color: #4B5563;
+}
+
+.ai-scan-btn {
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.ai-scan-btn:hover {
+  background: #2563EB;
+}
+.ai-scan-btn:active {
+  background: #1D4ED8;
+}
+.ai-scan-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- 文件上传区 ---- */
+.ai-scan-dropzone {
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 16px;
+}
+.ai-scan-dropzone:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.03);
+}
+.ai-scan-dropzone.dragover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.ai-scan-dropzone-text {
+  color: #4B5563;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ai-scan-dropzone-text .icon {
+  font-size: 16px;
+}
+
+/* ---- 分割线 ---- */
+.ai-scan-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: #374151;
+  font-size: 10px;
+}
+.ai-scan-divider::before,
+.ai-scan-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ---- 扫描状态 ---- */
+.ai-scan-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 11px;
+}
+.ai-scan-status.idle {
+  background: rgba(255, 255, 255, 0.03);
+  color: #4B5563;
+}
+.ai-scan-status.loading {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60A5FA;
+}
+.ai-scan-status.done {
+  background: rgba(16, 185, 129, 0.1);
+  color: #6EE7B7;
+}
+.ai-scan-status.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #FCA5A5;
+}
+
+.ai-scan-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  border-top-color: #3B82F6;
+  border-radius: 50%;
+  animation: ai-spin 0.6s linear infinite;
+}
+@keyframes ai-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- 扫描结果列表 ---- */
+.ai-scan-results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.ai-scan-result-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.1s;
+  border: 1px solid transparent;
+}
+.ai-scan-result-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.ai-scan-result-item.selected {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+.ai-scan-result-item.added {
+  opacity: 0.6;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.ai-scan-result-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.ai-scan-result-icon.color {
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.ai-scan-result-info {
+  flex: 1;
+  min-width: 0;
+}
+.ai-scan-result-name {
+  color: #E2E8F0;
+  font-size: 11px;
+  font-weight: 500;
+}
+.ai-scan-result-desc {
+  color: #4B5563;
+  font-size: 9px;
+  margin-top: 1px;
+}
+.ai-scan-result-detail {
+  color: #6B7280;
+  font-size: 9px;
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.ai-scan-result-action {
+  color: #6B7280;
+  font-size: 10px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+.ai-scan-result-action:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60A5FA;
+}
+.ai-scan-result-action.added {
+  color: #10B981;
+  cursor: default;
+}
+
+/* ---- 底部操作区 ---- */
+.ai-scan-footer {
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ai-scan-btn-primary {
+  flex: 1;
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ai-scan-btn-primary:hover {
+  background: #2563EB;
+}
+.ai-scan-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ai-scan-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #9CA3AF;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ai-scan-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #E2E8F0;
+}
+
+/* ---- 空结果 ---- */
+.ai-scan-empty {
+  text-align: center;
+  padding: 24px;
+  color: #374151;
+  font-size: 12px;
+}
+.ai-scan-empty .icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
