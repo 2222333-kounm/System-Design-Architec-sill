@@ -27,10 +27,11 @@ import TransitionNode from './nodes/TransitionNode';
 import ConvertNode from './nodes/ConvertNode';
 import MergeNode from './nodes/MergeNode';
 import GlobalTokenNode from './nodes/GlobalTokenNode';
+import InstanceNode from './nodes/InstanceNode';
 import OutputNode from './nodes/OutputNode';
 import PreviewPanel from './components/PreviewPanel';
 import AIScanner from './components/AIScanner';
-import { useStore, setStore } from './store';
+import { useStore, setStore, componentStore } from './store';
 
 const nodeTypes = {
   colorBlock: ColorBlockNode,
@@ -49,6 +50,7 @@ const nodeTypes = {
   convert: ConvertNode,
   merge: MergeNode,
   globalToken: GlobalTokenNode,
+  instance: InstanceNode,
   output: OutputNode,
 };
 
@@ -77,6 +79,7 @@ function Flow() {
   const [showEmptyGuide, setShowEmptyGuide] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const compVersionRef = useRef(0);
 
   // Toast 通知
   const showToast = useCallback((msg, type) => {
@@ -186,15 +189,16 @@ function Flow() {
     return () => clearTimeout(timer);
   }, [nodes, edges, pushHistory]);
 
-  // 全局 handleNodeChange
+  // 全局 handleNodeChange（注入组件定义）
   const handleNodeChange = useCallback((nodeId, properties) => {
     setNodes((nds) =>
       nds.map((n) => {
         if (n.id === nodeId) {
-          return {
-            ...n,
-            data: { ...n.data, properties },
-          };
+          const extra = {};
+          if (n.type === 'instance' && properties.componentId) {
+            extra.componentDef = componentStore.get(properties.componentId);
+          }
+          return { ...n, data: { ...n.data, ...extra, properties } };
         }
         return n;
       })
@@ -357,7 +361,7 @@ function Flow() {
     '基础组件': ['colorBlock', 'text', 'button', 'icon'],
     '布局 & 结构': ['layoutContainer', 'spacing', 'breakpoint'],
     '变换 & 特效': ['transform', 'mask', 'border', 'shadow', 'mouseFollow', 'transition'],
-    '工具 & 全局': ['convert', 'merge', 'globalToken', 'output'],
+    '工具 & 全局': ['convert', 'merge', 'globalToken', 'instance', 'output'],
   };
 
   const NODE_LABELS = {
@@ -365,7 +369,7 @@ function Flow() {
     layoutContainer: '📐 布局容器', spacing: '↔ 间距', breakpoint: '📱 断点',
     transform: '🔄 变换', mask: '🎭 蒙版', border: '📦 边框', shadow: '💡 阴影',
     mouseFollow: '🖱️ 鼠标跟随', transition: '✨ 转场',
-    convert: '🔄 转换', merge: '🗂️ 合并', globalToken: '🌐 全局Token', output: '📤 输出',
+    convert: '🔄 转换', merge: '🗂️ 合并', globalToken: '🌐 全局Token', instance: '♻ 组件实例', output: '📤 输出',
   };
 
   // =====================
@@ -588,12 +592,34 @@ function Flow() {
       case 'globalToken':
         output = { type: 'tokens', css: {}, extra: { count: window.TokenStore?.keys().length || 0 }};
         break;
+      case 'instance': {
+        const compDef = componentStore.get(props.componentId);
+        if (compDef && compDef.nodes.length > 0) {
+          // 合并组件内所有节点的CSS
+          const mergedCss = {};
+          compDef.nodes.forEach(n => {
+            const np = n.data?.properties;
+            if (!np) return;
+            if (np.color) mergedCss.background = np.color;
+            if (np.width) mergedCss.width = np.width + (np.widthUnit || 'px');
+            if (np.height) mergedCss.height = np.height + (np.heightUnit || 'px');
+            if (np.borderRadius) mergedCss.borderRadius = np.borderRadius + 'px';
+            if (np.fontSize) mergedCss.fontSize = np.fontSize + (np.fontSizeUnit || 'px');
+            if (np.content) mergedCss.content = np.content;
+          });
+          output = { type: 'instance', css: mergedCss, extra: { componentRef: props.componentId, instanceName: props.instanceName, slots: props.slots } };
+        } else {
+          output = { type: 'instance', css: {}, extra: { componentRef: props.componentId } };
+        }
+        break;
+      }
       default:
-        output = { type: 'unknown', css: {} };
     }
 
     setStore({ previewData: output });
   }, [nodes, edges]);
+
+  // 替换原有的 handleNodeChange 以注入 componentDef
 
   // 节点/边变化时更新预览
   React.useEffect(() => {
@@ -964,6 +990,22 @@ function Flow() {
                   ))}
                 </React.Fragment>
               ))}
+              {/* 分割线 */}
+              <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px 12px' }} />
+              {/* 保存为组件（选中节点时显示） */}
+              <div onClick={() => { const sel = nodes.filter(n => n.selected); if (sel.length > 0) { const name = prompt('组件名称:', '组件 ' + (Object.keys(componentStore.list()).length + 1)); if (name) { const id = componentStore.createFromSelected(sel, edges, name); showToast('✅ 已保存组件: ' + name, 'done'); closeContextMenu(); } } else { showToast('⚠️ 请先选中要保存的节点', 'error'); closeContextMenu(); } }}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 14px', cursor: 'pointer', color: '#C4B5FD', transition: 'background 0.1s', fontSize: 11 }}
+                onMouseEnter={(e) => e.target.style.background = 'rgba(139,92,246,0.1)'}
+                onMouseLeave={(e) => e.target.style.background = ''}>
+                💾 保存选中为组件
+              </div>
+              {/* 组件管理 */}
+              <div onClick={() => { const list = componentStore.list(); if (list.length === 0) { showToast('⚠️ 暂无保存的组件', 'error'); } else { showToast('📦 共 ' + list.length + ' 个组件: ' + list.map(c => c.name).join(', '), 'done'); } closeContextMenu(); }}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 14px', cursor: 'pointer', color: '#6B7280', transition: 'background 0.1s', fontSize: 11 }}
+                onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.03)'}
+                onMouseLeave={(e) => e.target.style.background = ''}>
+                📋 组件列表
+              </div>
             </div>
           </div>
         )}
@@ -994,6 +1036,7 @@ function Flow() {
         <DraggableNode type="convert" label="🔄 转换" />
         <DraggableNode type="merge" label="🗂️ 合并" />
         <DraggableNode type="globalToken" label="🌐 全局Token" />
+t<DraggableNode type="instance" label="♻ 组件实例" />
         <DraggableNode type="output" label="📤 输出" />
       </div>
 
@@ -1084,6 +1127,8 @@ function getDefaultProps(type) {
       return { mode: '叠加' };
     case 'globalToken':
       return {};
+    case 'instance':
+      return { componentId: '', instanceName: '', slots: '' };
     case 'output':
       return {};
     default:
