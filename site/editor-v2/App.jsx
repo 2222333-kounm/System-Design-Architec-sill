@@ -30,7 +30,7 @@ import GlobalTokenNode from './nodes/GlobalTokenNode';
 import OutputNode from './nodes/OutputNode';
 import PreviewPanel from './components/PreviewPanel';
 import AIScanner from './components/AIScanner';
-import { setStore } from './store';
+import { useStore, setStore } from './store';
 
 const nodeTypes = {
   colorBlock: ColorBlockNode,
@@ -75,12 +75,61 @@ function Flow() {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [toast, setToast] = useState(null);
   const [showEmptyGuide, setShowEmptyGuide] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Toast 通知
   const showToast = useCallback((msg, type) => {
     setToast({ msg, type: type || 'info' });
     setTimeout(() => setToast(null), 2500);
   }, []);
+
+  // 主题切换
+  const toggleTheme = useCallback(() => {
+    setIsDarkMode((d) => !d);
+  }, []);
+
+  React.useEffect(() => {
+    document.documentElement.style.filter = isDarkMode ? 'none' : 'invert(0.92) hue-rotate(180deg)';
+    // 保留画布暗色背景不变
+    const flowEl = document.querySelector('.react-flow');
+    if (flowEl) {
+      flowEl.style.filter = 'none';
+    }
+  }, [isDarkMode]);
+
+  // 全屏
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => setIsFullscreen(true)).catch(() => {});
+    } else {
+      document.exitFullscreen().then(() => setIsFullscreen(false)).catch(() => {});
+    }
+  }, []);
+
+  React.useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onFsChange);
+    return () => document.removeEventListener('fullscreenchange', onFsChange);
+  }, []);
+
+  // 自动布局（简单网格排列）
+  const autoLayout = useCallback(() => {
+    if (nodes.length === 0) return;
+    setNodes((nds) => {
+      const cols = Math.ceil(Math.sqrt(nds.length));
+      const spacingX = 350;
+      const spacingY = 200;
+      return nds.map((n, i) => ({
+        ...n,
+        position: {
+          x: 80 + (i % cols) * spacingX,
+          y: 80 + Math.floor(i / cols) * spacingY,
+        },
+      }));
+    });
+    showToast('✅ 已自动排列 ' + nodes.length + ' 个节点', 'done');
+  }, [nodes.length, setNodes, showToast]);
 
   // =====================
   //  撤销/重做
@@ -687,6 +736,7 @@ function Flow() {
       if (ctrl && e.key === 'y') { e.preventDefault(); redo(); }
       if (ctrl && e.key === 'c') { e.preventDefault(); copySelected(); }
       if (ctrl && e.key === 'v') { e.preventDefault(); pasteClipboard(); }
+      if (ctrl && e.key === 'a') { e.preventDefault(); /* 全选由 ReactFlow 处理 */ }
       if (e.key === '?' && !ctrl) { e.preventDefault(); setShowShortcuts((s) => !s); }
       if (e.key === 'Escape') { setShowShortcuts(false); }
       if (e.key === 'r' && !ctrl) {
@@ -700,10 +750,10 @@ function Flow() {
     return () => document.removeEventListener('keydown', handler);
   }, [saveToFile, loadFromFile, undo, redo, copySelected, pasteClipboard, reactFlowInstance, nodes]);
 
-  // 暴露保存/加载到 Store（供 App 工具栏按钮使用）
+  // 暴露方法到 Store（供 App 工具栏按钮使用）
   React.useEffect(() => {
-    setStore({ saveToFile, loadFromFile });
-  }, [saveToFile, loadFromFile]);
+    setStore({ saveToFile, loadFromFile, autoLayout, toggleTheme, toggleFullscreen, isDarkMode, isFullscreen });
+  }, [saveToFile, loadFromFile, autoLayout, toggleTheme, toggleFullscreen, isDarkMode, isFullscreen]);
 
   return (
     <div style={{ display: 'flex', width: '100%', height: '100%' }}>
@@ -1042,6 +1092,12 @@ function getDefaultProps(type) {
 }
 
 export default function App() {
+  const nodeCountStore = useStore('nodeCount');
+  const autoLayoutFromStore = useStore('autoLayout');
+  const toggleThemeFromStore = useStore('toggleTheme');
+  const toggleFullscreenFromStore = useStore('toggleFullscreen');
+  const isDarkModeFromStore = useStore('isDarkMode');
+  const isFullscreenFromStore = useStore('isFullscreen');
   return (
     <div style={{ width: '100vw', height: '100vh', background: '#1A1C23' }}>
       {/* 顶栏 */}
@@ -1058,7 +1114,14 @@ export default function App() {
           🔌 <span style={{ color: '#3B82F6' }}>Node</span> Editor <span style={{ color: '#6B7280', fontSize: 10, fontWeight: 400 }}>v2 · React Flow</span>
         </span>
         <div style={{ flex: 1 }} />
-        <span style={{ color: '#4B5563', fontSize: 11 }} id="v2Status">就绪</span>
+        <span style={{ color: '#4B5563', fontSize: 11 }}>{nodeCountStore || 0} 个节点</span>
+        <span style={{ color: '#374151', fontSize: 9, margin: '0 4px' }}>·</span>
+        <button onClick={autoLayoutFromStore} title="自动排列"
+          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: '#6B7280', borderRadius: 6, padding: '4px 8px', fontSize: 10, cursor: 'pointer' }}>⊞ 排列</button>
+        <button onClick={toggleThemeFromStore} title="切换主题"
+          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: '#6B7280', borderRadius: 6, padding: '4px 8px', fontSize: 10, cursor: 'pointer' }}>{isDarkModeFromStore !== false ? '☀️' : '🌙'}</button>
+        <button onClick={toggleFullscreenFromStore} title="全屏"
+          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: '#6B7280', borderRadius: 6, padding: '4px 8px', fontSize: 10, cursor: 'pointer' }}>{!!isFullscreenFromStore ? '⛶' : '⛶'}</button>
       </div>
 
       {/* 主体 */}
