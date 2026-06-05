@@ -629,6 +629,45 @@ function Flow() {
   //  键盘快捷键
   // =====================
 
+  // 复制/粘贴状态
+  const clipboardRef = useRef(null);
+
+  const copySelected = useCallback(() => {
+    const selected = nodes.filter((n) => n.selected);
+    if (selected.length === 0) return;
+    const selectedIds = new Set(selected.map((n) => n.id));
+    const relatedEdges = edges.filter((e) => selectedIds.has(e.source) || selectedIds.has(e.target));
+    clipboardRef.current = {
+      nodes: JSON.parse(JSON.stringify(selected)),
+      edges: JSON.parse(JSON.stringify(relatedEdges)),
+    };
+  }, [nodes, edges]);
+
+  const pasteClipboard = useCallback(() => {
+    const data = clipboardRef.current;
+    if (!data || !data.nodes.length) return;
+    const idMap = {};
+    const newNodes = data.nodes.map((n) => {
+      const newId = n.type + '-' + Date.now() + '-' + Math.random().toString(36).slice(2, 4);
+      idMap[n.id] = newId;
+      return {
+        ...n,
+        id: newId,
+        position: { x: n.position.x + 40, y: n.position.y + 40 },
+        selected: false,
+        data: { ...n.data, id: newId, properties: { ...n.data.properties } },
+      };
+    });
+    const newEdges = data.edges.map((e) => ({
+      ...e,
+      id: 'e-' + Date.now() + '-' + Math.random().toString(36).slice(2, 4),
+      source: idMap[e.source] || e.source,
+      target: idMap[e.target] || e.target,
+    }));
+    setNodes((nds) => [...nds, ...newNodes]);
+    setEdges((eds) => [...eds, ...newEdges]);
+  }, [setNodes, setEdges]);
+
   React.useEffect(() => {
     const handler = (e) => {
       const ctrl = e.ctrlKey || e.metaKey;
@@ -637,6 +676,8 @@ function Flow() {
       if (ctrl && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
       if (ctrl && e.key === 'z' && e.shiftKey) { e.preventDefault(); redo(); }
       if (ctrl && e.key === 'y') { e.preventDefault(); redo(); }
+      if (ctrl && e.key === 'c') { e.preventDefault(); copySelected(); }
+      if (ctrl && e.key === 'v') { e.preventDefault(); pasteClipboard(); }
       if (e.key === 'r' && !ctrl) {
         e.preventDefault();
         if (reactFlowInstance && nodes.length > 0) {
@@ -646,7 +687,7 @@ function Flow() {
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
-  }, [saveToFile, loadFromFile, undo, redo, reactFlowInstance, nodes]);
+  }, [saveToFile, loadFromFile, undo, redo, copySelected, pasteClipboard, reactFlowInstance, nodes]);
 
   // 暴露保存/加载到 Store（供 App 工具栏按钮使用）
   React.useEffect(() => {
