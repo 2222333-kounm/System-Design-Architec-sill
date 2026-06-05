@@ -57,19 +57,32 @@ const nodeTypes = {
 
 const defaultViewport = { x: 200, y: 100, zoom: 1 };
 
-const initialNodes = [
-  {
-    id: 'output-1',
-    type: 'output',
-    position: { x: 500, y: 200 },
-    data: { id: 'output-1', onChange: handleNodeChange },
-    deletable: true,
-  },
-];
-
-// 注意：handleNodeChange 需要提升到 useEffect 外，用 useCallback
-
 function Flow() {
+  // 先定义 handleNodeChange，供 initialNodes 使用
+  const handleNodeChange = useCallback((nodeId, properties) => {
+    setNodes((nds) =>
+      nds.map((n) => {
+        if (n.id === nodeId) {
+          const extra = {};
+          if (n.type === 'instance' && properties.componentId) {
+            extra.componentDef = componentStore.get(properties.componentId);
+          }
+          return { ...n, data: { ...n.data, ...extra, properties } };
+        }
+        return n;
+      })
+    );
+  }, []);
+
+  const initialNodes = [
+    {
+      id: 'output-1',
+      type: 'output',
+      position: { x: 500, y: 200 },
+      data: { id: 'output-1', onChange: handleNodeChange },
+      deletable: true,
+    },
+  ];
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [nodeCount, setNodeCount] = useState(1);
@@ -190,22 +203,6 @@ function Flow() {
     const timer = setTimeout(() => pushHistory(nodes, edges), 200);
     return () => clearTimeout(timer);
   }, [nodes, edges, pushHistory]);
-
-  // 全局 handleNodeChange（注入组件定义）
-  const handleNodeChange = useCallback((nodeId, properties) => {
-    setNodes((nds) =>
-      nds.map((n) => {
-        if (n.id === nodeId) {
-          const extra = {};
-          if (n.type === 'instance' && properties.componentId) {
-            extra.componentDef = componentStore.get(properties.componentId);
-          }
-          return { ...n, data: { ...n.data, ...extra, properties } };
-        }
-        return n;
-      })
-    );
-  }, []);
 
   // =====================
   //  端口类型匹配
@@ -873,7 +870,7 @@ function Flow() {
             pannable
             zoomable
             nodeBorderRadius={4}
-            nodeStrokeWidth={selected ? 2 : 0}
+            nodeStrokeWidth={2}
           />
         </ReactFlow>
 
@@ -1047,7 +1044,7 @@ function Flow() {
         <DraggableNode type="convert" label="🔄 转换" />
         <DraggableNode type="merge" label="🗂️ 合并" />
         <DraggableNode type="globalToken" label="🌐 全局Token" />
-t<DraggableNode type="instance" label="♻ 组件实例" />
+<DraggableNode type="instance" label="♻ 组件实例" />
         <DraggableNode type="output" label="📤 输出" />
       </div>
 
