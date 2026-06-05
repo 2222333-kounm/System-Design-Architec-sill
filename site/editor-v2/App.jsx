@@ -73,6 +73,14 @@ function Flow() {
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [showEmptyGuide, setShowEmptyGuide] = useState(true);
+
+  // Toast 通知
+  const showToast = useCallback((msg, type) => {
+    setToast({ msg, type: type || 'info' });
+    setTimeout(() => setToast(null), 2500);
+  }, []);
 
   // =====================
   //  撤销/重做
@@ -230,7 +238,7 @@ function Flow() {
       const targetType = OUTPUT_TYPE_MAP[targetNode.type]; // 用于判断输出连输入是否合理
 
       if (acceptedTypes.length > 0 && !acceptedTypes.some(t => isPortCompatible(sourceType, t))) {
-        console.warn('[ReactFlow] 端口类型不兼容:', sourceType, '→', targetNode.type, acceptedTypes);
+        showToast('❌ 端口类型不兼容: ' + sourceType + ' → 不能连接 ' + targetNode.type, 'error');
         return;
       }
 
@@ -251,7 +259,7 @@ function Flow() {
       })();
 
       if (isCycle) {
-        console.warn('[ReactFlow] 检测到循环依赖，连接被阻止');
+        showToast('⚠️ 检测到循环依赖，连接被阻止', 'error');
         return;
       }
 
@@ -699,6 +707,40 @@ function Flow() {
 
   return (
     <div style={{ display: 'flex', width: '100%', height: '100%' }}>
+      {/* 全局样式: 选中高亮 + 端口标签 */}
+      <style>{`
+        .react-flow__node.selected > div {
+          box-shadow: 0 0 0 2px rgba(59,130,246,0.6), 0 0 20px rgba(59,130,246,0.2) !important;
+          transition: box-shadow 0.15s ease;
+        }
+        .react-flow__node.selected {
+          filter: brightness(1.05);
+        }
+        .react-flow__handle {
+          width: 10px !important;
+          height: 10px !important;
+          border: 2px solid rgba(255,255,255,0.15) !important;
+          transition: all 0.15s ease;
+        }
+        .react-flow__handle:hover {
+          border-color: rgba(59,130,246,0.6) !important;
+          transform: scale(1.3);
+        }
+        .react-flow__handle-connecting {
+          border-color: #3B82F6 !important;
+        }
+        .react-flow__edge-path {
+          stroke: rgba(255,255,255,0.2);
+          stroke-width: 1.5;
+        }
+        .react-flow__edge.selected .react-flow__edge-path {
+          stroke: #3B82F6;
+          stroke-width: 2.5;
+        }
+        .react-flow__edge:hover .react-flow__edge-path {
+          stroke: rgba(59,130,246,0.5);
+        }
+      `}</style>
       {/* 画布 */}
       <div style={{ flex: 1, position: 'relative' }} ref={reactFlowWrapper}>
         <ReactFlow
@@ -718,6 +760,8 @@ function Flow() {
           defaultViewport={defaultViewport}
           fitView={false}
           colorMode="dark"
+          connectionLineStyle={{ stroke: 'rgba(59,130,246,0.5)', strokeWidth: 2 }}
+          defaultEdgeOptions={{ style: { stroke: 'rgba(255,255,255,0.2)', strokeWidth: 1.5 }, animated: false }}
           deleteKeyCode={['Backspace', 'Delete']}
           multiSelectionKeyCode="Shift"
           snapToGrid
@@ -738,14 +782,52 @@ function Flow() {
               background: '#1A1C23',
               border: '1px solid rgba(255,255,255,0.06)',
               borderRadius: 8,
+              cursor: 'pointer',
             }}
             nodeColor={(n) => {
               if (n.type === 'output') return '#FCD34D';
               return '#3B82F6';
             }}
             maskColor="rgba(0,0,0,0.5)"
+            pannable
+            zoomable
+            nodeBorderRadius={4}
+            nodeStrokeWidth={selected ? 2 : 0}
           />
         </ReactFlow>
+
+        {/* 空状态引导（首次打开时显示） */}
+        {nodes.length <= 1 && showEmptyGuide && (
+          <div onClick={() => setShowEmptyGuide(false)}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: nodes.length <= 1 ? 'auto' : 'none' }}>
+            <div style={{ textAlign: 'center', maxWidth: 420, padding: 24 }}>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>🔌</div>
+              <div style={{ color: '#9CA3AF', fontSize: 14, fontWeight: 500, marginBottom: 8 }}>欢迎使用 Node Editor</div>
+              <div style={{ color: '#6B7280', fontSize: 11, lineHeight: 1.6, marginBottom: 16 }}>
+                从下方拖拽节点到画布，或<span style={{ color: '#60A5FA', cursor: 'pointer' }} onClick={() => setShowEmptyGuide(false)}>关闭引导</span>后右键画布添加。
+                <br />连接节点到「输出」即可在右侧预览。
+              </div>
+              <button onClick={() => setShowEmptyGuide(false)}
+                style={{ background: 'rgba(59,130,246,0.15)', color: '#60A5FA', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 8, padding: '8px 20px', fontSize: 12, cursor: 'pointer' }}>
+                开始使用 ✕
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Toast 通知 */}
+        {toast && (
+          <div style={{
+            position: 'absolute', bottom: 60, right: 16, zIndex: 100,
+            background: toast.type === 'error' ? 'rgba(239,68,68,0.95)' : 'rgba(16,185,129,0.95)',
+            color: '#fff', padding: '8px 14px', borderRadius: 8, fontSize: 11,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)', maxWidth: 300,
+            backdropFilter: 'blur(8px)',
+          }}>
+            {toast.msg}
+          </div>
+        )}
+
         <AIScanner addNodes={handleAiAddNodes} />
 
         {/* 浮动工具按钮（撤销/重做/保存/加载/重置） */}
