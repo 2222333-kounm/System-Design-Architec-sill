@@ -28,8 +28,8 @@
   // =====================
 
   function ButtonNode() {
-    this.addInput('input', 'text');
-    this.addOutput('interactive', 'interactive');
+    this.addInput('text in', 'text');
+    this.addOutput('interactive →', 'interactive');
 
     this.properties = {
       text: '立即购买',

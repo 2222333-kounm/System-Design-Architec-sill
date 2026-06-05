@@ -16,8 +16,8 @@
   // =====================
 
   function VideoNode() {
-    this.addInput('input', 'any');
-    this.addOutput('video', 'video');
+    this.addInput('src in', 'any');
+    this.addOutput('video →', 'video');
 
     this.properties = {
       url: '',

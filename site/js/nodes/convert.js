@@ -16,8 +16,8 @@
   // =====================
 
   function ConvertNode() {
-    this.addInput('input', 'any');
-    this.addOutput('output', 'any');
+    this.addInput('any in', 'any');
+    this.addOutput('any →', 'any');
 
     this.properties = {
       mode: 'text→css'

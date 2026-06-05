@@ -16,8 +16,8 @@
   // =====================
 
   function ImageNode() {
-    this.addInput('input', 'any');
-    this.addOutput('image', 'image');
+    this.addInput('src in', 'any');
+    this.addOutput('image →', 'image');
 
     this.properties = {
       url: '',

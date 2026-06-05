@@ -12,7 +12,7 @@
   }
 
   function OutputNode() {
-    this.addInput('input', 'css');
+    this.addInput('data in', 'css');
     this.properties = {};
     this._lastOutput = null;
     this.size = [200, 80];

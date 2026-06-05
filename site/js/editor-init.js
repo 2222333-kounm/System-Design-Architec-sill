@@ -182,6 +182,91 @@
   });
 
   // =====================
+  //  Ctrl+E 折叠/展开选中节点
+  // =====================
+
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+      e.preventDefault();
+      if (!engine.canvas) return;
+      var selected = engine.canvas.selected_nodes;
+      if (!selected) return;
+      Object.keys(selected).forEach(function(id) {
+        var node = engine.graph.getNodeById(parseInt(id));
+        if (!node) return;
+        if (node.flags.collapsed) {
+          // 展开
+          node.flags.collapsed = false;
+          node.setSize(node._fullSize || node.size);
+        } else {
+          // 折叠
+          node._fullSize = node.size;
+          node.flags.collapsed = true;
+          node.setSize([node.size[0], 60]); // 仅显示标题的最小高度
+        }
+        node.setDirtyCanvas(true, true);
+      });
+    }
+  });
+
+  // =====================
+  //  Space + 拖拽平移（无限画布）
+  // =====================
+
+  var _spaceHeld = false;
+  var _spacePanning = false;
+  var _panStartX, _panStartY;
+  var _panOffsetX, _panOffsetY;
+
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space' && !e.repeat && !_spaceHeld) {
+      _spaceHeld = true;
+      e.preventDefault();
+      document.body.style.cursor = 'grab';
+    }
+  });
+
+  document.addEventListener('keyup', function(e) {
+    if (e.code === 'Space') {
+      _spaceHeld = false;
+      _spacePanning = false;
+      document.body.style.cursor = '';
+    }
+  });
+
+  var canvasEl = canvasWrap.querySelector('canvas');
+  if (canvasEl) {
+    canvasEl.addEventListener('mousedown', function(e) {
+      if (_spaceHeld && e.button === 0) {
+        _spacePanning = true;
+        _panStartX = e.clientX;
+        _panStartY = e.clientY;
+        if (engine.canvas && engine.canvas.ds) {
+          _panOffsetX = engine.canvas.ds.offset[0];
+          _panOffsetY = engine.canvas.ds.offset[1];
+        }
+        document.body.style.cursor = 'grabbing';
+        e.preventDefault();
+      }
+    });
+
+    window.addEventListener('mousemove', function(e) {
+      if (_spacePanning && engine.canvas && engine.canvas.ds) {
+        var dx = e.clientX - _panStartX;
+        var dy = e.clientY - _panStartY;
+        engine.canvas.ds.offset[0] = _panOffsetX + dx;
+        engine.canvas.ds.offset[1] = _panOffsetY + dy;
+        engine.canvas.setDirty(true, true);
+      }
+    });
+
+    window.addEventListener('mouseup', function() {
+      _spacePanning = false;
+      document.body.style.cursor = _spaceHeld ? 'grab' : '';
+    });
+  }
+
+  // =====================
   //  工具栏按钮
   // =====================
 

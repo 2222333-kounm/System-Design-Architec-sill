@@ -16,10 +16,10 @@
   // =====================
 
   function MergeNode() {
-    this.addInput('A', 'css');
-    this.addInput('B', 'css');
-    this.addInput('C', 'css');
-    this.addOutput('merged', 'css');
+    this.addInput('A in', 'css');
+    this.addInput('B in', 'css');
+    this.addInput('C in', 'css');
+    this.addOutput('merged →', 'css');
 
     this.properties = {
       mode: '叠加'

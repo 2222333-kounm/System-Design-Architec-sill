@@ -22,8 +22,8 @@
   // =====================
 
   function IconNode() {
-    this.addInput('input', 'any');
-    this.addOutput('css', 'css');
+    this.addInput('any in', 'any');
+    this.addOutput('css →', 'css');
 
     this.properties = {
       icon: '❤️',

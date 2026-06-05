@@ -16,8 +16,8 @@
   // =====================
 
   function MaskNode() {
-    this.addInput('input', 'image');
-    this.addOutput('masked', 'image');
+    this.addInput('img in', 'image');
+    this.addOutput('masked →', 'image');
 
     this.properties = {
       shape: '矩形',

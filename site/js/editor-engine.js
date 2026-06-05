@@ -126,7 +126,8 @@
     }
 
     var canvas = new LGraphCanvas(canvasEl, graph);
-    canvas.background_image = '';
+    // 无限画布网格背景（40px 间距深色点阵）
+    canvas.background_image = 'data:image/svg+xml,%3Csvg width=%2240%22 height=%2240%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Ccircle cx=%2220%22 cy=%2220%22 r=%221%22 fill=%22rgba(255,255,255,0.06)%22/%3E%3C/svg%3E';
     canvas.node_title_color = '#FAFAFA';
     canvas.allow_searchbox = true;
     canvas.setSize(canvasEl.width, canvasEl.height);

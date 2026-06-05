@@ -16,13 +16,14 @@
   // =====================
 
   function TextNode() {
-    this.addInput('input', 'any');
-    this.addOutput('text', 'text');
+    this.addInput('content in', 'any');
+    this.addOutput('styled text →', 'text');
 
     this.properties = {
       content: '这是一段示例文字',
       fontFamily: 'PingFang SC, sans-serif',
       fontSize: 16,
+      fontSizeUnit: 'px',
       fontWeight: '400',
       lineHeight: 1.5,
       letterSpacing: 0,
@@ -66,6 +67,12 @@
       that.properties.fontSize = v;
       that._markDirty();
     }, { min: 8, max: 120, step: 1 });
+
+    // 字号单位
+    this.addWidget('combo', '字号单位', this.properties.fontSizeUnit, function(v) {
+      that.properties.fontSizeUnit = v;
+      that._markDirty();
+    }, { values: ['px', 'em', 'rem'] });
 
     // 字重
     this.addWidget('combo', '字重', this.properties.fontWeight, function(v) {
@@ -129,7 +136,7 @@
 
     this._lastOutput = this.buildOutput('text', {
       fontFamily: this.properties.fontFamily,
-      fontSize: this.properties.fontSize + 'px',
+      fontSize: this.properties.fontSize + this.properties.fontSizeUnit,
       fontWeight: this.properties.fontWeight,
       lineHeight: String(this.properties.lineHeight),
       letterSpacing: this.properties.letterSpacing + 'em',

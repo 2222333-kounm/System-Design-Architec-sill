@@ -31,8 +31,8 @@
   // =====================
 
   function InstanceNode() {
-    this.addInput('input', 'any');
-    this.addOutput('instance', 'instance');
+    this.addInput('slot in', 'any');
+    this.addOutput('instance →', 'instance');
 
     this.properties = {
       componentRef: 'nav-bar',

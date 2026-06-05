@@ -28,8 +28,8 @@
   // =====================
 
   function BreakpointNode() {
-    this.addInput('input', 'css');
-    this.addOutput('responsive', 'responsive');
+    this.addInput('css in', 'css');
+    this.addOutput('responsive →', 'responsive');
 
     this.properties = {
       breakpoint: 'mobile',

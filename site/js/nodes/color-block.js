@@ -16,13 +16,15 @@
   // =====================
 
   function ColorBlockNode() {
-    this.addInput('input', 'color');
-    this.addOutput('color-block', 'color');
+    this.addInput('color in', 'color');
+    this.addOutput('color →', 'color');
 
     this.properties = {
       color: '#3B82F6',
       width: 320,
+      widthUnit: 'px',
       height: 120,
+      heightUnit: 'px',
       borderRadius: 12,
       opacity: 100
     };
@@ -48,11 +50,23 @@
       that._markDirty();
     }, { min: 40, max: 800, step: 1 });
 
+    // 宽度单位
+    this.addWidget('combo', '宽度单位', this.properties.widthUnit, function(v) {
+      that.properties.widthUnit = v;
+      that._markDirty();
+    }, { values: ['px', '%', 'vw'] });
+
     // 高度
     this.addWidget('number', '高度', this.properties.height, function(v) {
       that.properties.height = v;
       that._markDirty();
     }, { min: 20, max: 600, step: 1 });
+
+    // 高度单位
+    this.addWidget('combo', '高度单位', this.properties.heightUnit, function(v) {
+      that.properties.heightUnit = v;
+      that._markDirty();
+    }, { values: ['px', '%', 'vh'] });
 
     // 圆角
     this.addWidget('number', '圆角', this.properties.borderRadius, function(v) {
@@ -92,8 +106,8 @@
 
     this._lastOutput = this.buildOutput('color', {
       background: this.properties.color,
-      width: this.properties.width + 'px',
-      height: this.properties.height + 'px',
+      width: this.properties.width + this.properties.widthUnit,
+      height: this.properties.height + this.properties.heightUnit,
       'border-radius': this.properties.borderRadius + 'px',
       opacity: String(opacityVal)
     });

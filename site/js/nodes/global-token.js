@@ -17,7 +17,7 @@
 
   function GlobalTokenNode() {
     // 无输入端口 — 这是一个源节点
-    this.addOutput('tokens', 'css');
+    this.addOutput('tokens →', 'css');
 
     this.properties = {};
 

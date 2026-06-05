@@ -16,8 +16,8 @@
   // =====================
 
   function TransformNode() {
-    this.addInput('input', 'css');
-    this.addOutput('css', 'css');
+    this.addInput('css in', 'css');
+    this.addOutput('css →', 'css');
 
     this.properties = {
       scale: 1,

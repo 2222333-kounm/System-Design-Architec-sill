@@ -26,8 +26,8 @@
   // =====================
 
   function MouseFollowNode() {
-    this.addInput('input', 'css');
-    this.addOutput('interactive', 'interactive');
+    this.addInput('css in', 'css');
+    this.addOutput('interactive →', 'interactive');
 
     this.properties = {
       effect: '视差',

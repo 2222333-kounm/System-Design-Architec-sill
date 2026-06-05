@@ -18,8 +18,8 @@
   // =====================
 
   function LayoutContainerNode() {
-    this.addInput('input', 'css');
-    this.addOutput('layout', 'layout');
+    this.addInput('items in', 'css');
+    this.addOutput('layout →', 'layout');
 
     this.properties = {
       // Mode
@@ -30,6 +30,7 @@
       justifyContent: 'flex-start',
       alignItems: 'stretch',
       gap: 16,
+      gapUnit: 'px',
       flexWrap: 'nowrap',
       padding: 0,
 
@@ -82,6 +83,12 @@
       that.properties.gap = v;
       that._markDirty();
     }, { min: 0, max: 100, step: 1 });
+
+    // 间距单位
+    this.addWidget('combo', '间距单位', this.properties.gapUnit, function(v) {
+      that.properties.gapUnit = v;
+      that._markDirty();
+    }, { values: ['px', 'em', '%'] });
 
     this.addWidget('combo', '换行', this.properties.flexWrap, function(v) {
       that.properties.flexWrap = v;
@@ -174,9 +181,9 @@
         flexDirection: p.flexDirection,
         justifyContent: p.justifyContent,
         alignItems: p.alignItems,
-        gap: p.gap + 'px',
+        gap: p.gap + p.gapUnit,
         flexWrap: p.flexWrap,
-        padding: p.padding + 'px'
+        padding: p.padding + p.gapUnit
       };
       extra.mode = 'flex';
     } else {
@@ -185,9 +192,9 @@
         display: 'grid',
         gridTemplateColumns: p.gridTemplateColumns,
         gridTemplateRows: p.gridTemplateRows,
-        gap: p.rowGap + 'px',
-        rowGap: p.rowGap + 'px',
-        columnGap: p.columnGap + 'px',
+        gap: p.rowGap + p.gapUnit,
+        rowGap: p.rowGap + p.gapUnit,
+        columnGap: p.columnGap + p.gapUnit,
         justifyItems: p.justifyItems,
         alignItems: p.alignItems,
         justifyContent: p.gridJustifyContent,

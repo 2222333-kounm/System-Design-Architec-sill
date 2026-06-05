@@ -27,8 +27,8 @@
   // =====================
 
   function TransitionNode() {
-    this.addInput('input', 'css');
-    this.addOutput('interactive', 'interactive');
+    this.addInput('css in', 'css');
+    this.addOutput('interactive →', 'interactive');
 
     this.properties = {
       trigger: 'hover',
